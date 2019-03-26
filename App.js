@@ -1,86 +1,10 @@
 import React from 'react';
-import { registerRootComponent, AppLoading, Asset, Font } from 'expo';
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { View, Image, Dimensions } from 'react-native';
-import { DrawerNavigator, DrawerItems } from 'react-navigation';
-
-import Components from './src/drawer/components';
-import Ratings from './src/drawer/ratings';
-import Pricing from './src/drawer/pricing';
-import Login from './src/drawer/login';
-import Profile from './src/drawer/profile';
-import Lists from './src/drawer/lists';
-import Settings from './src/drawer/settings';
-
-const SCREEN_WIDTH = Dimensions.get('window').width;
-
-const CustomDrawerContentComponent = props => (
-  <View style={{ flex: 1, backgroundColor: '#43484d' }}>
-    <View
-      style={{ marginTop: 40, justifyContent: 'center', alignItems: 'center' }}
-    >
-      <Image
-        source={require('./src/images/logo.png')}
-        style={{ width: SCREEN_WIDTH * 0.57 }}
-        resizeMode="contain"
-      />
-    </View>
-    <View style={{ marginLeft: 10 }}>
-      <DrawerItems {...props} />
-    </View>
-  </View>
-);
-
-const MainRoot = DrawerNavigator(
-  {
-    Login: {
-      path: '/login',
-      screen: Login,
-    },
-    Profile: {
-      path: '/profile',
-      screen: Profile,
-    },
-    Lists: {
-      path: '/lists',
-      screen: Lists,
-    },
-    Components: {
-      path: '/components',
-      screen: Components,
-    },
-    Ratings: {
-      path: '/ratings',
-      screen: Ratings,
-    },
-    Pricing: {
-      path: '/pricing',
-      screen: Pricing,
-    },
-    Settings: {
-      path: '/settings',
-      screen: Settings,
-    },
-  },
-  {
-    initialRouteName: 'Components',
-    contentOptions: {
-      activeTintColor: '#548ff7',
-      activeBackgroundColor: 'transparent',
-      inactiveTintColor: '#ffffff',
-      inactiveBackgroundColor: 'transparent',
-      labelStyle: {
-        fontSize: 15,
-        marginLeft: 0,
-      },
-    },
-    drawerWidth: SCREEN_WIDTH * 0.8,
-    contentComponent: CustomDrawerContentComponent,
-    drawerOpenRoute: 'DrawerOpen',
-    drawerCloseRoute: 'DrawerClose',
-    drawerToggleRoute: 'DrawerToggle',
-  }
-);
+import {AppLoading, Asset, Font, registerRootComponent} from 'expo';
+import {FontAwesome, Ionicons} from '@expo/vector-icons';
+import {Image} from 'react-native';
+import Login from "./src/views/login/Login";
+import {SwitchNavigator} from "react-navigation";
+import Drawer from "./src/drawer/drawer";
 
 function cacheImages(images) {
   return images.map(image => {
@@ -95,6 +19,13 @@ function cacheImages(images) {
 function cacheFonts(fonts) {
   return fonts.map(font => Font.loadAsync(font));
 }
+
+const MainNavigation = SwitchNavigator({
+    App: Drawer,
+    Auth: Login,
+}, {
+  initialRouteName: 'Auth'
+});
 
 export default class AppContainer extends React.Component {
   state = {
@@ -128,7 +59,7 @@ export default class AppContainer extends React.Component {
       );
     }
 
-    return <MainRoot />;
+    return <MainNavigation />;
   }
 }
 

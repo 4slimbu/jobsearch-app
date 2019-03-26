@@ -1,29 +1,34 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
-  StyleSheet,
-  View,
-  Text,
-  ImageBackground,
-  Dimensions,
-  LayoutAnimation,
-  UIManager,
-  KeyboardAvoidingView,
+    Dimensions,
+    ImageBackground,
+    KeyboardAvoidingView,
+    LayoutAnimation,
+    ScrollView,
+    StyleSheet,
+    Text,
+    UIManager,
+    View,
 } from 'react-native';
-import { Font } from 'expo';
-import { Input, Button } from 'react-native-elements';
+import {Font} from 'expo';
+import {Button, Image, Input} from 'react-native-elements';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
+import socialColor from "../../config/socialColors";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-const BG_IMAGE = require('../../../assets/images/bg_screen4.jpg');
+const BG_IMAGE = require('../../../assets/images/wallpaper_2.jpg');
+const LogoUrl = require('../../../assets/icons/icon.png');
+
 
 // Enable LayoutAnimation on Android
 UIManager.setLayoutAnimationEnabledExperimental &&
   UIManager.setLayoutAnimationEnabledExperimental(true);
+
 
 const TabSelector = ({ selected }) => {
   return (
@@ -37,19 +42,29 @@ TabSelector.propTypes = {
   selected: PropTypes.bool.isRequired,
 };
 
-export default class LoginScreen2 extends Component {
+export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       email: '',
       password: '',
+      firstName: '',
+      lastName: '',
+      gender: '',
+      countryCode: '',
+      mobileNumber: '',
       fontLoaded: false,
       selectedCategory: 0,
       isLoading: false,
       isEmailValid: true,
       isPasswordValid: true,
       isConfirmationValid: true,
+      isFirstNameValid: true,
+      isLastNameValid: true,
+      isGenderValid: true,
+      isCountryCodeValid: true,
+      isMobileNumberValid: true
     };
 
     this.selectCategory = this.selectCategory.bind(this);
@@ -93,6 +108,7 @@ export default class LoginScreen2 extends Component {
         isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
       });
     }, 1500);
+
   }
 
   signUp() {
@@ -108,14 +124,16 @@ export default class LoginScreen2 extends Component {
         isConfirmationValid:
           password == passwordConfirmation || this.confirmationInput.shake(),
       });
+        this.props.navigation.navigate('VerificationScreen');
     }, 1500);
+
   }
 
   render() {
     const {
       selectedCategory,
-      isLoading,
       isEmailValid,
+      isLoading,
       isPasswordValid,
       isConfirmationValid,
       email,
@@ -125,8 +143,8 @@ export default class LoginScreen2 extends Component {
     const isLoginPage = selectedCategory === 0;
     const isSignUpPage = selectedCategory === 1;
     return (
-      <View style={styles.container}>
         <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
+          <ScrollView style={[styles.container]} horizontal={false}>
           {this.state.fontLoaded ? (
             <View>
               <KeyboardAvoidingView
@@ -134,11 +152,9 @@ export default class LoginScreen2 extends Component {
                 behavior="position"
               >
                 <View style={styles.titleContainer}>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles.titleText}>BEAUX</Text>
-                  </View>
-                  <View style={{ marginTop: -10, marginLeft: 10 }}>
-                    <Text style={styles.titleText}>VOYAGES</Text>
+                  <View style={{ alignItems: 'center' }}>
+                    <Image style={{ width: 100, height: 100  }} source={LogoUrl} />
+                    <Text style={styles.titleText}>LokSewa</Text>
                   </View>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
@@ -270,6 +286,155 @@ export default class LoginScreen2 extends Component {
                           : 'Please enter the same password'
                       }
                     />
+
+                  )}
+                  {isSignUpPage && (
+                      <Input
+                          icon={
+                            <SimpleIcon
+                                name="lock"
+                                color="rgba(0, 0, 0, 0.38)"
+                                size={25}
+                                style={{ backgroundColor: 'transparent' }}
+                            />
+                          }
+                          value={passwordConfirmation}
+                          secureTextEntry={true}
+                          keyboardAppearance="light"
+                          autoCapitalize="none"
+                          autoCorrect={false}
+                          keyboardType="default"
+                          returnKeyType={'done'}
+                          blurOnSubmit={true}
+                          containerStyle={{
+                            marginTop: 16,
+                            borderBottomColor: 'rgba(0, 0, 0, 0.38)',
+                          }}
+                          inputStyle={{ marginLeft: 10 }}
+                          placeholder={'First Name'}
+                          ref={input => (this.confirmationInput = input)}
+                          onSubmitEditing={this.signUp}
+                          onChangeText={passwordConfirmation =>
+                              this.setState({ passwordConfirmation })
+                          }
+                          errorMessage={
+                            isConfirmationValid
+                                ? null
+                                : 'Please enter the same password'
+                          }
+                      />
+
+                  )}
+                  {isSignUpPage && (
+                      <Input
+                          icon={
+                            <SimpleIcon
+                                name="lock"
+                                color="rgba(0, 0, 0, 0.38)"
+                                size={25}
+                                style={{ backgroundColor: 'transparent' }}
+                            />
+                          }
+                          value={passwordConfirmation}
+                          secureTextEntry={true}
+                          keyboardAppearance="light"
+                          autoCapitalize="none"
+                          autoCorrect={false}
+                          keyboardType="default"
+                          returnKeyType={'done'}
+                          blurOnSubmit={true}
+                          containerStyle={{
+                            marginTop: 16,
+                            borderBottomColor: 'rgba(0, 0, 0, 0.38)',
+                          }}
+                          inputStyle={{ marginLeft: 10 }}
+                          placeholder={'Last Name'}
+                          ref={input => (this.confirmationInput = input)}
+                          onSubmitEditing={this.signUp}
+                          onChangeText={passwordConfirmation =>
+                              this.setState({ passwordConfirmation })
+                          }
+                          errorMessage={
+                            isConfirmationValid
+                                ? null
+                                : 'Please enter the same password'
+                          }
+                      />
+
+                  )}
+                  {isSignUpPage && (
+                      <Input
+                          icon={
+                            <SimpleIcon
+                                name="lock"
+                                color="rgba(0, 0, 0, 0.38)"
+                                size={25}
+                                style={{ backgroundColor: 'transparent' }}
+                            />
+                          }
+                          value={passwordConfirmation}
+                          secureTextEntry={true}
+                          keyboardAppearance="light"
+                          autoCapitalize="none"
+                          autoCorrect={false}
+                          keyboardType="default"
+                          returnKeyType={'done'}
+                          blurOnSubmit={true}
+                          containerStyle={{
+                            marginTop: 16,
+                            borderBottomColor: 'rgba(0, 0, 0, 0.38)',
+                          }}
+                          inputStyle={{ marginLeft: 10 }}
+                          placeholder={'Gender'}
+                          ref={input => (this.confirmationInput = input)}
+                          onSubmitEditing={this.signUp}
+                          onChangeText={passwordConfirmation =>
+                              this.setState({ passwordConfirmation })
+                          }
+                          errorMessage={
+                            isConfirmationValid
+                                ? null
+                                : 'Please enter the same password'
+                          }
+                      />
+
+                  )}
+                  {isSignUpPage && (
+                      <Input
+                          icon={
+                            <SimpleIcon
+                                name="lock"
+                                color="rgba(0, 0, 0, 0.38)"
+                                size={25}
+                                style={{ backgroundColor: 'transparent' }}
+                            />
+                          }
+                          value={passwordConfirmation}
+                          secureTextEntry={true}
+                          keyboardAppearance="light"
+                          autoCapitalize="none"
+                          autoCorrect={false}
+                          keyboardType="default"
+                          returnKeyType={'done'}
+                          blurOnSubmit={true}
+                          containerStyle={{
+                            marginTop: 16,
+                            borderBottomColor: 'rgba(0, 0, 0, 0.38)',
+                          }}
+                          inputStyle={{ marginLeft: 10 }}
+                          placeholder={'Mobile'}
+                          ref={input => (this.confirmationInput = input)}
+                          onSubmitEditing={this.signUp}
+                          onChangeText={passwordConfirmation =>
+                              this.setState({ passwordConfirmation })
+                          }
+                          errorMessage={
+                            isConfirmationValid
+                                ? null
+                                : 'Please enter the same password'
+                          }
+                      />
+
                   )}
                   <Button
                     buttonStyle={styles.loginButton}
@@ -285,19 +450,30 @@ export default class LoginScreen2 extends Component {
               </KeyboardAvoidingView>
               <View style={styles.helpContainer}>
                 <Button
-                  title={'Need help ?'}
+                  title={'Forgot Password?'}
                   titleStyle={{ color: 'white' }}
                   buttonStyle={{ backgroundColor: 'transparent' }}
                   underlayColor="transparent"
-                  onPress={() => console.log('Account created')}
+                  onPress={() => this.props.navigation.navigate('ForgotPasswordScreen')}
                 />
               </View>
+              <View style={styles.helpContainer}>
+                <Button
+                    title={'Login with Facebook'}
+                    titleStyle={{ color: 'white' }}
+                    buttonStyle={styles.facebookLoginButton}
+                    underlayColor="transparent"
+                    onPress={() => this.props.navigation.navigate('App')}
+                />
+              </View>
+
+
             </View>
           ) : (
             <Text>Loading...</Text>
           )}
+          </ScrollView>
         </ImageBackground>
-      </View>
     );
   }
 }
@@ -305,6 +481,7 @@ export default class LoginScreen2 extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 50
   },
   rowSelector: {
     height: 20,
@@ -340,6 +517,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 50,
     width: 200,
+  },
+  facebookLoginButton: {
+    backgroundColor: socialColor.facebook,
+    borderRadius: 10,
+    height: 50,
+    width: 200
   },
   titleContainer: {
     height: 150,
