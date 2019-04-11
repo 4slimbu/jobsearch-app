@@ -11,12 +11,14 @@ import {
     UIManager,
     View,
 } from 'react-native';
+import {connect} from 'react-redux';
 import {Font} from 'expo';
 import {Button, Image, Input} from 'react-native-elements';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import socialColor from "../../config/socialColors";
+import { addUser, updateUser, authenticateUser } from '../../store/actions/authActions';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -42,7 +44,7 @@ TabSelector.propTypes = {
   selected: PropTypes.bool.isRequired,
 };
 
-export default class LoginScreen extends Component {
+class LoginScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -99,6 +101,7 @@ export default class LoginScreen extends Component {
   login() {
     const { email, password } = this.state;
     this.setState({ isLoading: true });
+    this.props.onAuthenticateUser(true);
     // Simulate an API call
     setTimeout(() => {
       LayoutAnimation.easeInEaseOut();
@@ -463,7 +466,7 @@ export default class LoginScreen extends Component {
                     titleStyle={{ color: 'white' }}
                     buttonStyle={styles.facebookLoginButton}
                     underlayColor="transparent"
-                    onPress={() => this.props.navigation.navigate('App')}
+                    onPress={this.login}
                 />
               </View>
 
@@ -573,3 +576,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+const mapStateToProps = state => {
+  return {
+    auth: state.main.auth
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAuthenticateUser: (isAuthenticated) => dispatch(authenticateUser(isAuthenticated))
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
