@@ -103,14 +103,14 @@ class LoginScreen extends Component {
     this.setState({ isLoading: true });
     this.props.onAuthenticateUser(true);
     // Simulate an API call
-    setTimeout(() => {
-      LayoutAnimation.easeInEaseOut();
-      this.setState({
-        isLoading: false,
-        isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
-        isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
-      });
-    }, 1500);
+    // setTimeout(() => {
+    //   LayoutAnimation.easeInEaseOut();
+    //   this.setState({
+    //     isLoading: false,
+    //     isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
+    //     isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
+    //   });
+    // }, 1500);
 
   }
 
