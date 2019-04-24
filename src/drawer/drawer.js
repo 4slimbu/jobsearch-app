@@ -1,5 +1,5 @@
 import {Dimensions, Image, Text, View} from "react-native";
-import colors from "../config/colors";
+import colors from "../constants/colors";
 import {DrawerItems, DrawerNavigator} from "react-navigation";
 import React from "react";
 

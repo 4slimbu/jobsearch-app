@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Icon, SearchBar,} from 'react-native-elements';
 
-import Colors from "../config/colors";
+import Colors from "../constants/colors";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 

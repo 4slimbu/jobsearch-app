@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity, ActivityIndicator, TextInput} from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Colors from '../config/colors';
+import Colors from '../constants/colors';
 import {Button, Divider, Image} from "react-native-elements";
 
 class AddPost extends Component {

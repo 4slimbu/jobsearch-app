@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Colors from '../config/colors';
+import Colors from '../constants/colors';
 
 class CategoriesHome extends Component {
   constructor(props) {

@@ -2,7 +2,7 @@ import React from 'react';
 import {AppLoading, Asset, Font} from 'expo';
 import {FontAwesome, Ionicons} from '@expo/vector-icons';
 import {Image} from 'react-native';
-import Login from "./views/login/Login";
+import Login from "./views/auth/LoginScreen";
 import {SwitchNavigator} from "react-navigation";
 import Drawer from "./drawer/drawer";
 import {connect} from "react-redux";
@@ -68,13 +68,12 @@ class MainContainer extends React.Component {
 
   const mapStateToProps = state => {
     return {
-      auth: state.main.auth
+      auth: state.auth
     }
   }
   
   const mapDispatchToProps = dispatch => {
     return {
-      onAuthenticateUser: (isAuthenticated) => dispatch(authenticateUser(isAuthenticated))
     };
   }
 

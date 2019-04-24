@@ -18,8 +18,7 @@ import {Button, Image, Input} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import socialColor from "../../constants/socialColors";
-import { addUser, updateUser, authenticateUser } from '../../store/actions/authActions';
-
+import { authenticateUser, tryAuth, facebookLogin } from '../../store/actions';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
@@ -44,7 +43,7 @@ TabSelector.propTypes = {
   selected: PropTypes.bool.isRequired,
 };
 
-class LoginScreen extends Component {
+class RegisterScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -72,6 +71,7 @@ class LoginScreen extends Component {
     this.selectCategory = this.selectCategory.bind(this);
     this.login = this.login.bind(this);
     this.signUp = this.signUp.bind(this);
+    this.facebookSignup = this.facebookSignup.bind(this);
   }
 
   async componentDidMount() {
@@ -114,21 +114,41 @@ class LoginScreen extends Component {
 
   }
 
+  authHandler = (authData) => {
+    this.props.onTryAuth(authData);
+  };
+
+  facebookAuthHandler = () => {
+    this.props.onFacebookLogin();
+  }
+
+  facebookSignup() {
+    this.facebookAuthHandler();
+  }
+  
   signUp() {
     const { email, password, passwordConfirmation } = this.state;
     this.setState({ isLoading: true });
-    // Simulate an API call
-    setTimeout(() => {
-      LayoutAnimation.easeInEaseOut();
-      this.setState({
-        isLoading: false,
-        isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
-        isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
-        isConfirmationValid:
-          password == passwordConfirmation || this.confirmationInput.shake(),
-      });
-        this.props.navigation.navigate('VerificationScreen');
-    }, 1500);
+
+    this.authHandler({
+        email: email,
+        password: password
+    });
+
+    this.setState({ isLoading: false });
+
+    // // Simulate an API call
+    // setTimeout(() => {
+    //   LayoutAnimation.easeInEaseOut();
+    //   this.setState({
+    //     isLoading: false,
+    //     isEmailValid: this.validateEmail(email) || this.emailInput.shake(),
+    //     isPasswordValid: password.length >= 8 || this.passwordInput.shake(),
+    //     isConfirmationValid:
+    //       password == passwordConfirmation || this.confirmationInput.shake(),
+    //   });
+    //     this.props.navigation.navigate('VerificationScreen');
+    // }, 1500);
 
   }
 
@@ -254,7 +274,7 @@ class LoginScreen extends Component {
                         : 'Please enter at least 8 characters'
                     }
                   />
-                  {isSignUpPage && (
+                  {/* {isSignUpPage && (
                     <Input
                       icon={
                         <SimpleIcon
@@ -438,7 +458,7 @@ class LoginScreen extends Component {
                           }
                       />
 
-                  )}
+                  )} */}
                   <Button
                     buttonStyle={styles.loginButton}
                     containerStyle={{ marginTop: 32, flex: 0 }}
@@ -466,7 +486,7 @@ class LoginScreen extends Component {
                     titleStyle={{ color: 'white' }}
                     buttonStyle={styles.facebookLoginButton}
                     underlayColor="transparent"
-                    onPress={this.login}
+                    onPress={this.facebookSignup}
                 />
               </View>
 
@@ -585,8 +605,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAuthenticateUser: (isAuthenticated) => dispatch(authenticateUser(isAuthenticated))
+    onAuthenticateUser: (isAuthenticated) => dispatch(authenticateUser(isAuthenticated)),
+    onTryAuth: (authData) => dispatch(tryAuth(authData)),
+    onFacebookLogin: dispatch(facebookLogin)
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);

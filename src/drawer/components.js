@@ -5,7 +5,7 @@ import {Icon} from 'react-native-elements';
 import CategoriesTab from '../tabs/categories';
 import ManagePostsTab from '../tabs/manage_posts';
 import SearchTab from '../tabs/Search';
-import Colors from "../config/colors";
+import Colors from "../constants/colors";
 
 const Components = TabNavigator(
   {
