@@ -1,16 +1,17 @@
 import React from 'react';
 
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import {Icon, Image} from 'react-native-elements';
 
-import ManagePostsHome from '../views/manage_posts_home';
-import ManagePostsDetails from '../views/manage_posts';
-import AddPost from "../views/add_post";
-import MyPosts from "../views/my_posts";
-import MyComments from "../views/my_comments";
-import CategoriesDetail from "../views/categories_detail";
-import MyProfile from "../views/my_profile";
-import EditPost from "../views/edit_post";
+import ManagePostsHome from '../views/ManagePosts/manage_posts_home';
+import ManagePostsDetails from '../views/ManagePosts/manage_posts';
+import AddPost from "../views/ManagePosts/AddPost";
+import MyPosts from "../views/ManagePosts/MyPosts";
+import MyComments from "../views/ManagePosts/MyComments";
+import CategoriesDetail from "../views/Category/CategoryDetail";
+import MyProfile from "../views/ManagePosts/MyProfile";
+import EditPost from "../views/ManagePosts/edit_post";
+import SavedPosts from "../views/ManagePosts/SavedPosts";
 
 const LogoUrl = require('../../assets/icons/icon.png');
 
@@ -22,7 +23,7 @@ const ManagePostsDetailTabView = ({ navigation }) => (
   <ManagePostsDetails banner="Manage Posts Detail" navigation={navigation} />
 );
 
-const ManagePostsTab = StackNavigator({
+const ManagePostsTab = createStackNavigator({
   Home: {
     screen: ManagePostsTabView,
     path: '/',
@@ -59,7 +60,7 @@ const ManagePostsTab = StackNavigator({
     screen: MyComments
   },
   MySavedPosts: {
-    screen: CategoriesDetail
+    screen: SavedPosts
   },
   MyProfile: {
     screen: MyProfile

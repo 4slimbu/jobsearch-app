@@ -29,29 +29,29 @@ class SinglePost extends Component {
                     <View style={{paddingLeft: 20, paddingRight: 20, marginBottom: 20}}>
                         <View style={{flex: 1, flexDirection: 'row'}}>
                             <View style={{flex: 1, marginRight: 15}}>
-                                <Image source={require('./../images/placeholder.png')} resizeMode={'contain'}
+                                <Image source={require('../../assets/images/placeholder.png')} resizeMode={'contain'}
                                        style={{width: '100%', height: 100, marginBottom: 5}}
                                        PlaceholderContent={<ActivityIndicator/>}
                                 />
                                 <Button title="Save" buttonStyle={{marginBottom: 5, paddingTop: 5, paddingBottom: 5}}
                                         buttonSize={5}/>
-                                <Image source={require('./../images/placeholder.png')} resizeMode={'contain'}
+                                <Image source={require('../../assets/images/placeholder.png')} resizeMode={'contain'}
                                        style={{width: '100%', height: 100, marginBottom: 5}}
                                        PlaceholderContent={<ActivityIndicator/>}
                                 />
-                                <Image source={require('./../images/placeholder.png')} resizeMode={'contain'}
+                                <Image source={require('../../assets/images/placeholder.png')} resizeMode={'contain'}
                                        style={{width: '100%', height: 100, marginBottom: 5}}
                                        PlaceholderContent={<ActivityIndicator/>}
                                 />
-                                <Image source={require('./../images/placeholder.png')} resizeMode={'contain'}
+                                <Image source={require('../../assets/images/placeholder.png')} resizeMode={'contain'}
                                        style={{width: '100%', height: 100, marginBottom: 5}}
                                        PlaceholderContent={<ActivityIndicator/>}
                                 />
-                                <Image source={require('./../images/placeholder.png')} resizeMode={'contain'}
+                                <Image source={require('../../assets/images/placeholder.png')} resizeMode={'contain'}
                                        style={{width: '100%', height: 100, marginBottom: 5}}
                                        PlaceholderContent={<ActivityIndicator/>}
                                 />
-                                <Image source={require('./../images/placeholder.png')} resizeMode={'contain'}
+                                <Image source={require('../../assets/images/placeholder.png')} resizeMode={'contain'}
                                        style={{width: '100%', height: 100, marginBottom: 5}}
                                        PlaceholderContent={<ActivityIndicator/>}
                                 />

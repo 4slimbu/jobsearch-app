@@ -1,11 +1,11 @@
 import {Dimensions, Image, Text, View} from "react-native";
 import colors from "../constants/colors";
-import {DrawerItems, DrawerNavigator} from "react-navigation";
+import {DrawerItems, createDrawerNavigator} from "react-navigation";
 import React from "react";
 
 import Components from "./components";
 import Page from "./page";
-import Logout from "../views/login/Logout";
+import Logout from "../views/Auth/Logout";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -15,7 +15,7 @@ const CustomDrawerContentComponent = props => (
             style={{ marginTop: 40, marginBottom: 10, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}
         >
             <Image
-                source={require('./../images/logo.png')}
+                source={require('../../assets/images/logo.png')}
                 style={{ width: SCREEN_WIDTH * 0.20, height: 50 }}
                 resizeMode="contain"
             />
@@ -27,7 +27,7 @@ const CustomDrawerContentComponent = props => (
     </View>
 );
 
-const Drawer = DrawerNavigator(
+const Drawer = createDrawerNavigator(
     {
         Home: {
             path: '/component',
@@ -83,7 +83,7 @@ const Drawer = DrawerNavigator(
         initialRouteName: 'Home',
         drawerPosition: 'right',
         contentOptions: {
-            activeTintColor: '#548ff7',
+            activeTintColor: colors.primary1,
             activeBackgroundColor: 'transparent',
             inactiveTintColor: '#ffffff',
             inactiveBackgroundColor: 'transparent',

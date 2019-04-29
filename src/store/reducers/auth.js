@@ -1,7 +1,8 @@
 import {
-    AUTH_SET_TOKEN,
+    AUTH_DATA_RESET,
     AUTH_REMOVE_TOKEN,
     AUTH_SET_LOGGED_IN_STATUS,
+    AUTH_SET_TOKEN,
     AUTH_SET_USER,
     FACEBOOK_LOGIN_SUCCESS
 } from "../actions/actionTypes";
@@ -9,12 +10,22 @@ import {
 const initialState = {
     token: null,
     expiryDate: null,
-    user: {},
+    user: {
+        first_name: null,
+        last_name: null,
+        gender: null,
+        contact_number: null,
+        preferences: {}
+    },
     isLoggedIn: false
 };
 
-const reducer = (state = initialState, action) => {
+const auth = (state = initialState, action) => {
     switch (action.type) {
+        case AUTH_DATA_RESET:
+            return {
+                ...initialState
+            };
         case AUTH_SET_TOKEN:
             return {
                 ...state,
@@ -47,4 +58,4 @@ const reducer = (state = initialState, action) => {
     }
 };
 
-export default reducer;
+export default auth;

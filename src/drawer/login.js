@@ -1,12 +1,12 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
 import Login from '../views/login/Login';
 import VerificationScreen from "../views/login/VerificationScreen";
 import ForgotPasswordScreen from "../views/login/ForgotPasswordScreen";
 
-const LoginDrawerItem = StackNavigator(
+const LoginDrawerItem = createStackNavigator(
   {
     Login: { screen: Login },
     VerificationScreen: { screen: VerificationScreen },

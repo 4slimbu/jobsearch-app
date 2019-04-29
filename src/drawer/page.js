@@ -1,11 +1,8 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import {Icon, Image} from 'react-native-elements';
 
-import CategoriesHome from '../views/categories_home';
-import CategoriesDetail from "../views/categories_detail";
-import SinglePost from "../views/single_post";
-import SinglePage from "../views/single_page";
+import SinglePage from "../views/Page/PageDetail";
 
 const LogoUrl = require('../../assets/icons/icon.png');
 
@@ -13,7 +10,7 @@ const PageView = ({ navigation }) => (
   <SinglePage navigation={navigation} />
 );
 
-const Page = StackNavigator({
+const Page = createStackNavigator({
   Categories: {
     screen: PageView,
     path: '/',

@@ -1,7 +1,7 @@
 export default {
   facebook: '#3b5998',
   twitter: '#00aced',
-  ['google-plus-official']: '#dd4b39',
+  googleplus: '#dd4b39',
   pinterest: '#cb2027',
   linkedin: '#007bb6',
   youtube: '#bb0000',

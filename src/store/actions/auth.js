@@ -1,14 +1,13 @@
 import {AsyncStorage} from "react-native";
-import {Facebook} from 'expo';
 import {
-    TRY_AUTH,
+    AUTH_DATA_RESET,
+    AUTH_SET_LOGGED_IN_STATUS,
     AUTH_SET_TOKEN,
-    AUTH_REMOVE_TOKEN,
-    FACEBOOK_LOGIN_SUCCESS,
+    AUTH_SET_USER,
+    AUTHENTICATE_USER,
     FACEBOOK_LOGIN_FAIL,
-    AUTHENTICATE_USER, AUTH_SET_USER, AUTH_SET_STATUS, AUTH_SET_LOGGED_IN_STATUS
+    FACEBOOK_LOGIN_SUCCESS
 } from "./actionTypes";
-import {uiStartLoading, uiStopLoading} from "./ui";
 import {API_BASE_URL, FB_APP_KEY} from "../../constants/app";
 
 const API_KEY = "AIzaSyC2ZkXi7n3mOinaM6F4lFGl7GV-HXmn9pU";
@@ -21,21 +20,33 @@ export const authenticateUser = (isAuthenticated) => {
 };
 
 export const tryAuth = (authData, authMode = 'login') => {
+    // email, password,
     return dispatch => {
         // dispatch(uiStartLoading());
         let url = API_BASE_URL + '/login';
-        if (authMode === "signup") {
-            url = API_BASE_URL + '/signup';
+        let body = {
+            email: authData.email,
+            password: authData.password
+        };
+
+        if (authMode === "register") {
+            url = API_BASE_URL + '/register';
+            body = {
+                email: authData.email,
+                password: authData.password,
+                first_name: authData.firstName,
+                last_name: authData.lastName,
+                gender: authData.gender,
+                contact_number: authData.contactNumber
+            }
         }
         console.log(url, authData);
         fetch(url, {
             method: "POST",
-            body: JSON.stringify({
-                email: authData.email,
-                password: authData.password
-            }),
+            body: JSON.stringify(body),
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         })
             .catch(err => {
@@ -47,33 +58,43 @@ export const tryAuth = (authData, authMode = 'login') => {
             .then(res => res.json())
             .then(parsedRes => {
                 // dispatch(uiStopLoading());
-                console.log(parsedRes);
+                console.log('response', parsedRes);
                 if (!parsedRes.access_token) {
-                    alert("Authentication failed, please try again!");
+                    if (parsedRes.error === 'UserExistsException' && parsedRes.message) {
+                        alert(parsedRes.message);
+                    } else {
+                        alert("Authentication failed, please try again!");
+                    }
                 } else {
-                    dispatch(authSetUser(parsedRes.user));
-                    dispatch(authSetLoggedInStatus(true));
                     dispatch(
-                        authStoreToken(
-                            parsedRes.access_token,
-                            parsedRes.expires_in,
-                            ''
-                        )
+                        storeAuthInfo(parsedRes)
                     );
-                    // startMainTabs();
                 }
+            })
+            .catch(function () {
+                console.log("error");
             });
     };
 };
 
-export const authStoreToken = (token, expiresIn, refreshToken) => {
+export const storeAuthInfo = (res) => {
     return dispatch => {
+        // Initialize
+        const token = res.access_token;
+        const user = res.user;
+        const expiresIn = res.expires_in;
         const now = new Date();
         const expiryDate = now.getTime() + expiresIn * 1000;
+
+        // Store user info in Async Storage
+        AsyncStorage.setItem("loksewa:auth:user", JSON.stringify(user));
+        AsyncStorage.setItem("loksewa:auth:token", token);
+        AsyncStorage.setItem("loksewa:auth:expiryDate", expiryDate.toString());
+
+        // Dispatch actions to store Auth info in the redux store
         dispatch(authSetToken(token, expiryDate));
-        AsyncStorage.setItem("ap:auth:token", token);
-        AsyncStorage.setItem("ap:auth:expiryDate", expiryDate.toString());
-        AsyncStorage.setItem("ap:auth:refreshToken", refreshToken);
+        dispatch(authSetUser(user));
+        dispatch(authSetLoggedInStatus(true));
     };
 };
 
@@ -99,14 +120,14 @@ export const authSetToken = (token, expiryDate) => {
     };
 };
 
-export const authGetToken = () => {
-    return (dispatch, getState) => {
-        const promise = new Promise((resolve, reject) => {
+export const authGetToken = (dispatch, getState) => {
+    return () => {
+        return new Promise((resolve, reject) => {
             const token = getState().auth.token;
             const expiryDate = getState().auth.expiryDate;
             if (!token || new Date(expiryDate) <= new Date()) {
-                let fetchedToken;
-                AsyncStorage.getItem("ap:auth:token")
+                let fetchedToken, fetchedExpiryDate, fetchedUser;
+                AsyncStorage.getItem("loksewa:auth:token")
                     .catch(err => reject())
                     .then(tokenFromStorage => {
                         fetchedToken = tokenFromStorage;
@@ -114,26 +135,35 @@ export const authGetToken = () => {
                             reject();
                             return;
                         }
-                        return AsyncStorage.getItem("ap:auth:expiryDate");
+                        return AsyncStorage.getItem("loksewa:auth:expiryDate");
                     })
                     .then(expiryDate => {
                         const parsedExpiryDate = new Date(parseInt(expiryDate));
                         const now = new Date();
                         if (parsedExpiryDate > now) {
-                            dispatch(authSetToken(fetchedToken));
-                            resolve(fetchedToken);
+                            fetchedExpiryDate = expiryDate;
+                            return AsyncStorage.getItem("loksewa:auth:user");
                         } else {
                             reject();
                         }
+                    })
+                    .then(user => {
+                        fetchedUser = JSON.parse(user);
+
+                        // Dispatch actions to store Auth info in the redux store
+                        dispatch(authSetToken(fetchedToken, fetchedExpiryDate));
+                        dispatch(authSetUser(fetchedUser));
+                        dispatch(authSetLoggedInStatus(true));
+
+                        resolve(fetchedToken);
                     })
                     .catch(err => reject());
             } else {
                 resolve(token);
             }
-        });
-        return promise
+        })
             .catch(err => {
-                return AsyncStorage.getItem("ap:auth:refreshToken")
+                return AsyncStorage.getItem("loksewa:Auth:refreshToken")
                     .then(refreshToken => {
                         return fetch(
                             "https://securetoken.googleapis.com/v1/token?key=" + API_KEY,
@@ -151,7 +181,7 @@ export const authGetToken = () => {
                         if (parsedRes.id_token) {
                             console.log("Refresh token worked!");
                             dispatch(
-                                authStoreToken(
+                                storeAuthInfo(
                                     parsedRes.id_token,
                                     parsedRes.expires_in,
                                     parsedRes.refresh_token
@@ -173,47 +203,44 @@ export const authGetToken = () => {
     };
 };
 
-export const authAutoSignIn = () => {
-    return dispatch => {
-        dispatch(authGetToken())
-            .then(token => {
-                // startMainTabs();
-            })
+export const authAutoSignIn = (dispatch, getState) => {
+    return () => {
+        dispatch(authGetToken(dispatch, getState))
             .catch(err => console.log("Failed to fetch token!"));
     };
 };
 
 export const authClearStorage = () => {
     return dispatch => {
-        AsyncStorage.removeItem("ap:auth:token");
-        AsyncStorage.removeItem("ap:auth:expiryDate");
-        return AsyncStorage.removeItem("ap:auth:refreshToken");
+        AsyncStorage.removeItem("loksewa:auth:token");
+        AsyncStorage.removeItem("loksewa:auth:expiryDate");
+        return AsyncStorage.removeItem("loksewa:auth:user");
     };
 };
 
-export const authLogout = () => {
-    return dispatch => {
+export const authLogout = (dispatch) => {
+    return () => {
         dispatch(authClearStorage()).then(() => {
             // App();
         });
-        dispatch(authRemoveToken());
+        dispatch(authDataReset());
     };
 };
 
-export const authRemoveToken = () => {
+export const authDataReset = () => {
     return {
-        type: AUTH_REMOVE_TOKEN
+        type: AUTH_DATA_RESET
     };
 };
 
 // How to use AsyncStorace
-// AsyncStorage.setItem('fb_token')
-// AsyncStorage.getItem('fb_token')
+// AsyncStorage.setItem('loksewa:auth:fb_token')
+// AsyncStorage.getItem('loksewa:auth:fb_token')
 export const facebookLogin = () => async dispatch => {
-    let token = await AsyncStorage.getItem('fb_token');
+    let token = await AsyncStorage.getItem('loksewa:auth:fb_token');
 
     if (token) {
-        console.log('fb_token:', token);
+        console.log('loksewa:auth:fb_token:', token);
         // Dispatch an action saying FB login is done
         dispatch({
             type: FACEBOOK_LOGIN_SUCCESS,
@@ -221,7 +248,7 @@ export const facebookLogin = () => async dispatch => {
         })
     } else {
         // Start up FB Login process
-        doFacebookLogin(dispatch);
+        return doFacebookLogin(dispatch);
     }
 };
 
@@ -235,6 +262,43 @@ const doFacebookLogin = async dispatch => {
         return dispatch({type: FACEBOOK_LOGIN_FAIL})
     }
 
-    await AsyncStorage.setItem('fb_token', token);
+    await AsyncStorage.setItem('loksewa:auth:fb_token', token);
     // dispatch({type: FACEBOOK_LOGIN_SUCCESS, payload: token});
+};
+
+export const authUpdatePreferences = (preferences) => {
+    return (dispatch, getState) => {
+        let url = API_BASE_URL + '/me';
+
+        const token = getState().auth.token;
+        console.log('save data', {preferences: preferences});
+        fetch(url, {
+            method: "PUT",
+            body: JSON.stringify({preferences: preferences}),
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": "Bearer " + token
+            }
+        })
+            .catch(err => {
+                console.log(err);
+                alert("Unable to get preferences!");
+                // dispatch(uiStopLoading());
+            })
+            .then(res => res.json())
+            .then(parsedRes => {
+                console.log('preferences', parsedRes);
+                if (!parsedRes.data) {
+                    alert("Unable to get preferences!");
+                } else {
+                    dispatch(
+                        authSetUser(parsedRes.data)
+                    );
+                }
+            })
+            .catch(function () {
+                console.log("error");
+            });
+    };
 };

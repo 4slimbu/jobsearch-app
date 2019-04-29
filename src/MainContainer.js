@@ -1,80 +1,101 @@
 import React from 'react';
 import {AppLoading, Asset, Font} from 'expo';
-import {FontAwesome, Ionicons} from '@expo/vector-icons';
 import {Image} from 'react-native';
-import Login from "./views/auth/LoginScreen";
-import {SwitchNavigator} from "react-navigation";
-import Drawer from "./drawer/drawer";
+import {createAppContainer, createSwitchNavigator} from "react-navigation";
 import {connect} from "react-redux";
+import AuthNavigator from "./views/Auth/AuthNavigator";
+import {authAutoSignIn} from "./store/actions";
+import Drawer from "./drawer/drawer";
+
+// TODO: organize navigations as below
+/*
+Navigation:
+- AppLoading
+- App
+    - Categories
+        - Categories Detail
+        - Post Detail
+    - Manage Posts
+        - Post Detail
+        - Post Edit
+        - Post Add
+        - Post Delete
+        - My comments
+        - My Posts
+        - My Saved Posts
+        - My Profile
+    - Search
+        - Search Detail
+- Drawer
+ */
+
+const MainNavigation = createSwitchNavigator({
+    App: Drawer,
+    Auth: AuthNavigator,
+}, {
+    initialRouteName: 'Auth'
+});
+
+const AppContainer = createAppContainer(MainNavigation);
 
 function cacheImages(images) {
     return images.map(image => {
-      if (typeof image === 'string') {
-        return Image.prefetch(image);
-      } else {
-        return Asset.fromModule(image).downloadAsync();
-      }
+        if (typeof image === 'string') {
+            return Image.prefetch(image);
+        } else {
+            return Asset.fromModule(image).downloadAsync();
+        }
     });
-  }
+}
 
 function cacheFonts(fonts) {
-return fonts.map(font => Font.loadAsync(font));
+    return fonts.map(font => Font.loadAsync(font));
 }
 
 class MainContainer extends React.Component {
-    state = {
-      isReady: false,
+    constructor(props) {
+        super(props);
+        this._isMounted = false;
+
+        this.state = {
+            isReady: true,
+        }
     };
-  
-    async _loadAssetsAsync() {
-      const imageAssets = cacheImages([
-        require('../assets/images/bg_screen1.jpg'),
-        require('../assets/images/bg_screen2.jpg'),
-        require('../assets/images/bg_screen3.jpg'),
-        require('../assets/images/bg_screen4.jpg'),
-        require('../assets/images/user-cool.png'),
-        require('../assets/images/user-hp.png'),
-        require('../assets/images/user-student.png'),
-        require('../assets/images/avatar1.jpg'),
-      ]);
-  
-      const fontAssets = cacheFonts([FontAwesome.font, Ionicons.font]);
-  
-      await Promise.all([...imageAssets, ...fontAssets]);
+
+    async componentDidMount() {
+        this.props.authAutoSignIn();
     }
-  
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
     render() {
-      if (!this.state.isReady) {
+        if (!this.state.isReady) {
+            return (
+                <AppLoading
+                    startAsync={this._loadAssetsAsync}
+                    onFinish={() => this.setState({isReady: true})}
+                />
+            );
+        }
+
         return (
-          <AppLoading
-            startAsync={this._loadAssetsAsync}
-            onFinish={() => this.setState({ isReady: true })}
-          />
+            <AppContainer/>
         );
-      }
-  
-      const MainNavigation = SwitchNavigator({
-        App: Drawer,
-        Auth: Login,
-      }, {
-        initialRouteName: this.props && this.props.auth && this.props.auth.isAuthenticated ? 'App' : 'Auth' 
-      });
-
-      return (
-        <MainNavigation/>
-      );
     }
-  }
+}
 
-  const mapStateToProps = state => {
+const mapStateToProps = state => {
     return {
-      auth: state.auth
+        auth: state.auth
     }
-  }
-  
-  const mapDispatchToProps = dispatch => {
+};
+
+const mapDispatchToProps = dispatch => {
     return {
+        authAutoSignIn: dispatch(authAutoSignIn)
     };
-  }
+};
 
-  export default connect(mapStateToProps, mapDispatchToProps) (MainContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);
