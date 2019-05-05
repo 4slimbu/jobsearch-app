@@ -4,7 +4,7 @@
     "slug": "loksewa-app",
     "description": "Loksewa app ",
     "privacy": "public",
-    "sdkVersion": "31.0.0",
+    "sdkVersion": "32.0.0",
     "platforms": [
       "ios",
       "android"
@@ -23,7 +23,11 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.responsivepixel.loksewa",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.responsivepixel.loksewa"
     }
   }
 }

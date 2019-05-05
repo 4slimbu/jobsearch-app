@@ -1,19 +1,19 @@
 import { combineReducers } from "redux";
-import auth from "./reducers/auth";
-import ui from "./reducers/ui";
+import authReducers from "./reducers/authReducers";
+import uiReducers from "./reducers/uiReducers";
 import { createStore, compose, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import {composeWithDevTools} from "redux-devtools-extension";
-import categories from "./reducers/categories";
-import posts from "./reducers/posts";
-import comments from "./reducers/comments";
+import categoriesReducers from "./reducers/categoriesReducers";
+import postsReducers from "./reducers/postsReducers";
+import commentsReducers from "./reducers/commentsReducers";
 
 const rootReducer = combineReducers({
-    auth: auth,
-    categories: categories,
-    posts: posts,
-    comments: comments,
-    ui: ui,
+    auth: authReducers,
+    categories: categoriesReducers,
+    posts: postsReducers,
+    comments: commentsReducers,
+    ui: uiReducers,
 });
 
 const configureStore = () => {
