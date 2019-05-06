@@ -23,7 +23,8 @@ export function toReadable(mysql_date) {
         let hours = d.getHours() > 9 ? d.getHours() : '0' + d.getHours();
         let minutes = d.getMinutes() > 9 ? d.getMinutes() : '0' + d.getMinutes();
 
-        return day + ' ' + month + ' ' + year + ' ' + hours + ':' + minutes;
+        // return day + ' ' + month + ' ' + year + ' ' + hours + ':' + minutes;
+        return day + ' ' + month + ' ' + year;
     }
 
     return '';

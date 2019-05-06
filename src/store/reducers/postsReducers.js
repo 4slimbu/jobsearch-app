@@ -13,6 +13,11 @@ const initialState = {
         links: {},
         meta: {}
     },
+    postsByMe: {
+        data: [],
+        links: {},
+        meta: {}
+    },
     searchedPosts: {
         data: [],
         links: {},
@@ -39,10 +44,7 @@ const postsReducers = (state = initialState, action) => {
             return {
                 ...state,
                 postsByCategory: {
-                    data: [
-                        // ...state.postsByCategory.data,
-                        ...action.payload.data
-                    ],
+                    data: action.payload.data,
                     links: action.payload.links,
                     meta: action.payload.meta
                 }
@@ -62,9 +64,7 @@ const postsReducers = (state = initialState, action) => {
             return {
                 ...state,
                 postsByMe: {
-                    data: [
-                        ...action.payload.data
-                    ],
+                    data: state.postsByMe.data.concat(action.payload.data),
                     links: action.payload.links,
                     meta: action.payload.meta
                 }

@@ -146,39 +146,41 @@ export const setPostsBySearch = (payload) => {
     }
 };
 
-export const getMyPosts = () => {
+export const getMyPosts = (url = null) => {
     return (dispatch, getState) => {
-        let url = API_BASE_URL + '/posts?type=my';
-
+        if (!url) {
+            url = API_BASE_URL + '/posts?type=my';
+        }
+        console.log('get my posts url', url);
         const token = getState().auth.token;
 
-        fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "Authorization": "Bearer " + token
-            }
-        })
-            .catch(err => {
-                console.log(err);
-                alert("Unable to search posts!");
-                // dispatch(uiStopLoading());
-            })
-            .then(res => res.json())
-            .then(parsedRes => {
-                console.log(parsedRes);
-                if (!parsedRes.data) {
-                    alert("Unable to search posts!");
-                } else {
-                    dispatch(
-                        setPostsByMe(parsedRes)
-                    );
+        return new Promise((resolve, reject) => {
+            fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": "Bearer " + token
                 }
             })
-            .catch(function() {
-                console.log("error");
-            });
+                .then(res => res.json())
+                .then(parsedRes => {
+                    console.log(parsedRes);
+                    if (!parsedRes.data) {
+                        console.log("Unable to get posts!");
+                        reject();
+                    } else {
+                        dispatch(
+                            setPostsByMe(parsedRes)
+                        );
+                        resolve(parsedRes);
+                    }
+                })
+                .catch(function() {
+                    reject();
+                    console.log("error");
+                });
+        });
     };
 };
 
@@ -232,4 +234,30 @@ export const setPostsSavedByMe = (payload) => {
         type: POSTS_SAVED_BY_ME_SET,
         payload: payload
     }
+};
+
+export const addPost = (formData) => {
+    let url = API_BASE_URL + '/posts';
+    return (dispatch, getState) => {
+        const token = getState().auth.token;
+        return new Promise((resolve, reject) => {
+            fetch(url, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Accept": "application/json",
+                    "Authorization": "Bearer " + token
+                }
+            })
+                .then((res) => {
+                    console.log(res);
+                    resolve();
+                })
+                .catch(function () {
+                    reject();
+                    console.log("error");
+                });
+        });
+    };
 };

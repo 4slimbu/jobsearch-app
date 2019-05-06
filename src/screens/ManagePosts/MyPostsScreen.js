@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View, Dimensions, ActivityIndicator} from 'react-native';
 import Colors from '../../constants/colors';
 import {connect} from "react-redux";
 import {getMyPosts} from "../../store/actions/postActions";
@@ -9,13 +9,23 @@ class MyPostsScreen extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            // loaded, loading, failed, no-posts
+            getPostsStatus: 'loading',
+        };
+
         this.onSelectPost = this.onSelectPost.bind(this);
+        this.scrollHandler = this.scrollHandler.bind(this);
     }
 
     async componentDidMount() {
         this._isMounted = true;
 
-        this._isMounted && await this.props.onGetMyPosts();
+        this._isMounted && await this.props.onGetMyPosts().then(res => {
+            this.setState({getPostsStatus: 'loaded'});
+        }).catch(err => {
+            this.setState({getPostsStatus: 'failed'});
+        });
     }
 
     componentWillUnmount() {
@@ -27,7 +37,24 @@ class MyPostsScreen extends Component {
         this.props.navigation.navigate('PostDetail', {postId: postId});
     }
 
+    async scrollHandler(e){
+        let windowHeight = Dimensions.get('window').height,
+            height = e.nativeEvent.contentSize.height,
+            offset = e.nativeEvent.contentOffset.y;
+        if( windowHeight + offset >= height ){
+            if (this.props.postsByMe.meta.to !== this.props.postsByMe.meta.total) {
+                this.setState({getPostsStatus: 'loading'});
+                await this.props.onGetMyPosts(this.props.postsByMe.links.next).then(res => {
+                    this.setState({getPostsStatus: 'loaded'});
+                }).catch(err => {
+                    this.setState({getPostsStatus: 'failed'});
+                });
+            }
+        }
+    }
+
     render() {
+        const {getPostsStatus} = this.state;
         const {postsByMe} = this.props;
         const postListProps = {
             posts: postsByMe,
@@ -35,7 +62,7 @@ class MyPostsScreen extends Component {
             type: 'my'
         };
         return (
-            <ScrollView style={styles.container}>
+            <ScrollView style={styles.container} onScrollEndDrag={this.scrollHandler}>
                 <View style={styles.contentView}>
                     <View style={styles.headerContainer}>
                         <Text style={styles.heading}>My Posts</Text>
@@ -43,6 +70,12 @@ class MyPostsScreen extends Component {
                     <View style={{marginTop: 20}}>
                         {
                             postsByMe && <PostList {...postListProps}/>
+                        }
+                        {
+                            getPostsStatus === 'loading' && <ActivityIndicator size={50} color={Colors.primary1}/>
+                        }
+                        {
+                            getPostsStatus === 'failed' && <Text style={{margin: 15}}>Failed!</Text>
                         }
                     </View>
                 </View>
@@ -115,7 +148,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onGetMyPosts: () => dispatch(getMyPosts()),
+        onGetMyPosts: (url = null) => dispatch(getMyPosts(url)),
     };
 };
 
