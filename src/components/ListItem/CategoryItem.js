@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const categoryItem = props => {
     const {category, onSelectCategory} = props;
-    console.log('categoryItem', category);
     return (
         <TouchableOpacity style={styles.categoryItem}
                           onPress={onSelectCategory}>

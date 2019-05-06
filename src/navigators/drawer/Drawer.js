@@ -2,13 +2,13 @@ import {Dimensions, Image, Text, View} from "react-native";
 import {createDrawerNavigator} from "react-navigation";
 import React from "react";
 import LogoutScreen from "../../screens/Auth/LogoutScreen";
-import PageDetailScreen from "../../screens/Page/PageDetailScreen";
 import Tabs from "../tabs/Tabs";
-import Stacks from "../stacks/Stacks";
+import Post from "../stacks/Post";
 import Modals from "../modals/Modals";
 import {ListItem} from "react-native-elements";
 import Colors from "../../constants/colors";
-import MyProfileScreen from "../../screens/ManagePosts/MyProfileScreen";
+import Profile from "../stacks/Profile";
+import Page from "../stacks/Page";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -84,7 +84,7 @@ const CustomDrawerContentComponent = props => (
                         size: 40
                     }}
                     key={i}
-                    onPress={() => props.navigation.navigate(l.target)}
+                    onPress={() => props.navigation.navigate(l.target, {navTitle: l.name})}
                     title={l.name}
                     subtitle={l.subtitle}
                     // chevron
@@ -98,50 +98,10 @@ const CustomDrawerContentComponent = props => (
 const Drawer = createDrawerNavigator(
     {
         Tabs: {screen: Tabs},
-        Stacks: {screen: Stacks},
+        Post: {screen: Post},
+        Profile: {screen: Profile},
+        Page: {screen: Page},
         Modal: {screen: Modals},
-        AboutUs: {
-            path: '/about-us',
-            screen: PageDetailScreen,
-            navigationOptions: {
-                drawerLabel: 'About Us',
-            }
-        },
-        ContactUs: {
-            path: '/contact-us',
-            screen: PageDetailScreen,
-            navigationOptions: {
-                drawerLabel: 'Contact Us'
-            }
-        },
-        Privacy: {
-            path: '/privacy',
-            screen: PageDetailScreen,
-            navigationOptions: {
-                drawerLabel: 'Privacy'
-            }
-        },
-        TermsAndConditions: {
-            path: '/terms-and-conditions',
-            screen: PageDetailScreen,
-            navigationOptions: {
-                drawerLabel: 'Terms and Conditions'
-            }
-        },
-        SecurityTips: {
-            path: '/security-tips',
-            screen: PageDetailScreen,
-            navigationOptions: {
-                drawerLabel: 'Security Tips',
-            }
-        },
-        MyProfile: {
-            path: '/my-profile',
-            screen: MyProfileScreen,
-            navigationOptions: {
-                drawerLabel: 'My Profile',
-            }
-        },
         LogOut: {
             path: '/logout',
             screen: LogoutScreen,

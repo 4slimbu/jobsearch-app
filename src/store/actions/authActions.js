@@ -7,6 +7,7 @@ import {
     AUTHENTICATE_USER
 } from "./actionTypes";
 import {API_BASE_URL, FB_APP_KEY} from "../../constants/app";
+import {getMyPosts} from "./postActions";
 
 const API_KEY = "AIzaSyC2ZkXi7n3mOinaM6F4lFGl7GV-HXmn9pU";
 
@@ -18,7 +19,6 @@ export const authenticateUser = (isAuthenticated) => {
 };
 
 export const tryAuth = (authData, authMode = 'login') => {
-    console.log('tryAuth params', authData, authMode);
     // dispatch(uiStartLoading());
     let url = API_BASE_URL + '/login';
     let body = {};
@@ -50,7 +50,6 @@ export const tryAuth = (authData, authMode = 'login') => {
 
     // email, password,
     return dispatch => {
-        console.log(url, authData);
         return new Promise((resolve, reject) => {
             fetch(url, {
                 method: "POST",
@@ -61,7 +60,6 @@ export const tryAuth = (authData, authMode = 'login') => {
                 }
             })
                 .catch(err => {
-                    console.log('test');
                     console.log(err);
                     alert("Authentication failed, please try again!");
                     // dispatch(uiStopLoading());
@@ -69,7 +67,6 @@ export const tryAuth = (authData, authMode = 'login') => {
                 .then(res => res.json())
                 .then(parsedRes => {
                     // dispatch(uiStopLoading());
-                    console.log('response', parsedRes);
                     if (!parsedRes.access_token) {
                         if (parsedRes.error === 'UserExistsException' && parsedRes.message) {
                             alert(parsedRes.message);
@@ -85,7 +82,6 @@ export const tryAuth = (authData, authMode = 'login') => {
                 })
                 .catch(function () {
                     reject();
-                    console.log("error");
                 });
         });
     };
@@ -203,12 +199,13 @@ export const authClearStorage = () => {
 export const authLogout = () => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
+            console.log('inside authLogout');
             dispatch(authClearStorage());
             dispatch(authDataReset());
 
             resolve(1);
         }).catch(err => {
-            console.log('Logout Err', err);
+            console.log('inside catch authLogout');
             reject();
         });
     };
@@ -237,13 +234,10 @@ export const authDataReset = () => {
 export const facebookLogin = () => async dispatch => {
     let fbToken = await AsyncStorage.getItem('loksewa:auth:fbToken');
 
-    console.log('loksewa:auth:fbToken:', fbToken);
     if (! fbToken) {
-        console.log('no fb token');
         fbToken = await doFacebookLogin(dispatch);
     }
 
-    console.log('fire auth from fb login');
     dispatch(tryAuth({fbToken: fbToken}, 'fbLogin'));
 };
 
@@ -267,35 +261,33 @@ export const authUpdatePreferences = (preferences) => {
         let url = API_BASE_URL + '/me';
 
         const token = getState().auth.token;
-        console.log('save data', {preferences: preferences});
-        fetch(url, {
-            method: "PUT",
-            body: JSON.stringify({preferences: preferences}),
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "Authorization": "Bearer " + token
-            }
-        })
-            .catch(err => {
-                console.log(err);
-                alert("Unable to get preferences!");
-                // dispatch(uiStopLoading());
-            })
-            .then(res => res.json())
-            .then(parsedRes => {
-                console.log('preferences', parsedRes);
-                if (!parsedRes.data) {
-                    alert("Unable to get preferences!");
-                } else {
-                    dispatch(
-                        authSetUser(parsedRes.data)
-                    );
+        return new Promise((resolve, reject) => {
+            fetch(url, {
+                method: "PUT",
+                body: JSON.stringify({preferences: preferences}),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": "Bearer " + token
                 }
             })
-            .catch(function () {
-                console.log("error");
-            });
+                .then(res => res.json())
+                .then(parsedRes => {
+                    console.log('preferences', parsedRes);
+                    if (!parsedRes.data) {
+                        alert("Unable to get preferences!");
+                    } else {
+                        dispatch(
+                            authSetUser(parsedRes.data)
+                        );
+                    }
+                    resolve(parsedRes);
+                })
+                .catch(function () {
+                    reject();
+                    console.log("error");
+                });
+        })
     };
 };
 
@@ -383,3 +375,96 @@ export const resetPassword = (data) => {
         });
     };
 };
+
+export const reSendVerificationCode = () => {
+    let url = API_BASE_URL + '/resend-verification-code';
+    return (dispatch, getState) => {
+        const token = getState().auth.token;
+        console.log('reSendVerificationCode', url, token);
+        return new Promise((resolve, reject) => {
+            fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": "Bearer " + token
+                }
+            })
+                // .then(res => res.json())
+                .then(parsedRes => {
+                    console.log(parsedRes);
+                    resolve(parsedRes);
+                })
+                .catch(function () {
+                    reject();
+                    console.log("error");
+                });
+        });
+    };
+};
+
+export const updateMyProfile = (formData) => {
+    let url = API_BASE_URL + '/me';
+    return (dispatch, getState) => {
+        const token = getState().auth.token;
+        return new Promise((resolve, reject) => {
+            fetch(url, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Accept": "application/json",
+                    "Authorization": "Bearer " + token
+                }
+            })
+                .then(res => res.json())
+                .then(parsedRes => {
+                    console.log('update profile response', parsedRes);
+                    if (!parsedRes.data) {
+                        console.log('Get Post Error', err);
+                    } else {
+                        // Store user info in Async Storage
+                        AsyncStorage.setItem("loksewa:auth:user", JSON.stringify(parsedRes.data));
+
+                        dispatch(
+                            authSetUser(parsedRes.data)
+                        );
+                    }
+                    resolve(parsedRes);
+                })
+                .catch(function() {
+                    reject();
+                    console.log("error");
+                });
+        });
+    };
+};
+
+export const updatePassword = (formData) => {
+    let url = API_BASE_URL + '/me/reset-password';
+    return (dispatch, getState) => {
+        const token = getState().auth.token;
+        console.log(formData);
+        return new Promise((resolve, reject) => {
+            fetch(url, {
+                method: "PUT",
+                body: JSON.stringify(formData),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": "Bearer " + token
+                }
+            })
+                // .then(res => res.json())
+                .then(parsedRes => {
+                    console.log('update password response', parsedRes);
+                    resolve(parsedRes);
+                })
+                .catch(function() {
+                    reject();
+                    console.log("error");
+                });
+        });
+    };
+};
+

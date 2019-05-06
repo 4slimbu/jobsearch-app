@@ -2,14 +2,14 @@ import React from 'react';
 import {createStackNavigator, DrawerActions} from 'react-navigation';
 import {Icon, Image} from 'react-native-elements/src/index';
 import PostDetailScreen from "../../screens/Post/PostDetailScreen";
-import PostListScreen from "../../screens/Post/PostListScreen";
 import PageDetailScreen from "../../screens/Page/PageDetailScreen";
+import MyProfileScreen from "../../screens/ManagePosts/MyProfileScreen";
 
 const LogoUrl = require('../../../assets/icons/icon.png');
 
-const Stacks = createStackNavigator({
-    PostList: {
-        screen: PostListScreen,
+const ProfileStacks = createStackNavigator({
+    MyProfile: {
+        screen: MyProfileScreen,
         path: '/',
         navigationOptions: ({navigation}) => ({
             title: 'Loksewa',
@@ -27,20 +27,27 @@ const Stacks = createStackNavigator({
             ),
         }),
     },
-    PostDetail: {
+    UpdateProfilePicture: {
         screen: PostDetailScreen,
-        path: '/post-detail',
+        path: '/update-profile-picture',
         navigationOptions: {
-            title: 'Post Detail',
+            title: 'Update Profile Picture',
         },
     },
-    PageDetail: {
-        screen: PageDetailScreen,
-        path: '/page-detail',
+    UpdateProfile: {
+        screen: PostDetailScreen,
+        path: '/edit-profile',
         navigationOptions: {
-            title: 'Page Detail',
+            title: 'Update Profile',
+        },
+    },
+    UpdatePassword: {
+        screen: PageDetailScreen,
+        path: '/update-password',
+        navigationOptions: {
+            title: 'Update Password',
         },
     },
 });
 
-export default Stacks;
+export default ProfileStacks;

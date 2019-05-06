@@ -14,7 +14,7 @@ import {Button, Image, Input} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import socialColor from "../../constants/socialColors";
 import Colors from "../../constants/colors";
-import {authAutoSignIn, facebookLogin, tryAuth, verifyEmail} from "../../store/actions/authActions";
+import {reSendVerificationCode, verifyEmail} from "../../store/actions/authActions";
 import {connect} from "react-redux";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -33,12 +33,15 @@ class VerificationScreen extends Component {
         this.state = {
             isLoading: false,
             verificationCode: '',
+            // fresh | processing | successful | unsuccessful
             verificationStatus: 'fresh'
         };
 
         this.verifyEmailHandler = this.verifyEmailHandler.bind(this);
         this.tryAgainHandler = this.tryAgainHandler.bind(this);
         this.continueHandler = this.continueHandler.bind(this);
+        this.reSendVerificationCodeHandler = this.reSendVerificationCodeHandler.bind(this);
+        this.tryAnotherAccountHandler = this.tryAnotherAccountHandler.bind(this);
     }
 
     verifyEmailHandler() {
@@ -61,6 +64,18 @@ class VerificationScreen extends Component {
 
     continueHandler() {
         this.props.navigation.navigate('App');
+    }
+
+    reSendVerificationCodeHandler() {
+        this.props.reSendVerificationCode().then(res => {
+            alert('Verification code sent successfully!');
+        }).catch(err => {
+            alert('Unable to send verification code');
+        });
+    }
+
+    tryAnotherAccountHandler() {
+        this.props.navigation.navigate('LogOut');
     }
 
     render() {
@@ -147,6 +162,25 @@ class VerificationScreen extends Component {
                             loading={isLoading}
                             disabled={isLoading}
                         />
+                        {
+                            (verificationStatus === 'successful' || verificationStatus === 'fresh') &&
+                            <View>
+                                <Button
+                                    title={'Re-Send Verification Code'}
+                                    titleStyle={{color: Colors.grey1}}
+                                    buttonStyle={{backgroundColor: 'transparent', marginTop: 20}}
+                                    underlayColor="transparent"
+                                    onPress={this.reSendVerificationCodeHandler}
+                                />
+                                <Button
+                                    title={'Try Another Account'}
+                                    titleStyle={{color: Colors.grey1}}
+                                    buttonStyle={{backgroundColor: 'transparent', marginTop: 20}}
+                                    underlayColor="transparent"
+                                    onPress={this.tryAnotherAccountHandler}
+                                />
+                            </View>
+                        }
                     </View>
                 </KeyboardAvoidingView>
             </ScrollView>
@@ -260,6 +294,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
     return {
         verifyEmail: (verificationCode) => dispatch(verifyEmail(verificationCode)),
+        reSendVerificationCode: () => dispatch(reSendVerificationCode()),
     };
 };
 

@@ -2,17 +2,35 @@ import React, {Component} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Colors from '../../constants/colors';
 
+const LogoUrl = require('../../../assets/icons/icon.png');
+
 class PageDetailScreen extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            pageTitle: ""
+        }
+    }
+
+    componentDidMount() {
+        this._isMounted = true;
+        const {params} = this.props.navigation.state;
+        const pageTitle = params ? params.navTitle : "Default Page Title";
+
+        this._isMounted && this.setState({ pageTitle });
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     render() {
+        const {pageTitle} = this.state;
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.contentView}>
                     <View style={styles.headerContainer}>
-                        <Text style={styles.heading}>Page Title</Text>
+                        <Text style={styles.heading}>{pageTitle}</Text>
                     </View>
                     <View style={{paddingLeft: 20, paddingRight: 20, marginBottom: 20}}>
                         <Text style={styles.postContent}>Lorem ipsum dolor sit amet, ipsum dolor sit amet,

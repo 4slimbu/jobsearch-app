@@ -18,10 +18,6 @@ export const loadCategories = () => {
                     "Authorization": "Bearer " + token
                 }
             })
-                .catch(err => {
-                    console.log('Category Fetch Error', err);
-                    // dispatch(uiStopLoading());
-                })
                 .then(res => res.json())
                 .then(parsedRes => {
                     console.log(parsedRes);

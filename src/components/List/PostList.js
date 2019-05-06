@@ -4,21 +4,20 @@ import PropTypes from "prop-types";
 import {map} from "lodash";
 
 import PostItem from "../ListItem/PostItem";
+import {Divider} from "react-native-elements";
+import Colors from "../../constants/colors";
 
 const PostList = (props) => {
-    const {savedPosts, posts, onSavePost, onSelectPost, type} = props;
+    const {posts, type} = props;
     return map(posts.data, (post, key) => {
-        const isSaved = savedPosts && savedPosts.indexOf(post.id) > -1;
         return (
-            <PostItem
-                type={type}
-                key={key}
-                isFirst={key === 0}
-                isSaved={isSaved}
-                post={post}
-                onSelectPost={() => onSelectPost(post.id)}
-                onSavePost={() => onSavePost(post.id)}
-            />
+            <View key={key}>
+                {key !== 0 && <Divider style={styles.divider}/>}
+                <PostItem
+                    post={post}
+                    type={type}
+                />
+            </View>
         )
     });
 };
@@ -40,6 +39,11 @@ const postList = props => {
 };
 
 const styles = StyleSheet.create({
+    divider: {
+        backgroundColor: Colors.grey3,
+        marginTop: 20,
+        marginBottom: 20
+    },
     postContainer: {
         // flexDirection: 'row',
         // justifyContent: 'space-around',

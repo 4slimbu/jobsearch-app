@@ -1,3 +1,5 @@
+import * as _ from "lodash";
+
 export function showExcerpt(string, length) {
     return string.length > length ?
         string.substring(0, length) + "..." :
@@ -6,8 +8,6 @@ export function showExcerpt(string, length) {
 
 export function toReadable(mysql_date) {
     let t;
-
-    console.log('mysql date', mysql_date);
 
     if (typeof mysql_date === 'string' && mysql_date !== '') {
         t = mysql_date.split(/[- :]/);
@@ -23,8 +23,43 @@ export function toReadable(mysql_date) {
         let hours = d.getHours() > 9 ? d.getHours() : '0' + d.getHours();
         let minutes = d.getMinutes() > 9 ? d.getMinutes() : '0' + d.getMinutes();
 
-        return day + ' ' + month + ' ' + year + ' ' + hours + ':' + minutes;
+        // return day + ' ' + month + ' ' + year + ' ' + hours + ':' + minutes;
+        return day + ' ' + month + ' ' + year;
     }
 
     return '';
+}
+
+export function getFeaturedImageSrc(postImages) {
+    const primaryImage = _.find(postImages, {"is_primary": true});
+
+    return  primaryImage && primaryImage.url ? {uri: primaryImage.url} : require('../../../assets/images/placeholder.png');
+}
+
+export function findFeaturedImage(postImages) {
+    const primaryImage = _.find(postImages, {"is_primary": true});
+
+    if (primaryImage) {
+        return {
+            ...primaryImage,
+            uri: primaryImage.url
+        };
+    }
+
+    return null;
+}
+
+export function findAdditionalImages(postImages) {
+    let newPostImages = [];
+
+    _.forEach(postImages, (postImage, key) => {
+        if (! postImage.is_primary) {
+            newPostImages.push({
+                ...postImage,
+                uri: postImage.url
+            })
+        }
+    });
+
+    return newPostImages;
 }
