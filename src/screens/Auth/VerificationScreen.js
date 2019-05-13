@@ -276,7 +276,6 @@ const styles = StyleSheet.create({
     titleText: {
         color: Colors.grey1,
         fontSize: 30,
-        fontFamily: 'regular',
     },
     helpContainer: {
         height: 64,

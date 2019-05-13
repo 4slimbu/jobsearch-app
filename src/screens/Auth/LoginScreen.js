@@ -11,6 +11,7 @@ import {authAutoSignIn, facebookLogin, tryAuth} from '../../store/actions/authAc
 import {APP_NAME} from "../../constants/app";
 import Colors from "../../constants/colors";
 import * as _ from "lodash";
+import {validateEmail} from "../../utils/helper/helper";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -46,9 +47,9 @@ class LoginScreen extends Component {
 
     async componentDidMount() {
         this._isMounted = true;
-        this._isMounted && this.setState({fontLoaded: true});
+
         this._isMounted && await this.props.authAutoSignIn().then(res => {
-            this.setState({isLoggedIn: true, isReady: true});
+            this.setState({isLoggedIn: true});
 
             if ( ! this.props.auth.user.verified) {
                 this.props.navigation.navigate('VerificationScreen');
@@ -56,34 +57,29 @@ class LoginScreen extends Component {
                 this.props.navigation.navigate('App');
             }
         }).catch(err => {
-            this.setState({isReady: true});
-            console.log('Login Error:', err);
         });
+
+        this._isMounted && this.setState({isReady: true});
     }
 
     componentWillUnmount() {
         this._isMounted = false;
     }
 
-    validateEmail(email) {
-        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(String(email).toLowerCase());
-    }
-
     isFormValid() {
-        const {email, password, errors} = this.state;
-        if (! this.validateEmail(email)) {
+        const {email, password} = this.state;
+        let errors = {};
+
+        if (! validateEmail(email)) {
             errors.email = "Email is invalid";
-        } else {
-            errors.email && delete errors.email;
-        }
-        if (password.length < 8) {
-            errors.password = "Password must be at least 8 characters"
-        } else {
-            errors.password && delete errors.password;
         }
 
-        return ! errors.length > 0;
+        if (password.length < 8) {
+            errors.password = "Password must be at least 8 characters";
+        }
+
+        this.setState({errors});
+        return _.isEmpty(errors);
     }
 
     async normalLoginHandler() {
@@ -96,17 +92,16 @@ class LoginScreen extends Component {
         this.setState({isLoading: true});
 
         await this.props.onTryAuth({email: email, password: password}).then(() => {
-            this.setState({isReady: true});
-            this.setState({isLoading: false});
             if ( this.props.auth.isLoggedIn && !this.props.auth.user.verified) {
                 this.props.navigation.navigate('VerificationScreen');
             } else if (this.props.auth.isLoggedIn && this.props.auth.user.verified) {
                 this.props.navigation.navigate('App');
             }
         }).catch(err => {
-            this.setState({isReady: true});
-            this.setState({isLoading: false});
         });
+
+        this._isMounted && this.setState({isReady: true});
+        this._isMounted && this.setState({isLoading: false});
     }
 
     facebookLoginHandler() {
@@ -124,11 +119,10 @@ class LoginScreen extends Component {
             isLoading,
             email,
             password,
-            fontLoaded,
             errors
         } = this.state;
         return (
-            fontLoaded && isReady ? (
+            isReady ? (
             <ScrollView style={[styles.container]}>
 
                     <KeyboardAvoidingView style={{flex: 1, justifyContent: 'center', alignItems: 'center',
@@ -203,7 +197,7 @@ class LoginScreen extends Component {
                             <Button
                                 title={'Register'}
                                 titleStyle={{color: Colors.grey1}}
-                                buttonStyle={{backgroundColor: 'transparent'}}
+                                buttonStyle={{backgroundColor: 'transparent', marginBottom: 25}}
                                 underlayColor="transparent"
                                 onPress={() => this.props.navigation.navigate('RegisterScreen')}
                             />

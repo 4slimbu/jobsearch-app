@@ -16,6 +16,8 @@ import socialColor from "../../constants/socialColors";
 import Colors from "../../constants/colors";
 import {resetPassword, sendForgotPasswordEmail} from "../../store/actions/authActions";
 import {connect} from "react-redux";
+import {validateEmail} from "../../utils/helper/helper";
+import * as _ from "lodash";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -30,7 +32,7 @@ class ForgotPasswordScreen extends Component {
     constructor(props) {
         super(props);
 
-        // status: fresh|processing|receivedCode|unsuccessful|successful
+        // status: fresh|receivedCode|unsuccessful|successful
         this.state = {
             isLoading: false,
             email: '',
@@ -38,52 +40,86 @@ class ForgotPasswordScreen extends Component {
             confirmPassword: '',
             passwordResetCode: '',
             status: 'fresh',
-            isPasswordValid: true,
-            isPasswordResetCodeValid: true,
-            isConfirmPasswordValid: true
+            errors: {}
         };
 
         this.sendForgotPasswordEmailHandler = this.sendForgotPasswordEmailHandler.bind(this);
         this.tryAgainHandler = this.tryAgainHandler.bind(this);
         this.continueHandler = this.continueHandler.bind(this);
         this.resetPasswordHandler = this.resetPasswordHandler.bind(this);
+        this.havePasswordResetCodeHandler = this.havePasswordResetCodeHandler.bind(this);
     }
 
     async sendForgotPasswordEmailHandler() {
-        this.setState({status: 'processing'});
+
+        // Check for validation error
+        let errors = {};
+        if (! validateEmail(this.state.email)) {
+            errors.email = "Email is invalid";
+            this.setState({errors});
+            return;
+        }
+
+        // Send Forgot Password Email
+        this.setState({isLoading: true});
 
         await this.props.sendForgotPasswordEmail(this.state.email).then(res => {
-            this.setState({
-                status: 'codeReceived'
-            })
         }).catch(err => {
-            this.setState({
-                status: 'codeReceived'
-            })
         });
+
+        this.setState({status: 'codeReceived'});
+        this.setState({isLoading: false});
+    }
+
+    isResetFormValid() {
+        const {password, confirmPassword, passwordResetCode} = this.state;
+        let errors = {};
+
+        if (passwordResetCode.length < 4) {
+            errors.passwordResetCode = "Invalid password reset code";
+        }
+
+        if (password.length < 8) {
+            errors.password = "Password must be at least 8 characters";
+        }
+
+        if (password !== confirmPassword) {
+            errors.confirmPassword = "Confirm password should match password";
+        }
+
+        this.setState({errors});
+        return _.isEmpty(errors);
     }
 
     async resetPasswordHandler() {
         const {email, password, passwordResetCode} = this.state;
+
+        if (! this.isResetFormValid()) {
+            return;
+        }
+
+        this.setState({isLoading: true});
+
         const data = {
             email: email,
             password: password,
             token: passwordResetCode,
         };
         await this.props.resetPassword(data).then(res => {
-            this.setState({
-                status: 'successful'
-            })
+            this.setState({ status: 'successful' });
         }).catch(err => {
-            console.log('onrejected', err);
-            this.setState({
-                status: 'unsuccessful'
-            })
+            this.setState({ status: 'unsuccessful' });
         });
+
+        this.setState({isLoading: false});
     }
 
     tryAgainHandler() {
         this.setState({status: 'fresh'});
+    }
+
+    havePasswordResetCodeHandler() {
+        this.setState({status: 'codeReceived'});
     }
 
     continueHandler() {
@@ -98,9 +134,7 @@ class ForgotPasswordScreen extends Component {
             confirmPassword,
             passwordResetCode,
             status,
-            isPasswordResetCodeValid,
-            isPasswordValid,
-            isConfirmPasswordValid,
+            errors,
         } = this.state;
 
         let submitButtonTitle = 'Send Forgot Password Email';
@@ -160,11 +194,7 @@ class ForgotPasswordScreen extends Component {
                                     inputStyle={{marginLeft: 10}}
                                     placeholder={'Enter Password Reset Code'}
                                     onChangeText={passwordResetCode => this.setState({passwordResetCode})}
-                                    errorMessage={
-                                        isPasswordResetCodeValid
-                                            ? null
-                                            : 'Please enter Password Reset Code'
-                                    }
+                                    errorMessage={errors.passwordResetCode ? errors.passwordResetCode : null}
                                 />
                                 <Input
                                     leftIcon={
@@ -184,11 +214,7 @@ class ForgotPasswordScreen extends Component {
                                     inputStyle={{marginLeft: 10}}
                                     placeholder={'Password'}
                                     onChangeText={password => this.setState({password})}
-                                    errorMessage={
-                                        isPasswordValid
-                                            ? null
-                                            : 'Please enter at least 8 characters'
-                                    }
+                                    errorMessage={errors.password ? errors.password : null}
                                 />
                                 <Input
                                     leftIcon={
@@ -208,11 +234,7 @@ class ForgotPasswordScreen extends Component {
                                     inputStyle={{marginLeft: 10}}
                                     placeholder={'Confirm Password'}
                                     onChangeText={confirmPassword => this.setState({confirmPassword})}
-                                    errorMessage={
-                                        isConfirmPasswordValid
-                                            ? null
-                                            : 'Confirm Password must match password'
-                                    }
+                                    errorMessage={errors.confirmPassword ? errors.confirmPassword : null}
                                 />
 
                             </View>
@@ -222,7 +244,7 @@ class ForgotPasswordScreen extends Component {
                         status === 'unsuccessful' &&
                         <View style={{flex: 1, height: 150, alignItems: 'center', justifyContent: 'center'}}>
                             <View style={{alignItems: 'center'}}>
-                                <Icon color='green' name="check" size={62}/>
+                                <Icon color={Colors.danger} name="close" size={62}/>
                                 <Text>Something went wrong. Please, try again!</Text>
                             </View>
                         </View>
@@ -231,7 +253,7 @@ class ForgotPasswordScreen extends Component {
                         status === 'successful' &&
                         <View style={{flex: 1, height: 150, alignItems: 'center', justifyContent: 'center'}}>
                             <View style={{alignItems: 'center'}}>
-                                <Icon color='red' name="close" size={62}/>
+                                <Icon color={Colors.success} name="check" size={62}/>
                                 <Text>Password reset successfully!</Text>
                             </View>
                         </View>
@@ -249,17 +271,13 @@ class ForgotPasswordScreen extends Component {
                                     />
                                 }
                                 value={email}
-                                keyboardAppearance="light"
-                                autoFocus={false}
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                returnKeyType="next"
                                 inputStyle={{marginLeft: 10}}
                                 placeholder={'Enter your Email'}
                                 containerStyle={{
                                     borderBottomColor: 'rgba(0, 0, 0, 0.38)',
                                 }}
                                 onChangeText={email => this.setState({email})}
+                                errorMessage={errors.email ? errors.email : null}
                             />
                         </View>
 
@@ -275,6 +293,20 @@ class ForgotPasswordScreen extends Component {
                             loading={isLoading}
                             disabled={isLoading}
                         />
+
+                        {
+                            status === 'fresh' &&
+                            <Button
+                                buttonStyle={{backgroundColor: 'white'}}
+                                containerStyle={{marginTop: 32, flex: 0}}
+                                activeOpacity={0.8}
+                                title="Have Password Reset Code? Reset Password"
+                                onPress={this.havePasswordResetCodeHandler}
+                                titleStyle={{ color: Colors.grey1}}
+                                loading={isLoading}
+                                disabled={isLoading}
+                            />
+                        }
                     </View>
                 </KeyboardAvoidingView>
             </ScrollView>
@@ -369,7 +401,6 @@ const styles = StyleSheet.create({
     titleText: {
         color: Colors.grey1,
         fontSize: 30,
-        fontFamily: 'regular',
     },
     helpContainer: {
         height: 64,

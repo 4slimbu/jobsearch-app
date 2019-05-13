@@ -1,19 +1,40 @@
 import {AsyncStorage} from "react-native";
-import {
-    AUTH_DATA_RESET,
-    AUTH_SET_LOGGED_IN_STATUS,
-    AUTH_SET_TOKEN,
-    AUTH_SET_USER,
-    AUTHENTICATE_USER
-} from "./actionTypes";
+import {AUTH_DATA_RESET, AUTH_SET_LOGGED_IN_STATUS, AUTH_SET_TOKEN, AUTH_SET_USER} from "./actionTypes";
 import {API_BASE_URL, FB_APP_KEY} from "../../constants/app";
-import {getMyPosts} from "./postActions";
-import {getDeviceId} from "../../utils/helper/helper";
+import alertMessage from "../../components/Alert";
+
+export const authSetUser = (user) => {
+    return {
+        type: AUTH_SET_USER,
+        user: user,
+    };
+};
+
+export const authSetLoggedInStatus = (status) => {
+    return {
+        type: AUTH_SET_LOGGED_IN_STATUS,
+        status: status,
+    };
+};
+
+export const authSetToken = (token, expiryDate) => {
+    return {
+        type: AUTH_SET_TOKEN,
+        token: token,
+        expiryDate: expiryDate
+    };
+};
+
+export const authDataReset = () => {
+    return {
+        type: AUTH_DATA_RESET
+    };
+};
 
 export const tryAuth = (authData, authMode = 'login') => {
-    // dispatch(uiStartLoading());
     let url = API_BASE_URL + '/login';
     let body = {};
+
     if (authMode === "login") {
         body = {
             email: authData.email,
@@ -43,7 +64,6 @@ export const tryAuth = (authData, authMode = 'login') => {
         }
     }
 
-    // email, password,
     return dispatch => {
         console.log('body', body);
         return new Promise((resolve, reject) => {
@@ -55,32 +75,20 @@ export const tryAuth = (authData, authMode = 'login') => {
                     "Accept": "application/json"
                 }
             })
-                .catch(err => {
-                    console.log(err);
-                    alert("Authentication failed, please try again!");
-                    // dispatch(uiStopLoading());
-                })
-                .then(res => {
-                    console.log('unparsed res', res);
-                    return res.json();
-                })
+                .then(res => res.json())
                 .then(parsedRes => {
-                    // dispatch(uiStopLoading());
                     if (!parsedRes.access_token) {
                         if (parsedRes.error === 'UserExistsException' && parsedRes.message) {
-                            alert(parsedRes.message);
+                            alertMessage({ title: "Error", body: parsedRes.message });
                         } else {
-                            alert("Authentication failed, please try again!");
+                            alertMessage({ title: "Error", body: "Authentication failed, please try again!" });
                         }
                     } else {
-                        dispatch(
-                            storeAuthInfo(parsedRes)
-                        );
+                        dispatch( storeAuthInfo(parsedRes) );
                     }
                     resolve(parsedRes);
                 })
                 .catch(err => {
-                    console.log('err', err);
                     reject();
                 });
         });
@@ -105,28 +113,6 @@ export const storeAuthInfo = (res) => {
         dispatch(authSetToken(token, expiryDate));
         dispatch(authSetUser(user));
         dispatch(authSetLoggedInStatus(true));
-    };
-};
-
-export const authSetUser = (user) => {
-    return {
-        type: AUTH_SET_USER,
-        user: user,
-    };
-};
-
-export const authSetLoggedInStatus = (status) => {
-    return {
-        type: AUTH_SET_LOGGED_IN_STATUS,
-        status: status,
-    };
-};
-
-export const authSetToken = (token, expiryDate) => {
-    return {
-        type: AUTH_SET_TOKEN,
-        token: token,
-        expiryDate: expiryDate
     };
 };
 
@@ -211,26 +197,6 @@ export const authLogout = () => {
     };
 };
 
-export const authDataReset = () => {
-    return {
-        type: AUTH_DATA_RESET
-    };
-};
-
-// How Facebook Login works
-// User click on facebook login button
-// If AsyncStorage has fbToken
-    // Then login request is sent to the loksewa server with the token
-        // The token is decoded there and checked for validity
-            // If valid, user information is stored and login is performed by normal method and returned new jwt token
-                // That response is processed and stored in redux store and the app is now authenticated
-            // If not valid, error response is sent from the server. In this case, facebook login is called which will
-            // return fbToken which is then saved to AsyncStorage and call to login is again made using fbToken
-// If no fbToken in AsyncStorage then facebook login is called directly
-
-// How to use AsyncStorage
-// AsyncStorage.setItem('loksewa:auth:fbToken')
-// AsyncStorage.getItem('loksewa:auth:fbToken')
 export const facebookLogin = () => async dispatch => {
     let fbToken = await AsyncStorage.getItem('loksewa:auth:fbToken');
     let deviceId = await AsyncStorage.getItem('loksewa:auth:deviceId');
@@ -240,21 +206,6 @@ export const facebookLogin = () => async dispatch => {
     }
 
     return dispatch(tryAuth({fbToken: fbToken, deviceId: deviceId}, 'fbLogin'));
-};
-
-const doFacebookLogin = async() => {
-    const {type, token} = await Expo.Facebook.logInWithReadPermissionsAsync(
-        FB_APP_KEY,
-        {permissions: ['public_profile', 'email', 'user_gender', 'user_location']}
-    );
-
-    if (type === 'cancel') {
-        alert('Facebook Login Failed!');
-    }
-
-    await AsyncStorage.setItem('loksewa:auth:fbToken', token);
-
-    return token;
 };
 
 export const authUpdatePreferences = (preferences) => {
@@ -339,12 +290,10 @@ export const sendForgotPasswordEmail = (email) => {
             })
                 .then(res => res.json())
                 .then(parsedRes => {
-                    console.log(parsedRes);
                     resolve(parsedRes);
                 })
                 .catch(function () {
                     reject();
-                    console.log("error 2");
                 });
         });
     };
@@ -366,12 +315,15 @@ export const resetPassword = (data) => {
                     "Accept": "application/json"
                 }
             })
-                .then(() => {
+                .then(res => res.json())
+                .then((parsedRes) => {
+                    if (parsedRes.error) {
+                        reject();
+                    }
                     resolve();
                 })
-                .catch(function () {
+                .catch(err => {
                     reject();
-                    console.log("error");
                 });
         });
     };
@@ -468,4 +420,20 @@ export const updatePassword = (formData) => {
         });
     };
 };
+
+const doFacebookLogin = async() => {
+    const {type, token} = await Expo.Facebook.logInWithReadPermissionsAsync(
+        FB_APP_KEY,
+        {permissions: ['public_profile', 'email', 'user_gender', 'user_location']}
+    );
+
+    if (type === 'cancel') {
+        alertMessage({ title: "Cancelled", body: 'Facebook Login Failed!' });
+    }
+
+    await AsyncStorage.setItem('loksewa:auth:fbToken', token);
+
+    return token;
+};
+
 
