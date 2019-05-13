@@ -8,15 +8,7 @@ import {
 } from "./actionTypes";
 import {API_BASE_URL, FB_APP_KEY} from "../../constants/app";
 import {getMyPosts} from "./postActions";
-
-const API_KEY = "AIzaSyC2ZkXi7n3mOinaM6F4lFGl7GV-HXmn9pU";
-
-export const authenticateUser = (isAuthenticated) => {
-    return {
-        type: AUTHENTICATE_USER,
-        isAuthenticated: isAuthenticated
-    }
-};
+import {getDeviceId} from "../../utils/helper/helper";
 
 export const tryAuth = (authData, authMode = 'login') => {
     // dispatch(uiStartLoading());
@@ -31,25 +23,29 @@ export const tryAuth = (authData, authMode = 'login') => {
 
     if (authMode === "register") {
         url = API_BASE_URL + '/register';
+
         body = {
             email: authData.email,
             password: authData.password,
             first_name: authData.firstName,
             last_name: authData.lastName,
             gender: authData.gender,
-            contact_number: authData.contactNumber
-        }
+            contact_number: authData.contactNumber,
+            device_id: authData.deviceId
+        };
     }
 
     if (authMode === "fbLogin") {
         url = API_BASE_URL + '/login';
         body = {
-            fb_token: authData.fbToken
+            fb_token: authData.fbToken,
+            device_id: authData.deviceId
         }
     }
 
     // email, password,
     return dispatch => {
+        console.log('body', body);
         return new Promise((resolve, reject) => {
             fetch(url, {
                 method: "POST",
@@ -64,7 +60,10 @@ export const tryAuth = (authData, authMode = 'login') => {
                     alert("Authentication failed, please try again!");
                     // dispatch(uiStopLoading());
                 })
-                .then(res => res.json())
+                .then(res => {
+                    console.log('unparsed res', res);
+                    return res.json();
+                })
                 .then(parsedRes => {
                     // dispatch(uiStopLoading());
                     if (!parsedRes.access_token) {
@@ -80,7 +79,8 @@ export const tryAuth = (authData, authMode = 'login') => {
                     }
                     resolve(parsedRes);
                 })
-                .catch(function () {
+                .catch(err => {
+                    console.log('err', err);
                     reject();
                 });
         });
@@ -233,12 +233,13 @@ export const authDataReset = () => {
 // AsyncStorage.getItem('loksewa:auth:fbToken')
 export const facebookLogin = () => async dispatch => {
     let fbToken = await AsyncStorage.getItem('loksewa:auth:fbToken');
+    let deviceId = await AsyncStorage.getItem('loksewa:auth:deviceId');
 
     if (! fbToken) {
         fbToken = await doFacebookLogin(dispatch);
     }
 
-    dispatch(tryAuth({fbToken: fbToken}, 'fbLogin'));
+    return dispatch(tryAuth({fbToken: fbToken, deviceId: deviceId}, 'fbLogin'));
 };
 
 const doFacebookLogin = async() => {

@@ -2,13 +2,19 @@ import React from 'react';
 import {registerRootComponent, Permissions, Notifications} from 'expo';
 import {Provider} from 'react-redux';
 import configureStore from './src/store/configureStore';
-import {StyleSheet} from "react-native";
+import {AsyncStorage, StyleSheet} from "react-native";
 import {createAppContainer} from "react-navigation";
 import MainNavigator from "./src/navigators/MainNavigator";
 
 const store = configureStore();
 
 const registerForPushNotificationsAsync = async() => {
+    let deviceId = await AsyncStorage.getItem('loksewa:auth:deviceId');
+
+    if (deviceId) {
+        return;
+    }
+
     const {status: existingStatus} = await Permissions.getAsync(
         Permissions.NOTIFICATIONS
     );
@@ -29,25 +35,10 @@ const registerForPushNotificationsAsync = async() => {
     }
 
     // Get the token that uniquely identifies this device
-    let token = await Notifications.getExpoPushTokenAsync();
+    deviceId = await Notifications.getExpoPushTokenAsync();
 
-    console.log('expo push token:' + token);
-    // POST the token to your backend server from where you can retrieve it to send push notifications.
-    // return fetch(PUSH_ENDPOINT, {
-    //   method: 'POST',
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     token: {
-    //       value: token,
-    //     },
-    //     user: {
-    //       username: 'Brent',
-    //     },
-    //   }),
-    // });
+    AsyncStorage.setItem("loksewa:auth:deviceId", deviceId);
+    console.log('expo push token:' + deviceId);
 };
 
 const AppContainer = createAppContainer(MainNavigator);

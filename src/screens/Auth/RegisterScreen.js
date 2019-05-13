@@ -10,6 +10,7 @@ import socialColor from "../../constants/socialColors";
 import {tryAuth} from '../../store/actions/authActions';
 import {APP_NAME} from "../../constants/app";
 import Colors from "../../constants/colors";
+import {getDeviceId} from "../../utils/helper/helper";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -63,16 +64,18 @@ class RegisterScreen extends Component {
         this._isMounted = false;
     }
 
-    registerHandler() {
+    async registerHandler() {
         const {email, password, firstName, lastName, gender, contactNumber} = this.state;
         this.setState({isLoading: true});
-        this.props.onTryAuth({
+        const deviceId = await getDeviceId();
+        await this.props.onTryAuth({
             email: email,
             password: password,
             firstName: firstName,
             lastName: lastName,
             gender: gender,
-            contactNumber: contactNumber
+            contactNumber: contactNumber,
+            deviceId: deviceId
         }, 'register').then(() => {
             this.setState({isLoading: true});
 
@@ -462,7 +465,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onTryAuth: (authData, authMode) => dispatch(tryAuth(authData, authMode)),
+        onTryAuth: async (authData, authMode) => await dispatch(tryAuth(authData, authMode)),
     };
 };
 

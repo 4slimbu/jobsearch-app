@@ -1,4 +1,5 @@
 import * as _ from "lodash";
+import {AsyncStorage} from "react-native";
 
 export function showExcerpt(string, length) {
     return string.length > length ?
@@ -62,4 +63,14 @@ export function findAdditionalImages(postImages) {
     });
 
     return newPostImages;
+}
+
+export async function getDeviceId() {
+    let deviceId = '';
+    try {
+        deviceId =  await AsyncStorage.getItem('loksewa:auth:deviceId');
+    } catch (error) {
+        console.log(error.message);
+    }
+    return deviceId;
 }

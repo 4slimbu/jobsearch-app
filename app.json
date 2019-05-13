@@ -27,7 +27,8 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.responsivepixel.loksewa"
+      "package": "com.responsivepixel.loksewa",
+      "googleServicesFile": "./google-services.json"
     }
   }
 }
