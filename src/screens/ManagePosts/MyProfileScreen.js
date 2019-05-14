@@ -7,6 +7,7 @@ import {ImagePicker} from "expo";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {updateMyProfile, updatePassword} from "../../store/actions/authActions";
 import alertMessage from "../../components/Alert";
+import * as _ from "lodash";
 
 class MyProfileScreen extends Component {
     constructor(props) {
@@ -31,6 +32,10 @@ class MyProfileScreen extends Component {
             isSaveProfilePicture: false,
             isSaveProfile: false,
             isSavePassword: false,
+            isSavingProfilePicture: false,
+            isSavingProfile: false,
+            isSavingPassword: false,
+            errors: {}
         };
 
         this.pickProfilePictureHandler = this.pickProfilePictureHandler.bind(this);
@@ -100,6 +105,7 @@ class MyProfileScreen extends Component {
             return alertMessage({title: "Error", body: "Something went wrong!"});
         }
 
+        this.setState({isSavingProfilePicture: true});
         let formData = new FormData();
 
         if (newProfilePicture &&  ('cancelled' in newProfilePicture)) {
@@ -113,6 +119,7 @@ class MyProfileScreen extends Component {
 
         this.setData();
         this.cancelEditHandler("profile-picture");
+        this.setState({isSavingProfilePicture: false});
     }
 
     editProfileHandler() {
@@ -126,15 +133,27 @@ class MyProfileScreen extends Component {
         });
     }
 
+    isProfileFormValid() {
+        const {newFirstName, newLastName, newContactNumber} = this.state;
+        let errors = {};
+
+        if (!newFirstName) { errors.newFirstName = 'First Name is required'; }
+        if (!newLastName) { errors.newLastName = 'Last Name is required'; }
+        if (!newContactNumber) { errors.newContactNumber = 'Contact number is required!'; }
+
+        this.setState({errors});
+        return _.isEmpty(errors);
+    }
+
     async saveProfileHandler() {
         const {newFirstName, newLastName, newGender, newContactNumber} = this.state;
 
-        let error = '';
-
-        if (error) {
-            return alertMessage({title: "Error", body: "Something went wrong!"});
+        if (!this.isProfileFormValid()) {
+            alertMessage({title: "Error", body: "Validation failed"});
+            return;
         }
 
+        this.setState({isSavingProfile: true});
         let formData = new FormData();
         formData.append('first_name', newFirstName);
         formData.append('last_name', newLastName);
@@ -149,6 +168,7 @@ class MyProfileScreen extends Component {
 
         this.setData();
         this.cancelEditHandler("profile");
+        this.setState({isSavingProfile: false});
     }
 
     editPasswordHandler() {
@@ -157,15 +177,27 @@ class MyProfileScreen extends Component {
         });
     }
 
-    async savePasswordHandler() {
+    isPasswordFormValid() {
         const {currentPassword, newPassword, confirmNewPassword} = this.state;
+        let errors = {};
 
-        let error = '';
+        if (!currentPassword) { errors.currentPassword = 'Current Password is required'; }
+        if (newPassword.length < 8) { errors.newPassword= 'Password must be at least 8 characters'; }
+        if (confirmNewPassword !== newPassword) { errors.confirmNewPassword= 'Password and confirm password must match'; }
 
-        if (error) {
-            return alertMessage({title: "Error", body: "Something went wrong!"});
+        this.setState({errors});
+        return _.isEmpty(errors);
+    }
+
+    async savePasswordHandler() {
+        const {currentPassword, newPassword} = this.state;
+
+        if (!this.isPasswordFormValid()) {
+            alertMessage({title: "Error", body: "Validation failed"});
+            return;
         }
 
+        this.setState({isSavingPassword: true});
         let formData = {
             old_password: currentPassword,
             new_password: newPassword
@@ -179,6 +211,7 @@ class MyProfileScreen extends Component {
 
         this.setData();
         this.cancelEditHandler("password");
+        this.setState({isSavingPassword: false});
     }
 
     cancelEditHandler(type) {
@@ -216,7 +249,8 @@ class MyProfileScreen extends Component {
             firstName, lastName, email, gender, contactNumber,
             profilePicture, newProfilePicture, isSaveProfilePicture, isSaveProfile, isSavePassword,
             currentPassword, newPassword, confirmNewPassword,
-            newFirstName, newLastName, newGender, newContactNumber
+            newFirstName, newLastName, newGender, newContactNumber,
+            isSavingProfilePicture, isSavingProfile, isSavingPassword, errors
         } = this.state;
         const profilePictureSource = profilePicture ? {uri: profilePicture} : require('../../../assets/images/placeholder.png');
 
@@ -248,7 +282,10 @@ class MyProfileScreen extends Component {
                                     isSaveProfilePicture ?
                                         <Button title="Save Profile Picture"
                                                 buttonStyle={{marginBottom: 5, paddingTop: 3, paddingBottom: 3, marginRight: 10}}
-                                                buttonSize={5} onPress={this.saveProfilePictureHandler}/>
+                                                buttonSize={5} onPress={this.saveProfilePictureHandler}
+                                                loading={isSavingProfilePicture}
+                                                disabled={isSavingProfilePicture}
+                                        />
                                         :
                                         <Button title="Change Profile Picture"
                                                 buttonStyle={{marginBottom: 5, paddingTop: 3, paddingBottom: 3, marginRight: 10, backgroundColor: Colors.grey3}}
@@ -274,6 +311,7 @@ class MyProfileScreen extends Component {
                                                    value={newFirstName}
                                                    onChangeText={newFirstName => this.setState({newFirstName})}
                                         />
+                                        <Text style={{color: Colors.danger, marginTop: 5}}>{errors.newFirstName ? errors.newFirstName: ''}</Text>
                                     </View>
                                 </View>
                                 :
@@ -303,6 +341,7 @@ class MyProfileScreen extends Component {
                                                    value={newLastName}
                                                    onChangeText={newLastName => this.setState({newLastName})}
                                         />
+                                        <Text style={{color: Colors.danger, marginTop: 5}}>{errors.newLastName ? errors.newLastName: ''}</Text>
                                     </View>
                                 </View>
                                 :
@@ -347,6 +386,7 @@ class MyProfileScreen extends Component {
                                                        placeholder="Current Password"
                                                        onChangeText={currentPassword => this.setState({currentPassword})}
                                             />
+                                            <Text style={{color: Colors.danger, marginTop: 5}}>{errors.currentPassword ? errors.currentPassword: ''}</Text>
                                         </View>
                                     </View>
                                     <View style={{flex: 1, flexDirection: 'row', marginTop: 15}}>
@@ -360,11 +400,12 @@ class MyProfileScreen extends Component {
                                                        placeholder="New Password"
                                                        onChangeText={newPassword => this.setState({newPassword})}
                                             />
+                                            <Text style={{color: Colors.danger, marginTop: 5}}>{errors.newPassword ? errors.newPassword: ''}</Text>
                                         </View>
                                     </View>
                                     <View style={{flex: 1, flexDirection: 'row', marginTop: 15}}>
                                         <View style={{flex: 2, marginRight: 15}}>
-                                            <Text style={styles.postTitle}>Password</Text>
+                                            <Text style={styles.postTitle}>Confirm Password</Text>
                                         </View>
                                         <View style={{flex: 3}}>
                                             <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
@@ -373,11 +414,14 @@ class MyProfileScreen extends Component {
                                                        placeholder="Confirm New Password"
                                                        onChangeText={confirmNewPassword => this.setState({confirmNewPassword})}
                                             />
+                                            <Text style={{color: Colors.danger, marginTop: 5}}>{errors.confirmNewPassword ? errors.confirmNewPassword: ''}</Text>
                                         </View>
                                     </View>
                                     <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
                                         <Button title="Update password" buttonStyle={{ backgroundColor: Colors.danger,  marginBottom: 5, marginRight: 15, paddingTop: 3, paddingBottom: 3}}
-                                                buttonSize={5} onPress={this.savePasswordHandler}/>
+                                                buttonSize={5} onPress={this.savePasswordHandler}
+                                                loading={isSavingPassword} disabled={isSavingPassword}
+                                        />
                                         <Button title="Cancel" buttonStyle={{ backgroundColor: Colors.grey3,  marginBottom: 5, paddingTop: 3, paddingBottom: 3}}
                                                 buttonSize={5} onPress={() => this.cancelEditHandler('password')}/>
                                     </View>
@@ -453,6 +497,7 @@ class MyProfileScreen extends Component {
                                                    value={newContactNumber}
                                                    onChangeText={newContactNumber => this.setState({newContactNumber})}
                                         />
+                                        <Text style={{color: Colors.danger, marginTop: 5}}>{errors.newContactNumber ? errors.newContactNumber: ''}</Text>
                                     </View>
                                 </View>
                                 :
@@ -484,7 +529,9 @@ class MyProfileScreen extends Component {
                         {
                             isSaveProfile ?
                                 <Button title="Save Profile" buttonStyle={{ marginBottom: 5, paddingTop: 3, paddingBottom: 3, marginRight: 15}}
-                                    buttonSize={5} onPress={this.saveProfileHandler}/>
+                                    buttonSize={5} onPress={this.saveProfileHandler}
+                                    loading={isSavingProfile} disabled={isSavingProfile}
+                                />
 
                                 :
                                 <Button title="Edit Profile" buttonStyle={{ marginBottom: 5, paddingTop: 3, paddingBottom: 3, backgroundColor: Colors.grey3, marginRight: 15}}

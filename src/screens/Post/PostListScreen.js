@@ -6,23 +6,21 @@ import {loadPostsByCategory} from "../../store/actions/categoryActions";
 import * as _ from "lodash";
 import PostList from "../../components/List/PostList";
 import {authUpdatePreferences} from "../../store/actions/authActions";
+import alertMessage from "../../components/Alert";
+import ContentLoading from "../../components/ContentLoading";
 
 class PostListScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
             category: {},
-            categoryPosts: [{}]
+            categoryPosts: [{}],
+            isLoading: false,
+            isReady: false,
         };
 
         this.onSelectPost = this.onSelectPost.bind(this);
         this.onSavePost = this.onSavePost.bind(this);
-    }
-
-    componentWillReceiveProps() {
-        this.setState({
-            categoryPosts: this.props.postsByCategory
-        });
     }
 
     async componentDidMount() {
@@ -33,25 +31,22 @@ class PostListScreen extends Component {
         const category = _.find(this.props.categories, {id:categoryId});
 
         if (!categoryId) {
-            alert('No category selected');
+            alertMessage({title: "Error", body: "No category selected"});
         }
 
         this._isMounted && await this.props.onLoadPostsByCategory(categoryId);
 
         this.setState({
-            category: category
+            category: category,
+            isReady: true
         });
-        console.log('post detail mount');
-
     }
 
     componentWillUnmount() {
         this._isMounted = false;
-        console.log('post detail unount');
     }
 
     onSelectPost(postId) {
-        console.log('on Select Post', postId);
         this.props.navigation.navigate('PostDetail', {postId: postId});
     }
 
@@ -68,17 +63,16 @@ class PostListScreen extends Component {
             savedPosts: savedPosts
         };
         this.props.onUpdatePreferences(preferences);
-        console.log('onSavePost', postId);
     }
 
     render() {
-        const {category} = this.state;
+        const {category, isReady} = this.state;
         const {postsByCategory, preferences} = this.props;
         const postListProps = {
             posts: postsByCategory,
             onSelectPost: this.onSelectPost,
             onSavePost: this.onSavePost,
-            savedPosts: preferences.savedPosts
+            savedPosts: preferences.savedPosts,
         };
         return (
             <ScrollView style={styles.container}>
@@ -87,7 +81,12 @@ class PostListScreen extends Component {
                         <Text style={styles.heading}>{category.name}</Text>
                     </View>
 
-                    <PostList {...postListProps}/>
+                    {
+                        !isReady ?
+                            <ContentLoading/>
+                            :
+                            <PostList {...postListProps}/>
+                    }
 
                 </View>
             </ScrollView>

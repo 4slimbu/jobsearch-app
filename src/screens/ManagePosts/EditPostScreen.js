@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, TextInput, View, Picker} from 'react-native';
+import {Picker, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
 import PropTypes from "prop-types";
 import Colors from '../../constants/colors';
 import {Button, Image} from "react-native-elements";
@@ -9,8 +9,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {loadCategories} from "../../store/actions/categoryActions";
 import {connect} from "react-redux";
 import DatePicker from 'react-native-datepicker';
-import {addPost, getPost, updatePost} from "../../store/actions/postActions";
-import {findAdditionalImages, findFeaturedImage, getFeaturedImageSrc} from "../../utils/helper/helper";
+import {getPost, updatePost} from "../../store/actions/postActions";
+import {findAdditionalImages, findFeaturedImage} from "../../utils/helper/helper";
+import alertMessage from "../../components/Alert";
 
 const PostImages = (props) => {
     const {type, images, removeImageHandler} = props;
@@ -28,10 +29,6 @@ class EditPostScreen extends Component {
     constructor(props) {
         super(props);
 
-        /*
-        Featured Image = {uri: '', url: ''},
-        Additional Image = {uri: '',
-         */
         this.state = {
             postId: null,
             postTitle: '',
@@ -41,7 +38,9 @@ class EditPostScreen extends Component {
             categories: [],
             selectedCategoryId: null,
             date: null,
-            imagesToRemove: []
+            imagesToRemove: [],
+            errors: {},
+            isLoading: false
         };
 
         this.removeImageHandler = this.removeImageHandler.bind(this);
@@ -125,8 +124,6 @@ class EditPostScreen extends Component {
             aspect: [1, 1],
         });
 
-        console.log(result);
-
         if (!result.cancelled) {
             this.setState({featuredImage: result});
         }
@@ -137,8 +134,6 @@ class EditPostScreen extends Component {
             allowsEditing: true,
             aspect: [1, 1],
         });
-
-        console.log(result);
 
         if (!result.cancelled) {
             this.setState({
@@ -151,20 +146,28 @@ class EditPostScreen extends Component {
         }
     };
 
+    isFormValid() {
+        const {postTitle, postContent, selectedCategoryId, date} = this.state;
+        let errors = {};
+
+        if (!postTitle) { errors.postTitle = 'Post Title is required!'; }
+        if (!postContent) { errors.postContent = 'Post Content is required!'; }
+        if (!selectedCategoryId) { errors.selectedCategoryId = 'Category is required!'; }
+        if (!date) { errors.date = 'Deadline is required!'; }
+
+        this.setState({errors});
+        return _.isEmpty(errors);
+    }
+
     submitHandler() {
         const {postId, postTitle, postContent, featuredImage,additionalImages, selectedCategoryId, imagesToRemove, date} = this.state;
 
-        let error = '';
-        if (!postTitle) { error += 'Post Title is required! \n'; }
-        if (!postContent) { error += 'Post Content is required! \n'; }
-        if (!postContent) { error += 'Post Content is required! \n'; }
-        if (!selectedCategoryId) { error += 'Category is required! \n'; }
-        if (!date) { error += 'Deadline is required! \n'; }
-
-        if (error) {
-            alert(error);
+        if (!this.isFormValid()) {
+            alertMessage({title: "Error", body: "Validation failed"});
             return;
         }
+
+        this.setState({isLoading: true});
 
         let formData = new FormData();
         formData.append('post_title', postTitle);
@@ -195,16 +198,17 @@ class EditPostScreen extends Component {
         }
 
         this.props.updatePost(postId, formData).then(res => {
-            alert('Post updated successfully');
+            alertMessage({title: "Success", body: "Post updated successfully"});
             this.props.navigation.goBack();
-            console.log(res);
         }).catch(err => {
-            console.log(err);
+            alertMessage({title: "Error", body: "Unable to update post"});
         });
+
+        this._isMounted && this.setState({isLoading: false});
     }
 
     render() {
-        const {postTitle, postContent, featuredImage, additionalImages, categories, selectedCategoryId, date} = this.state;
+        const {postTitle, postContent, featuredImage, additionalImages, categories, selectedCategoryId, date, errors, isLoading} = this.state;
 
         return (
             <ScrollView style={styles.container}>
@@ -220,6 +224,7 @@ class EditPostScreen extends Component {
                                            value={postTitle}
                                            onChangeText={postTitle => this.setState({postTitle})}
                                 />
+                                <Text style={{color: Colors.danger, marginTop: 5}}>{errors.postTitle ? errors.postTitle: ''}</Text>
                             </View>
                         </View>
                         <View>
@@ -231,7 +236,7 @@ class EditPostScreen extends Component {
                                            value={postContent}
                                            onChangeText={postContent => this.setState({postContent})}
                                 />
-
+                                <Text style={{color: Colors.danger, marginTop: 5}}>{errors.postContent ? errors.postContent: ''}</Text>
                             </View>
                         </View>
                         <View>
@@ -293,6 +298,7 @@ class EditPostScreen extends Component {
                                     })
                                 }
                             </Picker>
+                            <Text style={{color: Colors.danger, marginTop: 5}}>{errors.selectedCategoryId ? errors.selectedCategoryId: ''}</Text>
                         </View>
                         <View>
                             <Text style={styles.postTitle}>Deadline</Text>
@@ -322,10 +328,14 @@ class EditPostScreen extends Component {
                                     this.setState({date: date})
                                 }}
                             />
+                            <Text style={{color: Colors.danger, marginTop: 5}}>{errors.date ? errors.date: ''}</Text>
                         </View>
 
                         <Button title="Save" buttonStyle={{marginTop: 25, marginBottom: 50}} onPress={this.submitHandler}
-                                buttonSize={5}/>
+                                buttonSize={5}
+                                loading={isLoading}
+                                disabled={isLoading}
+                        />
 
                     </View>
 

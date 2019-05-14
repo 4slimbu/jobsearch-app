@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, TextInput, View, Picker} from 'react-native';
+import {Picker, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
 import PropTypes from "prop-types";
 import Colors from '../../constants/colors';
 import {Button, Image} from "react-native-elements";
@@ -10,6 +10,7 @@ import {loadCategories} from "../../store/actions/categoryActions";
 import {connect} from "react-redux";
 import DatePicker from 'react-native-datepicker';
 import {addPost} from "../../store/actions/postActions";
+import alertMessage from "../../components/Alert";
 
 const PostImages = (props) => {
     const {type, images, removeImageHandler} = props;
@@ -34,7 +35,9 @@ class AddPostScreen extends Component {
             additionalImages: [],
             categories: [],
             selectedCategoryId: null,
-            date: null
+            date: null,
+            errors: {},
+            isLoading: false
         };
 
         this.removeImageHandler = this.removeImageHandler.bind(this);
@@ -90,8 +93,6 @@ class AddPostScreen extends Component {
             aspect: [1, 1],
         });
 
-        console.log(result);
-
         if (!result.cancelled) {
             this.setState({featuredImage: result});
         }
@@ -102,8 +103,6 @@ class AddPostScreen extends Component {
             allowsEditing: true,
             aspect: [1, 1],
         });
-
-        console.log(result);
 
         if (!result.cancelled) {
             this.setState({
@@ -116,20 +115,28 @@ class AddPostScreen extends Component {
         }
     };
 
+    isFormValid() {
+        const {postTitle, postContent, selectedCategoryId, date} = this.state;
+        let errors = {};
+
+        if (!postTitle) { errors.postTitle = 'Post Title is required!'; }
+        if (!postContent) { errors.postContent = 'Post Content is required!'; }
+        if (!selectedCategoryId) { errors.selectedCategoryId = 'Category is required!'; }
+        if (!date) { errors.date = 'Deadline is required!'; }
+
+        this.setState({errors});
+        return _.isEmpty(errors);
+    }
+
     submitHandler() {
         const {postTitle, postContent, featuredImage,additionalImages, selectedCategoryId, date} = this.state;
 
-        let error = '';
-        if (!postTitle) { error += 'Post Title is required! \n'; }
-        if (!postContent) { error += 'Post Content is required! \n'; }
-        if (!postContent) { error += 'Post Content is required! \n'; }
-        if (!selectedCategoryId) { error += 'Category is required! \n'; }
-        if (!date) { error += 'Deadline is required! \n'; }
-
-        if (error) {
-            alert(error);
+        if (!this.isFormValid()) {
+            alertMessage({title: "Error", body: "Validation failed"});
             return;
         }
+
+        this.setState({isLoading: true});
 
         let formData = new FormData();
         formData.append('post_title', postTitle);
@@ -150,22 +157,22 @@ class AddPostScreen extends Component {
         }
 
         this.props.addPost(formData).then(res => {
-            alert('Post created successfully');
+            this.setState({isLoading: false});
+            alertMessage({title: "Success", body: "Post created successfully"});
             this.props.navigation.goBack();
-            console.log(res);
         }).catch(err => {
-            console.log(err);
+            this.setState({isLoading: false});
         });
     }
 
     render() {
-        const {featuredImage, additionalImages, categories} = this.state;
+        const {featuredImage, additionalImages, categories, errors, isLoading} = this.state;
 
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.contentView}>
                     <View style={styles.headerContainer}>
-                        <Text style={styles.heading}>Add Post Test</Text>
+                        <Text style={styles.heading}>Add Post</Text>
                     </View>
                     <View style={{marginLeft: 20, marginRight: 20}}>
                         <View>
@@ -174,6 +181,7 @@ class AddPostScreen extends Component {
                                 <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
                                            onChangeText={postTitle => this.setState({postTitle})}
                                 />
+                                <Text style={{color: Colors.danger, marginTop: 5}}>{errors.postTitle ? errors.postTitle: ''}</Text>
                             </View>
                         </View>
                         <View>
@@ -184,7 +192,7 @@ class AddPostScreen extends Component {
                                            numberOfLines={15}
                                            onChangeText={postContent => this.setState({postContent})}
                                 />
-
+                                <Text style={{color: Colors.danger, marginTop: 5}}>{errors.postContent ? errors.postContent: ''}</Text>
                             </View>
                         </View>
                         <View>
@@ -236,7 +244,8 @@ class AddPostScreen extends Component {
                                 style={{height: 50, width: '100%'}}
                                 onValueChange={(itemValue, itemIndex) =>
                                     this.setState({selectedCategoryId: itemValue})
-                                }>
+                                }
+                            >
                                 <Picker.Item value="" label="Select Category"/>
                                 {
                                     _.map(categories, (category, key) => {
@@ -246,6 +255,7 @@ class AddPostScreen extends Component {
                                     })
                                 }
                             </Picker>
+                            <Text style={{color: Colors.danger, marginTop: 5}}>{errors.selectedCategoryId ? errors.selectedCategoryId: ''}</Text>
                         </View>
                         <View>
                             <Text style={styles.postTitle}>Deadline</Text>
@@ -275,10 +285,14 @@ class AddPostScreen extends Component {
                                     this.setState({date: date})
                                 }}
                             />
+                            <Text style={{color: Colors.danger, marginTop: 5}}>{errors.date ? errors.date: ''}</Text>
                         </View>
 
                         <Button title="Save" buttonStyle={{marginTop: 25, marginBottom: 50}} onPress={this.submitHandler}
-                                buttonSize={5}/>
+                                buttonSize={5}
+                                loading={isLoading}
+                                disabled={isLoading}
+                        />
 
                     </View>
 

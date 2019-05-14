@@ -102,9 +102,10 @@ class PostItem extends Component {
                         </View>
                         <View style={{flex: 3}}>
                             <TouchableOpacity onPress={() => this.selectPostHandler(post)}>
-                                <Text style={styles.postTitle}>{post.title}</Text>
+                                <Text style={styles.postTitle}>{post.title}-{post.id}</Text>
                                 <Text style={styles.postAuthorMeta}>By: {post.author && post.author.full_name}</Text>
                                 <Text style={styles.postDateMeta}>Deadline: {toReadable(post.expire_at)}</Text>
+                                <Text style={styles.postDateMeta}>Category: {post.category.name}</Text>
                             </TouchableOpacity>
                             {(type === 'my') &&
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
@@ -150,13 +151,14 @@ const styles = StyleSheet.create({
     postAuthorMeta: {
         color: Colors.grey1,
         marginBottom: 3,
-        fontSize: 14,
+        fontSize: 16,
+        fontStyle: 'italic'
     },
     postDateMeta: {
         color: Colors.grey1,
         marginBottom: 5,
-        fontSize: 14,
-        fontStyle: 'italic'
+        fontSize: 16,
+        fontWeight: 'bold'
     },
     postContent: {
         color: Colors.grey1,
