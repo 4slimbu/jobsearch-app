@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, TextInput, View, Picker} from 'react-native';
+import {ScrollView, StyleSheet, Text, TextInput, View, Picker, ActivityIndicator} from 'react-native';
 import PropTypes from "prop-types";
 import Colors from '../../constants/colors';
 import {Button, Image} from "react-native-elements";
@@ -28,13 +28,16 @@ class AddPostScreen extends Component {
         super(props);
 
         this.state = {
+            isReady: false,
+            isLoading: false,
             postTitle: '',
             postContent: '',
             featuredImage: null,
             additionalImages: [],
             categories: [],
             selectedCategoryId: null,
-            date: null
+            date: null,
+            errors: {}
         };
 
         this.removeImageHandler = this.removeImageHandler.bind(this);
@@ -58,6 +61,7 @@ class AddPostScreen extends Component {
             });
         }
 
+        this.setState({isReady: true});
     }
 
     componentWillUnmount() {
@@ -131,6 +135,7 @@ class AddPostScreen extends Component {
             return;
         }
 
+        this.setState({isLoading: true});
         let formData = new FormData();
         formData.append('post_title', postTitle);
         formData.append('post_body', postContent);
@@ -156,133 +161,140 @@ class AddPostScreen extends Component {
         }).catch(err => {
             console.log(err);
         });
+        
+        this._isMounted && this.setState({isLoading: false});
     }
 
     render() {
-        const {featuredImage, additionalImages, categories} = this.state;
+        const {isReady, isLoading, featuredImage, additionalImages, categories} = this.state;
 
         return (
             <ScrollView style={styles.container}>
-                <View style={styles.contentView}>
-                    <View style={styles.headerContainer}>
-                        <Text style={styles.heading}>Add Post Test</Text>
-                    </View>
-                    <View style={{marginLeft: 20, marginRight: 20}}>
-                        <View>
-                            <Text style={styles.postTitle}>Post Title</Text>
-                            <View>
-                                <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
-                                           onChangeText={postTitle => this.setState({postTitle})}
-                                />
+                {
+                    ! isReady ?
+                        <ActivityIndicator size="large" color={Colors.primary} style={{marginTop: 100}}/>
+                        :
+                        <View style={styles.contentView}>
+                            <View style={styles.headerContainer}>
+                                <Text style={styles.heading}>Add Post Test</Text>
                             </View>
-                        </View>
-                        <View>
-                            <Text style={styles.postTitle}>Post Content</Text>
-                            <View>
-                                <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
-                                           multiline={true}
-                                           numberOfLines={15}
-                                           onChangeText={postContent => this.setState({postContent})}
-                                />
-
-                            </View>
-                        </View>
-                        <View>
-                            <Text style={styles.postTitle}>Featured Image</Text>
-                            {
-                                featuredImage &&
-                                <PostImages type="featured" images={[featuredImage]}
-                                            removeImageHandler={this.removeImageHandler}/>
-                            }
-                            {
-                                !featuredImage &&
-                                <Button title="Pick Image"
-                                        buttonStyle={{marginBottom: 5, paddingTop: 5, paddingBottom: 5}}
-                                        buttonSize={5} type="outline"
-                                        onPress={this.pickFeaturedImageHandler}
-                                />
-                            }
-                        </View>
-
-                        <View>
-                            <Text style={styles.postTitle}>Additional Images</Text>
-                            <View>
-                                {
-                                    additionalImages &&
-                                    <View style={{
-                                        flexDirection: 'row',
-                                        flexWrap: 'wrap',
-                                        justifyContent: 'space-around'
-                                    }}>
-                                        <PostImages type="additionalImages" images={additionalImages}
-                                                    removeImageHandler={this.removeImageHandler}/>
+                            <View style={{marginLeft: 20, marginRight: 20}}>
+                                <View>
+                                    <Text style={styles.postTitle}>Post Title</Text>
+                                    <View>
+                                        <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
+                                                   onChangeText={postTitle => this.setState({postTitle})}
+                                        />
                                     </View>
-                                }
-                                {
-                                    additionalImages.length < 6 &&
-                                    <Button title="Pick Image"
-                                            buttonStyle={{marginBottom: 5, paddingTop: 5, paddingBottom: 5}}
-                                            buttonSize={5} type="outline"
-                                            onPress={this.pickAdditionalImagesHandler}
-                                    />
-                                }
-                            </View>
-                        </View>
-                        <View>
-                            <Text style={styles.postTitle}>Category</Text>
+                                </View>
+                                <View>
+                                    <Text style={styles.postTitle}>Post Content</Text>
+                                    <View>
+                                        <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
+                                                   multiline={true}
+                                                   numberOfLines={15}
+                                                   onChangeText={postContent => this.setState({postContent})}
+                                        />
 
-                            <Picker
-                                selectedValue={this.state.selectedCategoryId}
-                                style={{height: 50, width: '100%'}}
-                                onValueChange={(itemValue, itemIndex) =>
-                                    this.setState({selectedCategoryId: itemValue})
-                                }>
-                                <Picker.Item value="" label="Select Category"/>
-                                {
-                                    _.map(categories, (category, key) => {
-                                        return (
-                                            <Picker.Item key={key} value={category.id} label={category.name}/>
-                                        )
-                                    })
-                                }
-                            </Picker>
-                        </View>
-                        <View>
-                            <Text style={styles.postTitle}>Deadline</Text>
-                            <DatePicker
-                                style={{width: '100%'}}
-                                date={this.state.date}
-                                mode="date"
-                                placeholder="select date"
-                                format="YYYY-MM-DD"
-                                minDate="2019-05-01"
-                                maxDate="2050-01-01"
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                customStyles={{
-                                    dateIcon: {
-                                        position: 'absolute',
-                                        left: 0,
-                                        top: 4,
-                                        marginLeft: 0
-                                    },
-                                    dateInput: {
-                                        marginLeft: 36
+                                    </View>
+                                </View>
+                                <View>
+                                    <Text style={styles.postTitle}>Featured Image</Text>
+                                    {
+                                        featuredImage &&
+                                        <PostImages type="featured" images={[featuredImage]}
+                                                    removeImageHandler={this.removeImageHandler}/>
                                     }
-                                    // ... You can check the source to find the other keys.
-                                }}
-                                onDateChange={(date) => {
-                                    this.setState({date: date})
-                                }}
-                            />
+                                    {
+                                        !featuredImage &&
+                                        <Button title="Pick Image"
+                                                buttonStyle={{marginBottom: 5, paddingTop: 5, paddingBottom: 5}}
+                                                buttonSize={5} type="outline"
+                                                onPress={this.pickFeaturedImageHandler}
+                                        />
+                                    }
+                                </View>
+
+                                <View>
+                                    <Text style={styles.postTitle}>Additional Images</Text>
+                                    <View>
+                                        {
+                                            additionalImages &&
+                                            <View style={{
+                                                flexDirection: 'row',
+                                                flexWrap: 'wrap',
+                                                justifyContent: 'space-around'
+                                            }}>
+                                                <PostImages type="additionalImages" images={additionalImages}
+                                                            removeImageHandler={this.removeImageHandler}/>
+                                            </View>
+                                        }
+                                        {
+                                            additionalImages.length < 6 &&
+                                            <Button title="Pick Image"
+                                                    buttonStyle={{marginBottom: 5, paddingTop: 5, paddingBottom: 5}}
+                                                    buttonSize={5} type="outline"
+                                                    onPress={this.pickAdditionalImagesHandler}
+                                            />
+                                        }
+                                    </View>
+                                </View>
+                                <View>
+                                    <Text style={styles.postTitle}>Category</Text>
+
+                                    <Picker
+                                        selectedValue={this.state.selectedCategoryId}
+                                        style={{height: 50, width: '100%'}}
+                                        onValueChange={(itemValue, itemIndex) =>
+                                            this.setState({selectedCategoryId: itemValue})
+                                        }>
+                                        <Picker.Item value="" label="Select Category"/>
+                                        {
+                                            _.map(categories, (category, key) => {
+                                                return (
+                                                    <Picker.Item key={key} value={category.id} label={category.name}/>
+                                                )
+                                            })
+                                        }
+                                    </Picker>
+                                </View>
+                                <View>
+                                    <Text style={styles.postTitle}>Deadline</Text>
+                                    <DatePicker
+                                        style={{width: '100%'}}
+                                        date={this.state.date}
+                                        mode="date"
+                                        placeholder="select date"
+                                        format="YYYY-MM-DD"
+                                        minDate="2019-05-01"
+                                        maxDate="2050-01-01"
+                                        confirmBtnText="Confirm"
+                                        cancelBtnText="Cancel"
+                                        customStyles={{
+                                            dateIcon: {
+                                                position: 'absolute',
+                                                left: 0,
+                                                top: 4,
+                                                marginLeft: 0
+                                            },
+                                            dateInput: {
+                                                marginLeft: 36
+                                            }
+                                            // ... You can check the source to find the other keys.
+                                        }}
+                                        onDateChange={(date) => {
+                                            this.setState({date: date})
+                                        }}
+                                    />
+                                </View>
+
+                                <Button title="Save" buttonStyle={{marginTop: 25, marginBottom: 50}} onPress={this.submitHandler}
+                                        buttonSize={5} isLoading={isLoading} isDisabled={isLoading}/>
+
+                            </View>
+
                         </View>
-
-                        <Button title="Save" buttonStyle={{marginTop: 25, marginBottom: 50}} onPress={this.submitHandler}
-                                buttonSize={5}/>
-
-                    </View>
-
-                </View>
+                }
             </ScrollView>
         );
     }

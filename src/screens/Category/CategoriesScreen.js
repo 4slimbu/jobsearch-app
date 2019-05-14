@@ -33,7 +33,7 @@ class CategoriesScreen extends Component {
         super(props);
         this.state = {
             categories: [{}],
-            isLoading: false,
+            isReady: false,
         };
 
         this.onSelectCategory = this.onSelectCategory.bind(this);
@@ -42,12 +42,11 @@ class CategoriesScreen extends Component {
     async componentDidMount() {
         this._isMounted = true;
 
-        this.setState({isLoading: true});
         this._isMounted && await this.props.onLoadCategories() &&
         this.setState({
             categories: this.props.categories
         });
-        this.setState({isLoading: false});
+        this.setState({isReady: true});
     }
 
     componentWillUnmount() {
@@ -60,7 +59,7 @@ class CategoriesScreen extends Component {
     }
 
     render() {
-        const {isLoading} = this.state;
+        const {isReady} = this.state;
         const categoryListProps = {
             categories: this.props.categories,
             onSelectCategory: this.onSelectCategory
@@ -74,7 +73,7 @@ class CategoriesScreen extends Component {
                         <Text style={styles.heading}>Categories</Text>
                     </View>
                     {
-                        isLoading ?
+                        !isReady ?
                             <ActivityIndicator size="large" color={Colors.primary} style={{marginTop: 100}}/>
                             :
                             <CategoryList {...categoryListProps}/>
