@@ -2,12 +2,10 @@ import {CATEGORIES_SET, POSTS_BY_CATEGORY_SET} from "./actionTypes";
 import {API_BASE_URL} from "../../constants/app";
 
 export const loadCategories = () => {
-    console.log('load Categories called');
     return (dispatch, getState) => {
         let url = API_BASE_URL + '/categories';
 
         const token = getState().auth.token;
-        console.log('load categories', token);
 
         return new Promise((resolve, reject) => {
             fetch(url, {
@@ -20,17 +18,15 @@ export const loadCategories = () => {
             })
                 .then(res => res.json())
                 .then(parsedRes => {
-                    console.log(parsedRes);
                     if (!parsedRes.data) {
-                        console.log('Category Fetch Error', err);
-                    } else {
-                        dispatch(setCategories(parsedRes.data));
+                        reject();
                     }
+
+                    dispatch(setCategories(parsedRes.data));
                     resolve(parsedRes.data);
                 })
                 .catch(function() {
                     reject();
-                    console.log("error");
                 });
         });
 

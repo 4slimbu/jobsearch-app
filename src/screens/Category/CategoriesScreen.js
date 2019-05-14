@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, ScrollView, StyleSheet, Text, View} from 'react-native';
 import PropTypes from "prop-types";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from "react-redux";
@@ -12,7 +12,7 @@ import {DrawerActions} from "react-navigation";
 const LogoUrl = require('../../../assets/icons/icon.png');
 
 class CategoriesScreen extends Component {
-    static navigationOptions = ({ navigation }) => {
+    static navigationOptions = ({navigation}) => {
         return {
             title: 'Loksewa',
             headerLeft: (
@@ -32,7 +32,8 @@ class CategoriesScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            categories: [{}]
+            categories: [{}],
+            isLoading: false,
         };
 
         this.onSelectCategory = this.onSelectCategory.bind(this);
@@ -40,10 +41,13 @@ class CategoriesScreen extends Component {
 
     async componentDidMount() {
         this._isMounted = true;
+
+        this.setState({isLoading: true});
         this._isMounted && await this.props.onLoadCategories() &&
         this.setState({
             categories: this.props.categories
         });
+        this.setState({isLoading: false});
     }
 
     componentWillUnmount() {
@@ -56,6 +60,7 @@ class CategoriesScreen extends Component {
     }
 
     render() {
+        const {isLoading} = this.state;
         const categoryListProps = {
             categories: this.props.categories,
             onSelectCategory: this.onSelectCategory
@@ -68,7 +73,12 @@ class CategoriesScreen extends Component {
                         <Icon color="white" name="code-fork" size={62}/>
                         <Text style={styles.heading}>Categories</Text>
                     </View>
-                    <CategoryList {...categoryListProps}/>
+                    {
+                        isLoading ?
+                            <ActivityIndicator size="large" color={Colors.primary} style={{marginTop: 100}}/>
+                            :
+                            <CategoryList {...categoryListProps}/>
+                    }
                 </View>
             </ScrollView>
         );

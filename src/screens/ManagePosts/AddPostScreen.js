@@ -165,7 +165,7 @@ class AddPostScreen extends Component {
             <ScrollView style={styles.container}>
                 <View style={styles.contentView}>
                     <View style={styles.headerContainer}>
-                        <Text style={styles.heading}>Add Post</Text>
+                        <Text style={styles.heading}>Add Post Test</Text>
                     </View>
                     <View style={{marginLeft: 20, marginRight: 20}}>
                         <View>
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 40,
         paddingLeft: 20,
-        backgroundColor: Colors.primary1,
+        backgroundColor: Colors.primary,
         marginBottom: 20,
     },
     contentView: {

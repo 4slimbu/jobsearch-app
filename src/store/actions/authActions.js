@@ -185,13 +185,11 @@ export const authClearStorage = () => {
 export const authLogout = () => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
-            console.log('inside authLogout');
             dispatch(authClearStorage());
             dispatch(authDataReset());
 
             resolve(1);
         }).catch(err => {
-            console.log('inside catch authLogout');
             reject();
         });
     };
@@ -215,7 +213,7 @@ export const authUpdatePreferences = (preferences) => {
         const token = getState().auth.token;
         return new Promise((resolve, reject) => {
             fetch(url, {
-                method: "PUT",
+                method: "POST",
                 body: JSON.stringify({preferences: preferences}),
                 headers: {
                     "Content-Type": "application/json",

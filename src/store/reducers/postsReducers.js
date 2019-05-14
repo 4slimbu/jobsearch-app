@@ -28,7 +28,12 @@ const initialState = {
         data: [],
         links: {},
         meta: {}
-    }
+    },
+    savedPosts: {
+        data: [],
+        links: {},
+        meta: {}
+    },
 };
 
 const postsReducers = (state = initialState, action) => {

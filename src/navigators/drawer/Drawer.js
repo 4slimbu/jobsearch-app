@@ -114,7 +114,7 @@ const Drawer = createDrawerNavigator(
         initialRouteName: 'Tabs',
         drawerPosition: 'right',
         contentOptions: {
-            activeTintColor: Colors.primary1,
+            activeTintColor: Colors.primary,
             activeBackgroundColor: 'transparent',
             inactiveTintColor: '#ffffff',
             inactiveBackgroundColor: 'transparent',

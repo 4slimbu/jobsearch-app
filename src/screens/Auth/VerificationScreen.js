@@ -102,7 +102,7 @@ class VerificationScreen extends Component {
                     {
                         verificationStatus === 'processing' &&
                         <View style={{flex: 1, height: 150, alignItems: 'center', justifyContent: 'center'}}>
-                            <ActivityIndicator size={50} color={Colors.primary1}/>
+                            <ActivityIndicator size={50} color={Colors.primary}/>
                         </View>
                     }
                     {

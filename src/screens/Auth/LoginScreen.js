@@ -51,7 +51,7 @@ class LoginScreen extends Component {
         this._isMounted && await this.props.authAutoSignIn().then(res => {
             this.setState({isLoggedIn: true});
 
-            if ( ! this.props.auth.user.verified) {
+            if (!this.props.auth.user.verified) {
                 this.props.navigation.navigate('VerificationScreen');
             } else {
                 this.props.navigation.navigate('App');
@@ -70,7 +70,7 @@ class LoginScreen extends Component {
         const {email, password} = this.state;
         let errors = {};
 
-        if (! validateEmail(email)) {
+        if (!validateEmail(email)) {
             errors.email = "Email is invalid";
         }
 
@@ -85,14 +85,14 @@ class LoginScreen extends Component {
     async normalLoginHandler() {
         const {email, password} = this.state;
 
-        if (! this.isFormValid()) {
+        if (!this.isFormValid()) {
             return;
         }
 
         this.setState({isLoading: true});
 
         await this.props.onTryAuth({email: email, password: password}).then(() => {
-            if ( this.props.auth.isLoggedIn && !this.props.auth.user.verified) {
+            if (this.props.auth.isLoggedIn && !this.props.auth.user.verified) {
                 this.props.navigation.navigate('VerificationScreen');
             } else if (this.props.auth.isLoggedIn && this.props.auth.user.verified) {
                 this.props.navigation.navigate('App');
@@ -123,10 +123,12 @@ class LoginScreen extends Component {
         } = this.state;
         return (
             isReady ? (
-            <ScrollView style={[styles.container]}>
+                <ScrollView style={[styles.container]}>
 
-                    <KeyboardAvoidingView style={{flex: 1, justifyContent: 'center', alignItems: 'center',
-                        marginTop: 100, marginBottom: 100}}
+                    <KeyboardAvoidingView style={{
+                        flex: 1, justifyContent: 'center', alignItems: 'center',
+                        marginTop: 100, marginBottom: 100
+                    }}
                                           behavior="padding"
                     >
                         <View style={styles.titleContainer}>
@@ -213,7 +215,7 @@ class LoginScreen extends Component {
                         </View>
                     </KeyboardAvoidingView>
 
-            </ScrollView>
+                </ScrollView>
             ) : <AppLoading/>
         );
     }

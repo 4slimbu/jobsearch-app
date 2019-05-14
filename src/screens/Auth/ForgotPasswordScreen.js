@@ -54,7 +54,7 @@ class ForgotPasswordScreen extends Component {
 
         // Check for validation error
         let errors = {};
-        if (! validateEmail(this.state.email)) {
+        if (!validateEmail(this.state.email)) {
             errors.email = "Email is invalid";
             this.setState({errors});
             return;
@@ -94,7 +94,7 @@ class ForgotPasswordScreen extends Component {
     async resetPasswordHandler() {
         const {email, password, passwordResetCode} = this.state;
 
-        if (! this.isResetFormValid()) {
+        if (!this.isResetFormValid()) {
             return;
         }
 
@@ -106,9 +106,9 @@ class ForgotPasswordScreen extends Component {
             token: passwordResetCode,
         };
         await this.props.resetPassword(data).then(res => {
-            this.setState({ status: 'successful' });
+            this.setState({status: 'successful'});
         }).catch(err => {
-            this.setState({ status: 'unsuccessful' });
+            this.setState({status: 'unsuccessful'});
         });
 
         this.setState({isLoading: false});
@@ -168,7 +168,7 @@ class ForgotPasswordScreen extends Component {
                     {
                         status === 'processing' &&
                         <View style={{flex: 1, height: 150, alignItems: 'center', justifyContent: 'center'}}>
-                            <ActivityIndicator size={50} color={Colors.primary1}/>
+                            <ActivityIndicator size={50} color={Colors.primary}/>
                         </View>
                     }
                     {
@@ -176,7 +176,8 @@ class ForgotPasswordScreen extends Component {
                         <View style={{alignItems: 'center'}}>
                             <View style={{paddingTop: 25}}>
                                 <View style={{alignItems: 'center'}}>
-                                    <Text style={{paddingLeft: 30, paddingRight: 30, fontSize: 18}}>If your email exists in our database, you will receive an email containing password reset code.
+                                    <Text style={{paddingLeft: 30, paddingRight: 30, fontSize: 18}}>If your email exists
+                                        in our database, you will receive an email containing password reset code.
                                         Please, use it to reset your password.</Text>
                                 </View>
                             </View>
@@ -302,7 +303,7 @@ class ForgotPasswordScreen extends Component {
                                 activeOpacity={0.8}
                                 title="Have Password Reset Code? Reset Password"
                                 onPress={this.havePasswordResetCodeHandler}
-                                titleStyle={{ color: Colors.grey1}}
+                                titleStyle={{color: Colors.grey1}}
                                 loading={isLoading}
                                 disabled={isLoading}
                             />

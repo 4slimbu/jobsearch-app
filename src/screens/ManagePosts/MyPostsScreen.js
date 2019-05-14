@@ -72,7 +72,7 @@ class MyPostsScreen extends Component {
                             postsByMe && <PostList {...postListProps}/>
                         }
                         {
-                            getPostsStatus === 'loading' && <ActivityIndicator size={50} color={Colors.primary1}/>
+                            getPostsStatus === 'loading' && <ActivityIndicator size={50} color={Colors.primary}/>
                         }
                         {
                             getPostsStatus === 'failed' && <Text style={{margin: 15}}>Failed!</Text>
