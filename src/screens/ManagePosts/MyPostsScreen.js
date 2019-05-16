@@ -4,37 +4,32 @@ import Colors from '../../constants/colors';
 import {connect} from "react-redux";
 import {getMyPosts} from "../../store/actions/postActions";
 import PostList from "../../components/List/PostList";
+import ContentLoading from "../../components/ContentLoading";
 
 class MyPostsScreen extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            // loaded, loading, failed, no-posts
-            getPostsStatus: 'loading',
+            isLoading: false,
         };
 
-        this.onSelectPost = this.onSelectPost.bind(this);
         this.scrollHandler = this.scrollHandler.bind(this);
     }
 
     async componentDidMount() {
         this._isMounted = true;
 
+        this.setState({isLoading: true});
         this._isMounted && await this.props.onGetMyPosts().then(res => {
-            this.setState({getPostsStatus: 'loaded'});
+            this.setState({isLoading: false});
         }).catch(err => {
-            this.setState({getPostsStatus: 'failed'});
+            this.setState({isLoading: false});
         });
     }
 
     componentWillUnmount() {
         this._isMounted = false;
-    }
-
-    onSelectPost(postId) {
-        console.log('on Select Post', postId);
-        this.props.navigation.navigate('PostDetail', {postId: postId});
     }
 
     async scrollHandler(e){
@@ -43,23 +38,22 @@ class MyPostsScreen extends Component {
             offset = e.nativeEvent.contentOffset.y;
         if( windowHeight + offset >= height ){
             if (this.props.postsByMe.meta.to !== this.props.postsByMe.meta.total) {
-                this.setState({getPostsStatus: 'loading'});
+                this.setState({isLoading: true});
                 await this.props.onGetMyPosts(this.props.postsByMe.links.next).then(res => {
-                    this.setState({getPostsStatus: 'loaded'});
+                    this.setState({isLoading: false});
                 }).catch(err => {
-                    this.setState({getPostsStatus: 'failed'});
+                    this.setState({isLoading: false});
                 });
             }
         }
     }
 
     render() {
-        const {getPostsStatus} = this.state;
+        const {isLoading} = this.state;
         const {postsByMe} = this.props;
         const postListProps = {
-            posts: postsByMe,
-            onSelectPost: this.onSelectPost,
-            type: 'my'
+            type: 'my',
+            posts: postsByMe
         };
         return (
             <ScrollView style={styles.container} onScrollEndDrag={this.scrollHandler}>
@@ -71,11 +65,10 @@ class MyPostsScreen extends Component {
                         {
                             postsByMe && <PostList {...postListProps}/>
                         }
+                    </View>
+                    <View style={{height: 100}}>
                         {
-                            getPostsStatus === 'loading' && <ActivityIndicator size={50} color={Colors.primary}/>
-                        }
-                        {
-                            getPostsStatus === 'failed' && <Text style={{margin: 15}}>Failed!</Text>
+                            isLoading && <ContentLoading/>
                         }
                     </View>
                 </View>

@@ -4,7 +4,7 @@ import Colors from "../constants/colors";
 
 const ContentLoading = props => {
     return (
-        <ActivityIndicator size="large" color={Colors.primary} style={{marginTop: 100}}/>
+        <ActivityIndicator size="large" color={Colors.primary} style={{marginTop: 50, marginBottom: 50}}/>
     )
 };
 

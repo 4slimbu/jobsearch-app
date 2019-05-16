@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {Icon, SearchBar,} from 'react-native-elements/src/index';
+import {Icon, SearchBar,} from 'react-native-elements';
 
 import Colors from "../../constants/colors";
 import {connect} from "react-redux";
-import {searchPosts} from "../../store/actions/postActions";
+import {resetSearchedPosts, searchPosts} from "../../store/actions/postActions";
 import PostList from "../../components/List/PostList";
 import {authUpdatePreferences} from "../../store/actions/authActions";
+import ContentLoading from "../../components/ContentLoading";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -29,31 +30,31 @@ class SearchScreen extends Component {
         this.onChange = this.onChange.bind(this);
         this.onSelectPost = this.onSelectPost.bind(this);
         this.onSavePost = this.onSavePost.bind(this);
+        this.scrollHandler = this.scrollHandler.bind(this);
     }
 
     onChange(searchText) {
-        this.setState({
-            ...this.state,
-            searchText: searchText
-        });
+        this.setState({searchText});
+
+        if (searchText.length === 0) {
+            this.props.resetSearchedPosts();
+        }
+
+        if (searchText.length < 3) {
+            return;
+        }
 
         // Check if state is loading, then do nothing
         if (!this.state.isLoading) {
+            // Initiate loading
+            this.setState({ isLoading: true });
+
             // Call action only after few milli seconds
             setTimeout(() => {
-                // Initiate loading
-                this.setState({
-                    ...this.state,
-                    isLoading: true
-                });
-
                this.props.onSearch(this.state.searchText);
 
                 // Stop Loading
-                this.setState({
-                    ...this.state,
-                    isLoading: false
-                });
+                this.setState({ isLoading: false });
             }, 500);
         }
     }
@@ -79,30 +80,51 @@ class SearchScreen extends Component {
         console.log('onSavePost', postId);
     }
 
+    async scrollHandler(e){
+        if (this.state.searchText.length < 3) {
+            return;
+        }
+
+        let windowHeight = Dimensions.get('window').height,
+            height = e.nativeEvent.contentSize.height,
+            offset = e.nativeEvent.contentOffset.y;
+        if( windowHeight + offset >= height ){
+            if (this.props.searchedPosts.meta.to !== this.props.searchedPosts.meta.total) {
+                this.setState({isLoading: true});
+                await this.props.onSearch(this.state.searchText, this.props.searchedPosts.links.next).then(res => {
+                    this.setState({isLoading: false});
+                }).catch(err => {
+                    this.setState({isLoading: false});
+                });
+            }
+        }
+    }
+
     render() {
-        const {searchText} = this.state;
-        const {searchedPosts, preferences} = this.props;
+        const {searchText, isLoading} = this.state;
+        const {searchedPosts} = this.props;
         const postListProps = {
+            type: "search",
             posts: searchedPosts,
-            onSelectPost: this.onSelectPost,
-            onSavePost: this.onSavePost,
-            savedPosts: preferences.savedPosts
         };
         return (
-            <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+            <ScrollView style={styles.container} keyboardShouldPersistTaps="handled" onScrollEndDrag={this.scrollHandler}>
                 <View style={styles.headerContainer}>
                     <Icon color="white" name="search" size={62}/>
                     <Text style={styles.heading}>Search Posts</Text>
                 </View>
                 <SearchBar lightTheme placeholder="Search Posts"
-                    showLoading={this.state.isLoading}
+                    showLoading={isLoading}
                     value={searchText}
                     onChangeText={searchText => this.onChange(searchText)}
                 />
 
                 <View style={{marginTop: 20}}>
+                     <PostList {...postListProps}/>
+                </View>
+                <View style={{height: 100}}>
                     {
-                        searchedPosts && <PostList {...postListProps}/>
+                        isLoading && <ContentLoading/>
                     }
                 </View>
             </ScrollView>
@@ -176,7 +198,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onUpdatePreferences: (preferences) => dispatch(authUpdatePreferences(preferences)),
-        onSearch: (text) => dispatch(searchPosts(text))
+        onSearch: (text, url) => dispatch(searchPosts(text, url)),
+        resetSearchedPosts: () => dispatch(resetSearchedPosts()),
     };
 };
 

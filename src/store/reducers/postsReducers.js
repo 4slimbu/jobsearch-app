@@ -8,7 +8,7 @@ import {
     POSTS_SAVED_BY_ME_SET,
     POSTS_BY_ME_DELETE,
     DELETE_SAVED_POST,
-    UPDATE_EDITED_POST
+    UPDATE_EDITED_POST, POSTS_BY_SEARCH_UPDATE, POSTS_BY_SEARCH_RESET
 } from "../actions/actionTypes";
 import * as _ from "lodash";
 
@@ -67,12 +67,26 @@ const postsReducers = (state = initialState, action) => {
             return {
                 ...state,
                 searchedPosts: {
-                    data: [
-                        ...action.payload.data
-                    ],
+                    data: [...action.payload.data],
                     links: action.payload.links,
                     meta: action.payload.meta
                 }
+            };
+
+        case POSTS_BY_SEARCH_UPDATE:
+            return {
+                ...state,
+                searchedPosts: {
+                    data: state.searchedPosts.data.concat(action.payload.data),
+                    links: action.payload.links,
+                    meta: action.payload.meta
+                }
+            };
+
+        case POSTS_BY_SEARCH_RESET:
+            return {
+                ...state,
+                searchedPosts: initialState.searchedPosts
             };
 
         case POSTS_BY_ME_SET:

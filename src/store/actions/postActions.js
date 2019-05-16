@@ -2,8 +2,8 @@ import {
     CATEGORIES_SET, DELETE_SAVED_POST,
     POST_SET,
     POSTS_BY_CATEGORY_SET, POSTS_BY_ME_DELETE,
-    POSTS_BY_ME_SET,
-    POSTS_BY_SEARCH_SET,
+    POSTS_BY_ME_SET, POSTS_BY_SEARCH_RESET,
+    POSTS_BY_SEARCH_SET, POSTS_BY_SEARCH_UPDATE,
     POSTS_SAVED_BY_ME_SET, UPDATE_EDITED_POST
 } from "./actionTypes";
 import {API_BASE_URL} from "../../constants/app";
@@ -106,47 +106,67 @@ export const setPostsByCategory = (payload) => {
     }
 };
 
-export const searchPosts = (text) => {
+export const searchPosts = (text, url=null) => {
+    let isFreshSearch = true;
+
     return (dispatch, getState) => {
-        let url = API_BASE_URL + '/posts?search=' + text;
+        if (!url) {
+            url = API_BASE_URL + '/posts?search=' + text;
+        } else {
+            url = url + '&search=' + text;
+            isFreshSearch = false;
+        }
 
         const token = getState().auth.token;
-
-        fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "Authorization": "Bearer " + token
-            }
-        })
-            .catch(err => {
-                console.log(err);
-                alert("Unable to search posts!");
-                // dispatch(uiStopLoading());
-            })
-            .then(res => res.json())
-            .then(parsedRes => {
-                console.log(parsedRes);
-                if (!parsedRes.data) {
-                    alert("Unable to search posts!");
-                } else {
-                    dispatch(
-                        setPostsBySearch(parsedRes)
-                    );
+        return new Promise((resolve, reject) => {
+            fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": "Bearer " + token
                 }
             })
-            .catch(function() {
-                console.log("error");
-            });
+                .then(res => res.json())
+                .then(parsedRes => {
+                    if (!parsedRes.data) {
+                        reject();
+                    }
+
+                    if (isFreshSearch) {
+                        dispatch( setPostsBySearch(parsedRes) );
+                    } else {
+                        dispatch( updatePostsBySearch(parsedRes) );
+                    }
+                    resolve(parsedRes);
+                })
+                .catch(err => {
+                    console.log(err);
+                    reject();
+                });
+        });
+
     };
 };
 
 export const setPostsBySearch = (payload) => {
-    console.log('setPostsBySearch', payload);
     return {
         type: POSTS_BY_SEARCH_SET,
         payload: payload
+    }
+};
+
+export const updatePostsBySearch = (payload) => {
+    return {
+        type: POSTS_BY_SEARCH_UPDATE,
+        payload: payload
+    }
+};
+
+export const resetSearchedPosts = () => {
+    return {
+        type: POSTS_BY_SEARCH_RESET,
+        payload: null
     }
 };
 

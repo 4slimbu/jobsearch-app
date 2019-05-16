@@ -23,13 +23,10 @@ const PostList = (props) => {
 };
 
 const postList = props => {
-    const {savedPosts, posts, onSelectPost, onSavePost, type} = props;
+    const {posts, type} = props;
     const postListProps = {
         type: type,
-        savedPosts: savedPosts,
         posts: posts,
-        onSelectPost: onSelectPost,
-        onSavePost: onSavePost,
     };
     return (
         <View style={styles.postContainer}>
@@ -44,20 +41,10 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginBottom: 20
     },
-    postContainer: {
-        // flexDirection: 'row',
-        // justifyContent: 'space-around',
-        // flexWrap: 'wrap',
-        // width: '100%',
-        // marginTop: 20,
-    },
 });
 
 PostList.propTypes = {
-    savedPosts: PropTypes.array,
     posts: PropTypes.object.isRequired,
-    onSavePost: PropTypes.func,
-    onSelectPost: PropTypes.func.isRequired
 };
 
 export default postList;
