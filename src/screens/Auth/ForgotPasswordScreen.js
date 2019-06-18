@@ -5,6 +5,7 @@ import {
     KeyboardAvoidingView,
     ScrollView,
     StyleSheet,
+    ImageBackground,
     Text,
     UIManager,
     View,
@@ -23,6 +24,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const LogoUrl = require('../../../assets/icons/icon.png');
+const BG_IMAGE = require('../../../assets/images/wallpaper_4.jpg');
 
 // Enable LayoutAnimation on Android
 UIManager.setLayoutAnimationEnabledExperimental &&
@@ -310,6 +312,8 @@ class ForgotPasswordScreen extends Component {
                         }
                     </View>
                 </KeyboardAvoidingView>
+                <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
+                </ImageBackground>
             </ScrollView>
         );
     }
@@ -338,7 +342,7 @@ const styles = StyleSheet.create({
         borderRightWidth: 70,
         borderBottomWidth: 70,
         borderColor: 'white',
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
     },
     loginContainer: {
         alignItems: 'center',
@@ -350,8 +354,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     loginButton: {
-        backgroundColor: 'rgba(232, 147, 142, 1)',
-        borderRadius: 10,
+        backgroundColor: '#ff4e6a',
+        borderRadius: 0,
         height: 50,
         paddingLeft: 20,
         paddingRight: 20,
@@ -368,11 +372,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     formContainer: {
-        backgroundColor: 'white',
-        width: SCREEN_WIDTH - 30,
+        backgroundColor: 'transparent',
+        width: SCREEN_WIDTH - 50,
         borderRadius: 10,
         paddingTop: 32,
         paddingBottom: 32,
+        alignItems: 'center',
     },
     loginText: {
         fontSize: 16,
@@ -383,10 +388,14 @@ const styles = StyleSheet.create({
         flex: 1,
         top: 0,
         left: 0,
-        width: SCREEN_WIDTH,
-        height: SCREEN_HEIGHT,
+        width: '100%',
+        height:'100%',
         justifyContent: 'center',
         alignItems: 'center',
+        opacity:1,
+        zIndex:-1,
+        position:'absolute',
+        opacity:0.4,
     },
     categoryText: {
         textAlign: 'center',

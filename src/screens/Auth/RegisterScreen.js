@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, KeyboardAvoidingView, ScrollView, StyleSheet, Text, UIManager, View} from 'react-native';
+import {Dimensions, KeyboardAvoidingView, ScrollView,ImageBackground, StyleSheet, Text, UIManager, View,} from 'react-native';
 import {connect} from 'react-redux';
 import {Button, CheckBox, Image, Input} from 'react-native-elements';
 
@@ -16,6 +16,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const LogoUrl = require('../../../assets/icons/icon.png');
+const BG_IMAGE = require('../../../assets/images/wallpaper_4.jpg');
 
 
 // Enable LayoutAnimation on Android
@@ -338,10 +339,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     loginButton: {
-        backgroundColor: 'rgba(232, 147, 142, 1)',
-        borderRadius: 10,
+        backgroundColor: '#f53756',
+        borderRadius: 5,
         height: 50,
-        width: 200,
+        width:  SCREEN_WIDTH - 65,
     },
     facebookLoginButton: {
         backgroundColor: socialColor.facebook,

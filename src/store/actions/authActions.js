@@ -75,7 +75,10 @@ export const tryAuth = (authData, authMode = 'login') => {
                     "Accept": "application/json"
                 }
             })
-                .then(res => res.json())
+                .then(res => {
+                    console.log(res);
+                    return res.json();
+                })
                 .then(parsedRes => {
                     if (!parsedRes.access_token) {
                         if (parsedRes.error === 'UserExistsException' && parsedRes.message) {
