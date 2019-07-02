@@ -92,16 +92,15 @@ const styles = StyleSheet.create({
     headerContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 40,
-        backgroundColor: Colors.primary,
+        backgroundColor: '#acacac',
         marginBottom: 20,
+        padding:40,
     },
     contentView: {
         flex: 1,
     },
     heading: {
         color: 'white',
-        marginTop: 10,
         fontSize: 22,
         fontWeight: 'bold',
     },

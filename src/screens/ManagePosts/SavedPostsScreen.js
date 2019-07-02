@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 40,
         paddingLeft: 20,
-        backgroundColor: Colors.primary,
+        backgroundColor: '#acacac',
         marginBottom: 20,
     },
     contentView: {

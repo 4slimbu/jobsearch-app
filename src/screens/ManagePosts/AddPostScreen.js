@@ -178,7 +178,7 @@ class AddPostScreen extends Component {
                         <View>
                             <Text style={styles.postTitle}>Post Title</Text>
                             <View>
-                                <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
+                                <TextInput style={{borderWidth: 1, borderColor: Colors.grey3, height:44,}}
                                            onChangeText={postTitle => this.setState({postTitle})}
                                 />
                                 <Text style={{color: Colors.danger, marginTop: 5}}>{errors.postTitle ? errors.postTitle: ''}</Text>
@@ -187,7 +187,7 @@ class AddPostScreen extends Component {
                         <View>
                             <Text style={styles.postTitle}>Post Content</Text>
                             <View>
-                                <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
+                                <TextInput style={{borderWidth: 1, borderColor: Colors.grey3, height:44,}}
                                            multiline={true}
                                            numberOfLines={15}
                                            onChangeText={postContent => this.setState({postContent})}
@@ -205,7 +205,7 @@ class AddPostScreen extends Component {
                             {
                                 !featuredImage &&
                                 <Button title="Pick Image"
-                                        buttonStyle={{marginBottom: 5, paddingTop: 5, paddingBottom: 5}}
+                                        buttonStyle={{marginBottom: 5, paddingTop: 5, paddingBottom: 5, height:44,}}
                                         buttonSize={5} type="outline"
                                         onPress={this.pickFeaturedImageHandler}
                                 />
@@ -229,7 +229,7 @@ class AddPostScreen extends Component {
                                 {
                                     additionalImages.length < 6 &&
                                     <Button title="Pick Image"
-                                            buttonStyle={{marginBottom: 5, paddingTop: 5, paddingBottom: 5}}
+                                            buttonStyle={{marginBottom: 5, paddingTop: 5, paddingBottom: 5, height:50,}}
                                             buttonSize={5} type="outline"
                                             onPress={this.pickAdditionalImagesHandler}
                                     />
@@ -288,7 +288,7 @@ class AddPostScreen extends Component {
                             <Text style={{color: Colors.danger, marginTop: 5}}>{errors.date ? errors.date: ''}</Text>
                         </View>
 
-                        <Button title="Save" buttonStyle={{marginTop: 25, marginBottom: 50}} onPress={this.submitHandler}
+                        <Button title="Save" buttonStyle={{marginTop: 25, marginBottom: 50, height:44,}} onPress={this.submitHandler}
                                 buttonSize={5}
                                 loading={isLoading}
                                 disabled={isLoading}
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 40,
         paddingLeft: 20,
-        backgroundColor: Colors.primary,
+        backgroundColor: '#acacac',
         marginBottom: 20,
     },
     contentView: {
@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
         width: "100%",
         paddingHorizontal: 8,
     },
-    input: {maxHeight: 40},
+    input: {maxHeight: 50},
     inputContainer: {
         display: "flex",
         flexShrink: 0,
@@ -375,8 +375,8 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: "#c7c6c1",
         paddingVertical: 13,
-        paddingLeft: 12,
-        paddingRight: "5%",
+        paddingLeft: 15,
+        paddingRight: 15,
         width: "100%",
         justifyContent: "flex-start",
     },

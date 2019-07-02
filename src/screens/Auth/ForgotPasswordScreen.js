@@ -10,6 +10,7 @@ import {
     UIManager,
     View,
 } from 'react-native';
+import {AppLoading, LinearGradient} from 'expo';
 import {Button, Image, Input} from 'react-native-elements';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -155,164 +156,171 @@ class ForgotPasswordScreen extends Component {
         return (
 
             <ScrollView style={[styles.container]}>
-                <KeyboardAvoidingView style={{
-                    flex: 1, justifyContent: 'center',
-                    alignItems: 'center', marginTop: 100, marginBottom: 100
-                }}
-                                      behavior="padding"
-                >
-                    <View style={styles.titleContainer}>
-                        <View style={{alignItems: 'center'}}>
-                            <Image style={{width: 100, height: 100}} source={LogoUrl}/>
-                            <Text style={styles.titleText}>LokSewa</Text>
+                <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
+                    <LinearGradient
+                            colors={[ '#f53554', '#ffc4c4']}
+                            style={styles.overlay}/>
+                    <KeyboardAvoidingView style={{
+                        flex: 1, justifyContent: 'center',
+                        alignItems: 'center', marginTop: 100, marginBottom: 100
+                    }}
+                                          behavior="padding"
+                    >
+                        <View style={styles.titleContainer}>
+                            <View style={{alignItems: 'center'}}>
+                                <Image style={{width: 100, height: 100}} source={LogoUrl}/>
+                                <Text style={styles.titleText}>LokSewa</Text>
+                            </View>
                         </View>
-                    </View>
-                    {
-                        status === 'processing' &&
-                        <View style={{flex: 1, height: 150, alignItems: 'center', justifyContent: 'center'}}>
-                            <ActivityIndicator size={50} color={Colors.primary}/>
-                        </View>
-                    }
-                    {
-                        status === 'codeReceived' &&
-                        <View style={{alignItems: 'center'}}>
-                            <View style={{paddingTop: 25}}>
-                                <View style={{alignItems: 'center'}}>
-                                    <Text style={{paddingLeft: 30, paddingRight: 30, fontSize: 18}}>If your email exists
-                                        in our database, you will receive an email containing password reset code.
-                                        Please, use it to reset your password.</Text>
+                        {
+                            status === 'processing' &&
+                            <View style={{flex: 1, height: 150, alignItems: 'center', justifyContent: 'center'}}>
+                                <ActivityIndicator size={50} color={Colors.primary}/>
+                            </View>
+                        }
+                        {
+                            status === 'codeReceived' &&
+                            <View style={{alignItems: 'center'}}>
+                                <View style={{paddingTop: 25}}>
+                                    <View style={{alignItems: 'center'}}>
+                                        <Text style={{paddingLeft: 30, paddingRight: 30, fontSize: 18}}>If your email exists
+                                            in our database, you will receive an email containing password reset code.
+                                            Please, use it to reset your password.</Text>
+                                    </View>
+                                </View>
+                                <View style={[styles.formContainer]}>
+                                    <Input
+                                        leftIcon={
+                                            <Icon
+                                                name="code"
+                                                color="rgba(0, 0, 0, 0.38)"
+                                                size={25}
+                                                style={{backgroundColor: 'transparent'}}
+                                            />
+                                        }
+                                        value={passwordResetCode}
+                                        inputStyle={{marginLeft: 10}}
+                                        placeholder={'Enter Password Reset Code'}
+                                        placeholderTextColor={Colors.white}
+                                        onChangeText={passwordResetCode => this.setState({passwordResetCode})}
+                                        errorMessage={errors.passwordResetCode ? errors.passwordResetCode : null}
+                                    />
+                                    <Input
+                                        leftIcon={
+                                            <Icon
+                                                name="lock"
+                                                color="rgba(0, 0, 0, 0.38)"
+                                                size={25}
+                                                style={{backgroundColor: 'transparent'}}
+                                            />
+                                        }
+                                        value={password}
+                                        secureTextEntry={true}
+                                        containerStyle={{
+                                            marginTop: 16,
+                                            borderBottomColor: 'rgba(0, 0, 0, 0.38)',
+                                        }}
+                                        inputStyle={{marginLeft: 10}}
+                                        placeholder={'Password'}
+                                        placeholderTextColor={Colors.white}
+                                        onChangeText={password => this.setState({password})}
+                                        errorMessage={errors.password ? errors.password : null}
+                                    />
+                                    <Input
+                                        leftIcon={
+                                            <Icon
+                                                name="lock"
+                                                color="rgba(0, 0, 0, 0.38)"
+                                                size={25}
+                                                style={{backgroundColor: 'transparent'}}
+                                            />
+                                        }
+                                        value={confirmPassword}
+                                        secureTextEntry={true}
+                                        containerStyle={{
+                                            marginTop: 16,
+                                            borderBottomColor: 'rgba(0, 0, 0, 0.38)',
+                                        }}
+                                        inputStyle={{marginLeft: 10}}
+                                        placeholder={'Confirm Password'}
+                                        placeholderTextColor={Colors.white}
+                                        onChangeText={confirmPassword => this.setState({confirmPassword})}
+                                        errorMessage={errors.confirmPassword ? errors.confirmPassword : null}
+                                    />
+
                                 </View>
                             </View>
-                            <View style={[styles.formContainer]}>
-                                <Input
-                                    leftIcon={
-                                        <Icon
-                                            name="code"
-                                            color="rgba(0, 0, 0, 0.38)"
-                                            size={25}
-                                            style={{backgroundColor: 'transparent'}}
-                                        />
-                                    }
-                                    value={passwordResetCode}
-                                    inputStyle={{marginLeft: 10}}
-                                    placeholder={'Enter Password Reset Code'}
-                                    onChangeText={passwordResetCode => this.setState({passwordResetCode})}
-                                    errorMessage={errors.passwordResetCode ? errors.passwordResetCode : null}
-                                />
-                                <Input
-                                    leftIcon={
-                                        <Icon
-                                            name="lock"
-                                            color="rgba(0, 0, 0, 0.38)"
-                                            size={25}
-                                            style={{backgroundColor: 'transparent'}}
-                                        />
-                                    }
-                                    value={password}
-                                    secureTextEntry={true}
-                                    containerStyle={{
-                                        marginTop: 16,
-                                        borderBottomColor: 'rgba(0, 0, 0, 0.38)',
-                                    }}
-                                    inputStyle={{marginLeft: 10}}
-                                    placeholder={'Password'}
-                                    onChangeText={password => this.setState({password})}
-                                    errorMessage={errors.password ? errors.password : null}
-                                />
-                                <Input
-                                    leftIcon={
-                                        <Icon
-                                            name="lock"
-                                            color="rgba(0, 0, 0, 0.38)"
-                                            size={25}
-                                            style={{backgroundColor: 'transparent'}}
-                                        />
-                                    }
-                                    value={confirmPassword}
-                                    secureTextEntry={true}
-                                    containerStyle={{
-                                        marginTop: 16,
-                                        borderBottomColor: 'rgba(0, 0, 0, 0.38)',
-                                    }}
-                                    inputStyle={{marginLeft: 10}}
-                                    placeholder={'Confirm Password'}
-                                    onChangeText={confirmPassword => this.setState({confirmPassword})}
-                                    errorMessage={errors.confirmPassword ? errors.confirmPassword : null}
-                                />
-
+                        }
+                        {
+                            status === 'unsuccessful' &&
+                            <View style={{flex: 1, height: 150, alignItems: 'center', justifyContent: 'center'}}>
+                                <View style={{alignItems: 'center'}}>
+                                    <Icon color={Colors.danger} name="close" size={62}/>
+                                    <Text>Something went wrong. Please, try again!</Text>
+                                </View>
                             </View>
-                        </View>
-                    }
-                    {
-                        status === 'unsuccessful' &&
-                        <View style={{flex: 1, height: 150, alignItems: 'center', justifyContent: 'center'}}>
-                            <View style={{alignItems: 'center'}}>
-                                <Icon color={Colors.danger} name="close" size={62}/>
-                                <Text>Something went wrong. Please, try again!</Text>
+                        }
+                        {
+                            status === 'successful' &&
+                            <View style={{flex: 1, height: 150, alignItems: 'center', justifyContent: 'center'}}>
+                                <View style={{alignItems: 'center'}}>
+                                    <Icon color={Colors.success} name="check" size={62}/>
+                                    <Text>Password reset successfully!</Text>
+                                </View>
                             </View>
-                        </View>
-                    }
-                    {
-                        status === 'successful' &&
-                        <View style={{flex: 1, height: 150, alignItems: 'center', justifyContent: 'center'}}>
-                            <View style={{alignItems: 'center'}}>
-                                <Icon color={Colors.success} name="check" size={62}/>
-                                <Text>Password reset successfully!</Text>
-                            </View>
-                        </View>
-                    }
-                    {
-                        status === 'fresh' &&
-                        <View style={[styles.formContainer, {height: 150}]}>
-                            <Input
-                                leftIcon={
-                                    <Icon
-                                        name="envelope-o"
-                                        color="rgba(0, 0, 0, 0.38)"
-                                        size={25}
-                                        style={{backgroundColor: 'transparent'}}
-                                    />
-                                }
-                                value={email}
-                                inputStyle={{marginLeft: 10}}
-                                placeholder={'Enter your Email'}
-                                containerStyle={{
-                                    borderBottomColor: 'rgba(0, 0, 0, 0.38)',
-                                }}
-                                onChangeText={email => this.setState({email})}
-                                errorMessage={errors.email ? errors.email : null}
-                            />
-                        </View>
-
-                    }
-                    <View>
-                        <Button
-                            buttonStyle={styles.loginButton}
-                            containerStyle={{marginTop: 32, flex: 0}}
-                            activeOpacity={0.8}
-                            title={submitButtonTitle}
-                            onPress={submitButtonPressHandler}
-                            titleStyle={styles.loginTextButton}
-                            loading={isLoading}
-                            disabled={isLoading}
-                        />
-
+                        }
                         {
                             status === 'fresh' &&
+                            <View style={[styles.formContainer, {height: 150}]}>
+                                <Input
+                                    leftIcon={
+                                        <Icon
+                                            name="envelope-o"
+                                            color="rgba(255,255,255,1)"
+                                            size={25}
+                                            style={{backgroundColor: 'transparent'}}
+                                        />
+                                    }
+                                    value={email}
+                                    inputStyle={{marginLeft: 10}}
+                                    placeholder={'Enter your Email'}
+                                    placeholderTextColor={Colors.white}
+                                    containerStyle={{
+                                        borderBottomColor: 'rgba(0, 0, 0, 0.38)',
+                                    }}
+                                    onChangeText={email => this.setState({email})}
+                                    errorMessage={errors.email ? errors.email : null}
+                                />
+                            </View>
+
+                        }
+                        <View>
                             <Button
-                                buttonStyle={{backgroundColor: 'white'}}
+                                buttonStyle={styles.loginButton}
                                 containerStyle={{marginTop: 32, flex: 0}}
                                 activeOpacity={0.8}
-                                title="Have Password Reset Code? Reset Password"
-                                onPress={this.havePasswordResetCodeHandler}
-                                titleStyle={{color: Colors.grey1}}
+                                title={submitButtonTitle}
+                                onPress={submitButtonPressHandler}
+                                titleStyle={styles.loginTextButton}
                                 loading={isLoading}
                                 disabled={isLoading}
                             />
-                        }
-                    </View>
-                </KeyboardAvoidingView>
-                <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
+
+                            {
+                                status === 'fresh' &&
+                                <Button
+                                    buttonStyle={styles.mainLink}
+                                    containerStyle={{marginTop: 32, flex: 0}}
+                                    activeOpacity={0.8}
+                                    title="Have Password Reset Code? Reset Password"
+                                    onPress={this.havePasswordResetCodeHandler}
+                                    titleStyle={{color: Colors.white,fontSize:14}}
+                                    loading={isLoading}
+                                    disabled={isLoading}
+                                />
+                            }
+                        </View>
+                    </KeyboardAvoidingView>
                 </ImageBackground>
             </ScrollView>
         );
@@ -386,16 +394,8 @@ const styles = StyleSheet.create({
     },
     bgImage: {
         flex: 1,
-        top: 0,
-        left: 0,
         width: '100%',
         height:'100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        opacity:1,
-        zIndex:-1,
-        position:'absolute',
-        opacity:0.4,
     },
     categoryText: {
         textAlign: 'center',
@@ -409,14 +409,27 @@ const styles = StyleSheet.create({
         opacity: 1,
     },
     titleText: {
-        color: Colors.grey1,
+        color: Colors.white,
         fontSize: 30,
+        fontWeight: 'bold'
     },
     helpContainer: {
         height: 64,
         alignItems: 'center',
         justifyContent: 'center',
     },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        opacity: 0.90,
+    },
+    mainLink: {
+        backgroundColor:'transparent',
+        // fontSize:14,
+    }
 });
 
 const mapStateToProps = state => {

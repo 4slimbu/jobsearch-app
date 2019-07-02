@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         padding: 40,
         paddingLeft: 20,
         paddingRight: 20,
-        backgroundColor: '#4F80E1',
+        backgroundColor: '#acacac',
         marginBottom: 20,
     },
     contentView: {

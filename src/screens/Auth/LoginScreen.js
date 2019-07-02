@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Dimensions, KeyboardAvoidingView, ScrollView,ImageBackground, StyleSheet, Text, UIManager, View,} from 'react-native';
 import {connect} from 'react-redux';
-import {AppLoading} from 'expo';
+import {AppLoading, LinearGradient} from 'expo';
 import {Button, Image, Input} from 'react-native-elements';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -129,7 +129,9 @@ class LoginScreen extends Component {
 
                     <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
 
-                        <View style={styles.overlay}/>
+                        <LinearGradient
+                            colors={[ '#f53554', '#ffc4c4']}
+                            style={styles.overlay}/>
 
                         <KeyboardAvoidingView style={{
                             flex: 1, justifyContent: 'center', alignItems: 'center',
@@ -148,17 +150,18 @@ class LoginScreen extends Component {
                                     leftIcon={
                                         <Icon
                                             name="envelope-o"
-                                            color="rgba(0, 0, 0, 0.38)"
+                                            color="rgba(255, 255, 255, 1)"
                                             size={25}
-                                            style={{backgroundColor: 'transparent'}}
+                                            style={{backgroundColor: 'transparent', fontSize:18,}}
                                         />
                                     }
                                     value={email}
                                     keyboardType="email-address"
-                                    inputStyle={{marginLeft: 10}}
+                                    inputStyle={{marginLeft: 10,color:Colors.white,}}
                                     placeholder={'Email'}
+                                    placeholderTextColor={Colors.white}
                                     containerStyle={{
-                                        borderBottomColor: 'rgba(0, 0, 0, 0.38)',
+                                        borderBottomColor: 'rgba(255, 255, 255, 1)',
                                     }}
                                     onChangeText={email => this.setState({email})}
                                     errorMessage={errors.email ? errors.email : null}
@@ -167,18 +170,18 @@ class LoginScreen extends Component {
                                     leftIcon={
                                         <SimpleIcon
                                             name="lock"
-                                            color="rgba(0, 0, 0, 0.38)"
+                                            color="rgba(255, 255, 255, 1)"
                                             size={25}
-                                            style={{backgroundColor: 'transparent'}}
+                                            style={{backgroundColor: 'transparent', fontSize:16,}}
                                         />
                                     }
                                     value={password}
                                     secureTextEntry={true}
                                     containerStyle={{
                                         marginTop: 16,
-                                        borderBottomColor: 'rgba(0, 0, 0, 0.38)',
+                                        borderBottomColor: Colors.white,
                                     }}
-                                    inputStyle={{marginLeft: 10}}
+                                    inputStyle={{marginLeft: 10,color:Colors.white,}}
                                     placeholder={'Password'}
                                     onChangeText={password => this.setState({password})}
                                     errorMessage={errors.password ? errors.password : null}
@@ -187,7 +190,7 @@ class LoginScreen extends Component {
                                     buttonStyle={styles.loginButton}
                                     containerStyle={styles.loginButtonContainer}
                                     activeOpacity={0.8}
-                                    title="LOGIN"
+                                    title="Login"
                                     onPress={this.normalLoginHandler}
                                     titleStyle={styles.loginTextButton}
                                     loading={isLoading}
@@ -197,14 +200,14 @@ class LoginScreen extends Component {
                             <View style={styles.helpContainer}>
                                 <Button
                                     title={'Forgot Password?'}
-                                    titleStyle={{color:  Colors.white}}
+                                    titleStyle={{color:  Colors.white,fontSize:14}}
                                     buttonStyle={styles.mainLink}
                                     underlayColor="transparent"
                                     onPress={() => this.props.navigation.navigate('ForgotPasswordScreen')}
                                 />
                                 <Button
                                     title={'Register'}
-                                    titleStyle={{color:  Colors.white}}
+                                    titleStyle={{color:  Colors.white,fontSize:14}}
                                     buttonStyle={[styles.mainLink,styles.registerLink]}
                                     underlayColor="transparent"
                                     onPress={() => this.props.navigation.navigate('RegisterScreen')}
@@ -220,6 +223,7 @@ class LoginScreen extends Component {
                                 />
                             </View>
                         </KeyboardAvoidingView>
+
                     </ImageBackground>
                 </View>
             ) : <AppLoading/>
@@ -323,16 +327,17 @@ const styles = StyleSheet.create({
         flexDirection:'row-reverse',
         marginBottom:30,
         marginTop:20,
-        width:  SCREEN_WIDTH - 65,
-        marginLeft:'auto',
-        marginRight:'auto',
+        width: SCREEN_WIDTH - 65,
+        justifyContent:'center',
     },
     mainLink: {
         backgroundColor:'transparent',
         borderRadius:0,
+        marginLeft:55,
     },
     registerLink: {
         marginLeft:0,
+        marginRight:55,
     },
     facebookContainer: {
         height: 64,
@@ -345,8 +350,7 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         left: 0,
-        backgroundColor: 'red',
-        opacity: 0.3
+        opacity: 0.90,
     }
 });
 

@@ -19,10 +19,12 @@ const AdditionalImages = (props) => {
             return;
         }
         return (
-            <Image key={key} source={image} resizeMode={'contain'}
-                   style={{width: '100%', height: 100, marginBottom: 5}}
+            <View style={styles.postAddtionalImg}>
+                <Image key={key} source={image} resizeMode={'contain'}
+                   style={{width:'100%', height:100,}}
                    PlaceholderContent={<ActivityIndicator/>}
-            />
+                />
+            </View>
         );
     });
 };
@@ -118,16 +120,22 @@ class PostDetailScreen extends Component {
                                                         this.state.isSaved && {backgroundColor: 'grey'}
                                                     ]}
                                                     buttonSize={5} onPress={() => this.savePostHandler(post.id)}/>
-                                            <AdditionalImages {...additionalImagesProps}/>
+                                            
                                         </View>
                                         <View style={{flex: 3}}>
                                             <Text style={styles.postAuthorMeta}>By: {post.author && post.author.full_name}</Text>
                                             <Text style={styles.postDateMeta}>Deadline: {toReadable(post.expire_at)}</Text>
-                                            <Text style={styles.postContent}>{post.body}</Text>
+                                            
 
-                                            <PostComments/>
+                                            
 
                                         </View>
+                                    </View>
+                                    <View>
+                                        <AdditionalImages {...additionalImagesProps} style={styles.additionalImg}>
+                                        </AdditionalImages>
+                                        <Text style={styles.postContent}>{post.body}</Text>
+                                        <PostComments/>
                                     </View>
                                 </View>
                         }
@@ -147,7 +155,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 40,
-        backgroundColor: '#4F80E1',
+        backgroundColor: '#acacac',
         marginBottom: 20,
     },
     keyboardAvoidingViewInner: {
@@ -191,7 +199,8 @@ const styles = StyleSheet.create({
         color: Colors.grey1,
         fontSize: 16,
         lineHeight: 20,
-        marginBottom: 15
+        marginBottom: 15,
+        marginTop:15,
     },
     heading: {
         color: 'white',
@@ -199,6 +208,16 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: 'bold',
     },
+    additionalImg: {
+        display:'flex',
+        flexDirection:'row',
+        paddingBottom:20,
+    },
+    postAddtionalImg: {
+        width: '33.33%', 
+        height: 100, 
+        marginBottom: 5,
+    }
 });
 
 const mapStateToProps = state => {

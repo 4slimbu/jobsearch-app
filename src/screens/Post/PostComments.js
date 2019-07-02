@@ -88,12 +88,12 @@ class PostComments extends Component {
                                 <View style={{width: '80%'}}>
                                     <TouchableOpacity style={{
                                         width: '100%',
-                                        backgroundColor: Colors.grey5,
+                                        backgroundColor: '#fafafa',
                                         borderRadius: 10,
                                         padding: 10
                                     }}
                                                       onPress={() => this.selectCommentHandler(comment.id)}>
-                                        <Text styles={{marginLeft: 100, color: Colors.grey3}}>{comment.body}</Text>
+                                        <Text styles={{marginLeft: 100, color: Colors.grey3,backgroundColor: '#f1f1f1',}}>{comment.body}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -120,7 +120,7 @@ class PostComments extends Component {
                                                 }}>
                                                     <TouchableOpacity style={{
                                                         width: '100%',
-                                                        backgroundColor: Colors.grey5,
+                                                        backgroundColor: '#fafafa',
                                                         borderRadius: 10,
                                                         padding: 10
                                                     }}
@@ -128,7 +128,7 @@ class PostComments extends Component {
                                                         <Text styles={{
                                                             marginLeft: 100,
                                                             color: Colors.grey3,
-                                                            backgroundColor: Colors.grey3
+                                                            backgroundColor: '#f1f1f1',
                                                         }}>
                                                             {reply.body}
                                                         </Text>
@@ -156,6 +156,7 @@ class PostComments extends Component {
                                                 paddingTop: 5,
                                                 paddingBottom: 5,
                                                 width: 100,
+                                                backgroundColor:'#525252',
                                             }}
                                             buttonSize={5}
                                             onPress={() => this.commentHandler(post.id, comment.id)}
@@ -191,7 +192,7 @@ class PostComments extends Component {
                     <Text>Leave a comment to apply. This comment section is private for each
                         user.</Text>
                     <View style={{marginTop: 10}}>
-                        <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
+                        <TextInput style={{borderWidth: 1, borderColor: Colors.grey3, height:44,}}
                                    multiline={true}
                                    numberOfLines={2}
                                    value={this.state.comment}
@@ -201,8 +202,9 @@ class PostComments extends Component {
                         <Button title="Comment" buttonStyle={{
                             marginTop: 10,
                             marginBottom: 5,
-                            paddingTop: 5,
-                            paddingBottom: 5
+                            paddingTop: 15,
+                            paddingBottom: 15,
+                            backgroundColor:'#525252',
                         }}
                                 onPress={() => this.commentHandler(post.id)}
                                 buttonSize={5}
@@ -226,7 +228,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 40,
-        backgroundColor: '#4F80E1',
+        backgroundColor: '#acacac',
         marginBottom: 20,
     },
     keyboardAvoidingViewInner: {

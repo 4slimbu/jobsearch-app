@@ -8,7 +8,7 @@ const categoryItem = props => {
     return (
         <TouchableOpacity style={styles.categoryItem}
                           onPress={onSelectCategory}>
-            <Icon color={Colors.grey1} name={category.icon} size={62}/>
+            <Icon style={styles.catIcon} name={category.icon}/>
             <Text style={styles.categoryText}>{category.name}</Text>
         </TouchableOpacity>
     )
@@ -16,17 +16,37 @@ const categoryItem = props => {
 
 const styles = StyleSheet.create({
     categoryItem: {
-        padding: 10,
         marginBottom: 20,
-        width: '33%',
+        width: '33.33%',
         alignItems: 'center',
+        padding:10,
+        display:'flex',
+        justifyContent:'center',
     },
     categoryText: {
         color: Colors.grey1,
-        marginTop: 10,
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold',
     },
+    catIcon: {
+        color:'#000',
+        fontSize:25,
+        borderRadius:50,
+        backgroundColor:'#f7f7f7',
+        display:'flex',
+        alignItems: 'center',
+        justifyContent:'center',
+        width:70,
+        height:70,
+        textAlign:'center',
+        lineHeight:70,
+        marginBottom:15, 
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 2.2,
+    }
 });
 
 export default categoryItem;

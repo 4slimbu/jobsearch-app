@@ -1,5 +1,5 @@
 export default {
-  primary: '#4F80E1',
+  primary: '#f53554',
   danger: '#c74248',
   success: '#00B233',
   grey1: '#43484d',
@@ -10,5 +10,5 @@ export default {
   dkGreyBg: '#232323',
   greyOutline: '#cbd2d9',
   white: '#ffffff',
-  black: '#000000'
+  black: '#000000',
 };

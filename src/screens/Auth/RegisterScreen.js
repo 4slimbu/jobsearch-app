@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Dimensions, KeyboardAvoidingView, ScrollView,ImageBackground, StyleSheet, Text, UIManager, View,} from 'react-native';
 import {connect} from 'react-redux';
+import {AppLoading, LinearGradient} from 'expo';
 import {Button, CheckBox, Image, Input} from 'react-native-elements';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -129,185 +130,197 @@ class RegisterScreen extends Component {
         } = this.state;
         return (
             <ScrollView style={[styles.container]}>
-                <KeyboardAvoidingView style={{
-                    flex: 1, justifyContent: 'center',
-                    alignItems: 'center', marginTop: 100, marginBottom: 100
-                }}
-                                      behavior="padding"
-                >
-                    <View style={styles.titleContainer}>
-                        <View style={{alignItems: 'center'}}>
-                            <Image style={{width: 100, height: 100}} source={LogoUrl}/>
-                            <Text style={styles.titleText}>{APP_NAME}</Text>
+                <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
+                    <LinearGradient
+                            colors={[ '#f53554', '#ffc4c4']}
+                            style={styles.overlay}/>
+                    <KeyboardAvoidingView style={{
+                        flex: 1, justifyContent: 'center',
+                        alignItems: 'center', marginTop: 100, marginBottom: 100
+                    }}
+                                          behavior="padding"
+                    >
+                        <View style={styles.titleContainer}>
+                            <View style={{alignItems: 'center'}}>
+                                <Image style={{width: 100, height: 100}} source={LogoUrl}/>
+                                <Text style={styles.titleText}>{APP_NAME}</Text>
+                            </View>
                         </View>
-                    </View>
-                    <View style={styles.formContainer}>
-                        <Input
-                            leftIcon={
-                                <Icon
-                                    name="envelope-o"
-                                    color="rgba(0, 0, 0, 0.38)"
-                                    size={25}
-                                    style={{backgroundColor: 'transparent'}}
-                                />
-                            }
-                            value={email}
-                            keyboardType="email-address"
-                            inputStyle={{marginLeft: 10}}
-                            placeholder={'Email'}
-                            containerStyle={{
-                                borderBottomColor: 'rgba(0, 0, 0, 0.38)',
-                            }}
-                            onChangeText={email => this.setState({email})}
-                            errorMessage={errors.email ? errors.email : null}
-                        />
-                        <Input
-                            leftIcon={
-                                <SimpleIcon
-                                    name="lock"
-                                    color="rgba(0, 0, 0, 0.38)"
-                                    size={25}
-                                    style={{backgroundColor: 'transparent'}}
-                                />
-                            }
-                            value={password}
-                            secureTextEntry={true}
-                            containerStyle={{
-                                marginTop: 16,
-                                borderBottomColor: 'rgba(0, 0, 0, 0.38)',
-                            }}
-                            inputStyle={{marginLeft: 10}}
-                            placeholder={'Password'}
-                            onChangeText={password => this.setState({password})}
-                            errorMessage={errors.password ? errors.password : null}
-                        />
-
-                        <Input
-                            leftIcon={
-                                <SimpleIcon
-                                    name="lock"
-                                    color="rgba(0, 0, 0, 0.38)"
-                                    size={25}
-                                    style={{backgroundColor: 'transparent'}}
-                                />
-                            }
-                            value={confirmPassword}
-                            secureTextEntry={true}
-                            containerStyle={{
-                                marginTop: 16,
-                                borderBottomColor: 'rgba(0, 0, 0, 0.38)',
-                            }}
-                            inputStyle={{marginLeft: 10}}
-                            placeholder={'Confirm password'}
-                            onChangeText={confirmPassword => this.setState({confirmPassword})}
-                            errorMessage={errors.confirmPassword ? errors.confirmPassword : null}
-                        />
-
-
-                        <Input
-                            leftIcon={
-                                <SimpleIcon
-                                    name="notebook"
-                                    color="rgba(0, 0, 0, 0.38)"
-                                    size={25}
-                                    style={{backgroundColor: 'transparent'}}
-                                />
-                            }
-                            value={firstName}
-                            containerStyle={{
-                                marginTop: 16,
-                                borderBottomColor: 'rgba(0, 0, 0, 0.38)',
-                            }}
-                            inputStyle={{marginLeft: 10}}
-                            placeholder={'First Name'}
-                            onChangeText={firstName => this.setState({firstName})}
-                            errorMessage={errors.firstName ? errors.firstName : null}
-                        />
-
-
-                        <Input
-                            leftIcon={
-                                <SimpleIcon
-                                    name="notebook"
-                                    color="rgba(0, 0, 0, 0.38)"
-                                    size={25}
-                                    style={{backgroundColor: 'transparent'}}
-                                />
-                            }
-                            value={lastName}
-                            containerStyle={{
-                                marginTop: 16,
-                                borderBottomColor: 'rgba(0, 0, 0, 0.38)',
-                            }}
-                            inputStyle={{marginLeft: 10}}
-                            placeholder={'Last Name'}
-                            onChangeText={lastName => this.setState({lastName})}
-                            errorMessage={errors.lastName ? errors.lastName : null}
-                        />
-
-                        <Input
-                            leftIcon={
-                                <SimpleIcon
-                                    name="phone"
-                                    color="rgba(0, 0, 0, 0.38)"
-                                    size={25}
-                                    style={{backgroundColor: 'transparent'}}
-                                />
-                            }
-                            value={contactNumber}
-                            containerStyle={{
-                                marginTop: 16,
-                                borderBottomColor: 'rgba(0, 0, 0, 0.38)',
-                            }}
-                            inputStyle={{marginLeft: 10}}
-                            placeholder={'Mobile No.'}
-                            onChangeText={contactNumber => this.setState({contactNumber})}
-                            errorMessage={errors.contactNumber ? errors.contactNumber : null}
-                        />
-
-                        <View style={{marginLeft: 10, marginTop: 10, flexDirection: 'row', width: '100%'}}>
-                            <CheckBox
-                                containerStyle={{width: '30%', backgroundColor: 'white', borderColor: 'white'}}
-                                title='Male'
-                                checkedIcon='dot-circle-o'
-                                uncheckedIcon='circle-o'
-                                checked={gender === 'male'}
-                                onPress={() => this.setState({gender: "male"})}
-                                size={30}
+                        <View style={styles.formContainer}>
+                            <Input
+                                leftIcon={
+                                    <Icon
+                                        name="envelope-o"
+                                        color="rgba(255, 255, 255, 1)"
+                                        size={25}
+                                        style={{backgroundColor: 'transparent', fontSize:16,}}
+                                    />
+                                }
+                                value={email}
+                                keyboardType="email-address"
+                                inputStyle={{marginLeft: 10,color:Colors.white,}}
+                                placeholder={'Email'}
+                                placeholderTextColor={Colors.white}
+                                containerStyle={{
+                                    borderBottomColor: 'rgba(0, 0, 0, 0.38)',
+                                }}
+                                onChangeText={email => this.setState({email})}
+                                errorMessage={errors.email ? errors.email : null}
+                            />
+                            <Input
+                                leftIcon={
+                                    <SimpleIcon
+                                        name="lock"
+                                        color="rgba(255, 255, 255, 1)"
+                                        size={25}
+                                        style={{backgroundColor: 'transparent', fontSize:16,}}
+                                    />
+                                }
+                                value={password}
+                                secureTextEntry={true}
+                                containerStyle={{
+                                    marginTop: 16,
+                                    borderBottomColor: 'rgba(0, 0, 0, 0.38)',
+                                }}
+                                inputStyle={{marginLeft: 10,color:Colors.white,}}
+                                placeholder={'Password'}
+                                placeholderTextColor={Colors.white}
+                                onChangeText={password => this.setState({password})}
+                                errorMessage={errors.password ? errors.password : null}
                             />
 
-                            <CheckBox
-                                containerStyle={{width: '30%', backgroundColor: 'white', borderColor: 'white'}}
-                                title='Female'
-                                checkedIcon='dot-circle-o'
-                                uncheckedIcon='circle-o'
-                                checked={gender === 'female'}
-                                size={30}
-                                onPress={() => this.setState({gender: "female"})}
+                            <Input
+                                leftIcon={
+                                    <SimpleIcon
+                                        name="lock"
+                                        color="rgba(255, 255, 255, 1)"
+                                        size={25}
+                                        style={{backgroundColor: 'transparent', fontSize:16,}}
+                                    />
+                                }
+                                value={confirmPassword}
+                                secureTextEntry={true}
+                                containerStyle={{
+                                    marginTop: 16,
+                                    borderBottomColor: Colors.white,
+                                }}
+                                inputStyle={{marginLeft: 10,color:Colors.white,}}
+                                placeholder={'Confirm password'}
+                                placeholderTextColor={Colors.white}
+                                onChangeText={confirmPassword => this.setState({confirmPassword})}
+                                errorMessage={errors.confirmPassword ? errors.confirmPassword : null}
+                            />
+
+
+                            <Input
+                                leftIcon={
+                                    <SimpleIcon
+                                        name="notebook"
+                                        color="rgba(255, 255, 255, 1)"
+                                        size={25}
+                                        style={{backgroundColor: 'transparent', fontSize:16,}}
+                                    />
+                                }
+                                value={firstName}
+                                containerStyle={{
+                                    marginTop: 16,
+                                    borderBottomColor: 'rgba(255, 255, 255, 1))',
+                                }}
+                                inputStyle={{marginLeft: 10,color:Colors.white,}}
+                                placeholder={'First Name'}
+                                placeholderTextColor={Colors.white}
+                                onChangeText={firstName => this.setState({firstName})}
+                                errorMessage={errors.firstName ? errors.firstName : null}
+                            />
+
+
+                            <Input
+                                leftIcon={
+                                    <SimpleIcon
+                                        name="notebook"
+                                        color="rgba(255, 255, 255, 1)"
+                                        size={25}
+                                        style={{backgroundColor: 'transparent', fontSize:16,}}
+                                    />
+                                }
+                                value={lastName}
+                                containerStyle={{
+                                    marginTop: 16,
+                                    borderBottomColor: 'rgba(255, 255, 255, 1)',
+                                }}
+                                inputStyle={{marginLeft: 10,color:Colors.white,}}
+                                placeholder={'Last Name'}
+                                placeholderTextColor={Colors.white}
+                                onChangeText={lastName => this.setState({lastName})}
+                                errorMessage={errors.lastName ? errors.lastName : null}
+                            />
+
+                            <Input
+                                leftIcon={
+                                    <SimpleIcon
+                                        name="phone"
+                                        color="rgba(255, 255, 255, 1)"
+                                        size={25}
+                                        style={{backgroundColor: 'transparent', fontSize:16,}}
+                                    />
+                                }
+                                value={contactNumber}
+                                containerStyle={{
+                                    marginTop: 16,
+                                    borderBottomColor: 'rgba(255, 255, 255, 1)',
+                                }}
+                                inputStyle={{marginLeft: 10,color:Colors.white,}}
+                                placeholder={'Mobile No.'}
+                                placeholderTextColor={Colors.white}
+                                onChangeText={contactNumber => this.setState({contactNumber})}
+                                errorMessage={errors.contactNumber ? errors.contactNumber : null}
+                            />
+
+                            <View style={{marginLeft: 10, marginTop: 10, flexDirection: 'row', width: '100%'}}>
+                                <CheckBox
+                                    containerStyle={{width: '30%', backgroundColor: 'transparent', borderColor: 'transparent'}}
+                                    title='Male'
+                                    checkedIcon='dot-circle-o'
+                                    uncheckedIcon='circle-o'
+                                    checked={gender === 'male'}
+                                    onPress={() => this.setState({gender: "male"})}
+                                    size={30}
+                                />
+
+                                <CheckBox
+                                    containerStyle={{width: '30%', backgroundColor: 'transparent', borderColor: 'transparent'}}
+                                    title='Female'
+                                    checkedIcon='dot-circle-o'
+                                    uncheckedIcon='circle-o'
+                                    checked={gender === 'female'}
+                                    size={30}
+                                    onPress={() => this.setState({gender: "female"})}
+                                />
+                            </View>
+
+
+                            <Button
+                                buttonStyle={styles.loginButton}
+                                containerStyle={{marginTop: 32, flex: 0}}
+                                activeOpacity={0.8}
+                                title="Register"
+                                onPress={this.registerHandler}
+                                titleStyle={styles.loginTextButton}
+                                loading={isLoading}
+                                disabled={isLoading}
                             />
                         </View>
-
-
-                        <Button
-                            buttonStyle={styles.loginButton}
-                            containerStyle={{marginTop: 32, flex: 0}}
-                            activeOpacity={0.8}
-                            title="Register"
-                            onPress={this.registerHandler}
-                            titleStyle={styles.loginTextButton}
-                            loading={isLoading}
-                            disabled={isLoading}
-                        />
-                    </View>
-                </KeyboardAvoidingView>
+                    </KeyboardAvoidingView>
+                </ImageBackground>
             </ScrollView>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'white'
+   container: {
+        flex: 1,
+        backgroundColor:'white',
     },
     rowSelector: {
         height: 20,
@@ -355,7 +368,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     formContainer: {
-        backgroundColor: 'white',
         width: SCREEN_WIDTH - 50,
         borderRadius: 10,
         paddingTop: 32,
@@ -371,8 +383,6 @@ const styles = StyleSheet.create({
         flex: 1,
         top: 0,
         left: 0,
-        width: SCREEN_WIDTH,
-        height: SCREEN_HEIGHT,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -388,9 +398,9 @@ const styles = StyleSheet.create({
         opacity: 1,
     },
     titleText: {
-        color: Colors.grey1,
+        color: Colors.white,
         fontSize: 30,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     helpContainer: {
         height: 64,
@@ -401,6 +411,14 @@ const styles = StyleSheet.create({
         height: 64,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        opacity: 0.90,
     },
 });
 

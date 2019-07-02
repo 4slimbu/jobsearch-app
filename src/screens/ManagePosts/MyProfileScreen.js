@@ -559,7 +559,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 40,
-        backgroundColor: '#4F80E1',
+        backgroundColor: '#acacac',
         marginBottom: 20,
     },
     contentView: {

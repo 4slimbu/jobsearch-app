@@ -81,7 +81,7 @@ const CustomDrawerContentComponent = props => (
                 <ListItem
                     leftIcon={{
                         name: l.icon,
-                        size: 40
+                        size: 25
                     }}
                     key={i}
                     onPress={() => props.navigation.navigate(l.target, {navTitle: l.name})}

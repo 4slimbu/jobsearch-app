@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 40,
-        backgroundColor: '#B46486',
+        backgroundColor: '#acacac',
     },
     heading: {
         color: 'white',
