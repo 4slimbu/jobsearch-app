@@ -1,9 +1,9 @@
 import {CATEGORIES_SET, COMMENTS_BY_ME_SET, POST_COMMENT_SET, POST_SET, POSTS_BY_CATEGORY_SET} from "./actionTypes";
-import {API_BASE_URL} from "../../constants/app";
+import appData from "../../constants/app";
 
 export const saveComment = (commentData) => {
     return (dispatch, getState) => {
-        let url = API_BASE_URL + '/comments';
+        let url = appData.app.API_BASE_URL + '/comments';
 
         const token = getState().auth.token;
 
@@ -48,7 +48,7 @@ export const saveComment = (commentData) => {
 
 export const getComments = (postId) => {
     return (dispatch, getState) => {
-        let url = API_BASE_URL + '/comments/' + postId;
+        let url = appData.app.API_BASE_URL + '/comments/' + postId;
 
         const token = getState().auth.token;
 
@@ -90,7 +90,7 @@ export const setPostComments = (postComments) => {
 
 export const loadPostsByCategory = (categoryId) => {
     return (dispatch, getState) => {
-        let url = API_BASE_URL + '/posts?category=' + categoryId;
+        let url = appData.app.API_BASE_URL + '/posts?category=' + categoryId;
 
         const token = getState().auth.token;
 
@@ -142,7 +142,7 @@ export const setPostsByCategory = (payload) => {
 
 export const getMyComments = () => {
     return (dispatch, getState) => {
-        let url = API_BASE_URL + '/mycomments';
+        let url = appData.app.API_BASE_URL + '/mycomments';
 
         const token = getState().auth.token;
 

@@ -6,11 +6,11 @@ import {
     POSTS_BY_SEARCH_SET, POSTS_BY_SEARCH_UPDATE,
     POSTS_SAVED_BY_ME_SET, UPDATE_EDITED_POST
 } from "./actionTypes";
-import {API_BASE_URL} from "../../constants/app";
+import appData from "../../constants/app";
 
 export const getPost = (postId) => {
     return (dispatch, getState) => {
-        let url = API_BASE_URL + '/posts/' + postId;
+        let url = appData.app.API_BASE_URL + '/posts/' + postId;
 
         const token = getState().auth.token;
 
@@ -56,7 +56,7 @@ export const setPost = (post) => {
 
 export const loadPostsByCategory = (categoryId) => {
     return (dispatch, getState) => {
-        let url = API_BASE_URL + '/posts?category=' + categoryId;
+        let url = appData.app.API_BASE_URL + '/posts?category=' + categoryId;
 
         const token = getState().auth.token;
 
@@ -111,7 +111,7 @@ export const searchPosts = (text, url=null) => {
 
     return (dispatch, getState) => {
         if (!url) {
-            url = API_BASE_URL + '/posts?search=' + text;
+            url = appData.app.API_BASE_URL + '/posts?search=' + text;
         } else {
             url = url + '&search=' + text;
             isFreshSearch = false;
@@ -173,7 +173,7 @@ export const resetSearchedPosts = () => {
 export const getMyPosts = (url = null) => {
     return (dispatch, getState) => {
         if (!url) {
-            url = API_BASE_URL + '/posts?type=my';
+            url = appData.app.API_BASE_URL + '/posts?type=my';
         }
         console.log('get my posts url', url);
         const token = getState().auth.token;
@@ -218,7 +218,7 @@ export const setPostsByMe = (payload) => {
 
 export const getSavedPosts = () => {
     return (dispatch, getState) => {
-        let url = API_BASE_URL + '/posts?type=saved';
+        let url = appData.app.API_BASE_URL + '/posts?type=saved';
 
         const token = getState().auth.token;
 
@@ -261,7 +261,7 @@ export const setPostsSavedByMe = (payload) => {
 };
 
 export const addPost = (formData) => {
-    let url = API_BASE_URL + '/posts';
+    let url = appData.app.API_BASE_URL + '/posts';
     return (dispatch, getState) => {
         const token = getState().auth.token;
         return new Promise((resolve, reject) => {
@@ -287,7 +287,7 @@ export const addPost = (formData) => {
 };
 
 export const deletePost = (id = 0) => {
-    let url = API_BASE_URL + '/posts/' + id;
+    let url = appData.app.API_BASE_URL + '/posts/' + id;
 
     return (dispatch, getState) => {
         const token = getState().auth.token;
@@ -329,7 +329,7 @@ export const deleteSavedPost = (id) => {
 };
 
 export const updatePost = (postId, formData) => {
-    let url = API_BASE_URL + '/posts/' + postId;
+    let url = appData.app.API_BASE_URL + '/posts/' + postId;
     return (dispatch, getState) => {
         const token = getState().auth.token;
         return new Promise((resolve, reject) => {

@@ -8,6 +8,7 @@ import PostList from "../../components/List/PostList";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import alertMessage from "../../components/Alert";
 import ContentLoading from "../../components/ContentLoading";
+import Colors from '../../constants/colors';
 
 class PostListScreen extends Component {
     constructor(props) {
@@ -78,7 +79,7 @@ class PostListScreen extends Component {
             <ScrollView style={styles.container}>
                 <View style={styles.contentView}>
                     <View style={styles.headerContainer}>
-                        <Text style={styles.heading}>{category.name}</Text>
+                        <Text style={styles.heading}>Browsing {category.name}</Text>
                     </View>
 
                     {
@@ -99,10 +100,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     headerContainer: {
-        justifyContent: 'center',
-        padding: 40,
-        paddingLeft: 20,
-        backgroundColor: '#acacac',
+        padding: 10,
+        backgroundColor: Colors.lightGray,
         marginBottom: 20,
     },
     contentView: {
@@ -121,8 +120,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     heading: {
-        color: 'white',
-        marginTop: 10,
+        color: Colors.primary,
         fontSize: 22,
         fontWeight: 'bold',
     },

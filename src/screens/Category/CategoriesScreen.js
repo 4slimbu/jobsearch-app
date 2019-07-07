@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
+import appData from "../../constants/app";
 import {ActivityIndicator, ScrollView, StyleSheet, Text, View} from 'react-native';
 import PropTypes from "prop-types";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Feather } from '@expo/vector-icons';
 import {connect} from "react-redux";
 import {loadCategories} from "../../store/actions/categoryActions";
 import CategoryList from "../../components/List/CategoryList";
@@ -9,20 +11,19 @@ import Colors from "../../constants/colors";
 import {Image} from "react-native-elements";
 import {DrawerActions} from "react-navigation";
 
-const LogoUrl = require('../../../assets/icons/icon.png');
-
 class CategoriesScreen extends Component {
     static navigationOptions = ({navigation}) => {
         return {
-            title: 'Loksewa',
+            title: 'Browse Categories',
             headerLeft: (
-                <Image style={{marginLeft: 10, width: 40, height: 40}} source={LogoUrl}/>
+                <Image style={{marginLeft: 10, width: 40, height: 40}} source={appData.app.LOGO_INNER_URL}/>
             ),
             headerRight: (
-                <Icon
-                    name="bars"
-                    size={30}
-                    style={{marginRight: 10}}
+                <Feather
+                    name="bar-chart-2"
+                    style={{marginRight: 10, transform: [{ rotate: "-90deg" }]}}
+                    size={32}
+                    color={Colors.darkGray}
                     onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
                 />
             ),
@@ -69,10 +70,6 @@ class CategoriesScreen extends Component {
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.contentView}>
-                    <View style={styles.headerContainer}>
-                        <Icon color="white" name="code-fork" size={62}/>
-                        <Text style={styles.heading}>Categories</Text>
-                    </View>
                     {
                         isLoading ?
                             <ActivityIndicator size="large" color={Colors.primary} style={{marginTop: 100}}/>

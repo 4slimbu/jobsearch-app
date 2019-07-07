@@ -1,9 +1,9 @@
 import {CATEGORIES_SET, POSTS_BY_CATEGORY_SET} from "./actionTypes";
-import {API_BASE_URL} from "../../constants/app";
+import appData from "../../constants/app";
 
 export const loadCategories = () => {
     return (dispatch, getState) => {
-        let url = API_BASE_URL + '/categories';
+        let url = appData.app.API_BASE_URL + '/categories';
 
         const token = getState().auth.token;
 
@@ -35,7 +35,7 @@ export const loadCategories = () => {
 
 export const loadPostsByCategory = (categoryId) => {
     return (dispatch, getState) => {
-        let url = API_BASE_URL + '/posts?category=' + categoryId;
+        let url = appData.app.API_BASE_URL + '/posts?category=' + categoryId;
 
         const token = getState().auth.token;
 

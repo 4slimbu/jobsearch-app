@@ -1,6 +1,6 @@
 import {AsyncStorage} from "react-native";
 import {AUTH_DATA_RESET, AUTH_SET_LOGGED_IN_STATUS, AUTH_SET_TOKEN, AUTH_SET_USER} from "./actionTypes";
-import {API_BASE_URL, FB_APP_KEY} from "../../constants/app";
+import appData from "../../constants/app";
 import alertMessage from "../../components/Alert";
 
 export const authSetUser = (user) => {
@@ -32,7 +32,7 @@ export const authDataReset = () => {
 };
 
 export const tryAuth = (authData, authMode = 'login') => {
-    let url = API_BASE_URL + '/login';
+    let url = appData.app.API_BASE_URL + '/login';
     let body = {};
 
     if (authMode === "login") {
@@ -43,7 +43,7 @@ export const tryAuth = (authData, authMode = 'login') => {
     }
 
     if (authMode === "register") {
-        url = API_BASE_URL + '/register';
+        url = appData.app.API_BASE_URL + '/register';
 
         body = {
             email: authData.email,
@@ -57,7 +57,7 @@ export const tryAuth = (authData, authMode = 'login') => {
     }
 
     if (authMode === "fbLogin") {
-        url = API_BASE_URL + '/login';
+        url = appData.app.API_BASE_URL + '/login';
         body = {
             fb_token: authData.fbToken,
             device_id: authData.deviceId
@@ -211,7 +211,7 @@ export const facebookLogin = () => async dispatch => {
 
 export const authUpdatePreferences = (preferences) => {
     return (dispatch, getState) => {
-        let url = API_BASE_URL + '/me';
+        let url = appData.app.API_BASE_URL + '/me';
 
         const token = getState().auth.token;
         return new Promise((resolve, reject) => {
@@ -245,7 +245,7 @@ export const authUpdatePreferences = (preferences) => {
 };
 
 export const verifyEmail = (verificationCode) => {
-    let url = API_BASE_URL + '/verify-email/' + verificationCode;
+    let url = appData.app.API_BASE_URL + '/verify-email/' + verificationCode;
     return dispatch => {
 
         return new Promise((resolve, reject) => {
@@ -278,7 +278,7 @@ export const verifyEmail = (verificationCode) => {
 };
 
 export const sendForgotPasswordEmail = (email) => {
-    let url = API_BASE_URL + '/forgot-password';
+    let url = appData.app.API_BASE_URL + '/forgot-password';
     return dispatch => {
         return new Promise((resolve, reject) => {
             fetch(url, {
@@ -301,7 +301,7 @@ export const sendForgotPasswordEmail = (email) => {
 };
 
 export const resetPassword = (data) => {
-    let url = API_BASE_URL + '/reset-password';
+    let url = appData.app.API_BASE_URL + '/reset-password';
     return dispatch => {
         return new Promise((resolve, reject) => {
             fetch(url, {
@@ -331,7 +331,7 @@ export const resetPassword = (data) => {
 };
 
 export const reSendVerificationCode = () => {
-    let url = API_BASE_URL + '/resend-verification-code';
+    let url = appData.app.API_BASE_URL + '/resend-verification-code';
     return (dispatch, getState) => {
         const token = getState().auth.token;
         console.log('reSendVerificationCode', url, token);
@@ -358,7 +358,7 @@ export const reSendVerificationCode = () => {
 };
 
 export const updateMyProfile = (formData) => {
-    let url = API_BASE_URL + '/me';
+    let url = appData.app.API_BASE_URL + '/me';
     return (dispatch, getState) => {
         const token = getState().auth.token;
         return new Promise((resolve, reject) => {
@@ -395,7 +395,7 @@ export const updateMyProfile = (formData) => {
 };
 
 export const updatePassword = (formData) => {
-    let url = API_BASE_URL + '/me/reset-password';
+    let url = appData.app.API_BASE_URL + '/me/reset-password';
     return (dispatch, getState) => {
         const token = getState().auth.token;
         console.log(formData);
@@ -424,7 +424,7 @@ export const updatePassword = (formData) => {
 
 const doFacebookLogin = async() => {
     const {type, token} = await Expo.Facebook.logInWithReadPermissionsAsync(
-        FB_APP_KEY,
+        appData.app.FB_APP_KEY,
         {permissions: ['public_profile', 'email', 'user_gender', 'user_location']}
     );
 

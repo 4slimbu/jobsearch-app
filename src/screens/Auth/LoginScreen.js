@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Dimensions, KeyboardAvoidingView, ScrollView,ImageBackground, StyleSheet, Text, UIManager, View,} from 'react-native';
+import appData from "../../constants/app";
+import {KeyboardAvoidingView, StyleSheet, UIManager, View,} from 'react-native';
 import {connect} from 'react-redux';
 import {AppLoading, LinearGradient} from 'expo';
 import {Button, Image, Input} from 'react-native-elements';
@@ -8,17 +9,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import socialColor from "../../constants/socialColors";
 import {authAutoSignIn, facebookLogin, tryAuth} from '../../store/actions/authActions';
-import {APP_NAME} from "../../constants/app";
+
 import Colors from "../../constants/colors";
 import * as _ from "lodash";
 import {validateEmail} from "../../utils/helper/helper";
-// import Styles from "../../constants/globalStyle";
-
-const SCREEN_WIDTH = Dimensions.get('window').width;
-const SCREEN_HEIGHT = Dimensions.get('window').height;
-
-const LogoUrl = require('../../../assets/icons/icon.png');
-const BG_IMAGE = require('../../../assets/images/wallpaper_4.jpg');
+import globalStyles from "../../constants/globalStyle";
 
 
 // Enable LayoutAnimation on Android
@@ -34,8 +29,8 @@ class LoginScreen extends Component {
         this.state = {
             isPasswordValid: true,
             isEmailValid: true,
-            email: "responsivesudip@gmail.com",
-            password: "password",
+            email: '',
+            password: '',
             isReady: false,
             isLoading: false,
             isLoggedIn: false,
@@ -126,105 +121,91 @@ class LoginScreen extends Component {
         return (
             isReady ? (
                 <View style={[styles.container]}>
-
-                    <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
-
-                        <LinearGradient
-                            colors={[ '#f53554', '#ffc4c4']}
-                            style={styles.overlay}/>
-
-                        <KeyboardAvoidingView style={{
-                            flex: 1, justifyContent: 'center', alignItems: 'center',
-                            marginTop: 100, marginBottom: 100
-                        }}
-                                              behavior="padding"
-                        >   
-                            <View style={styles.titleContainer}>
-                                <View style={{alignItems: 'center'}}>
-                                    <Image style={{width: 100, height: 100}} source={LogoUrl}/>
-                                    <Text style={styles.titleText}>{APP_NAME}</Text>
-                                </View>
+                    <KeyboardAvoidingView style={{
+                        flex: 1, justifyContent: 'center', alignItems: 'center',
+                        marginTop: 100, marginBottom: 100
+                    }}
+                                            behavior="padding"
+                    >   
+                        <View style={styles.titleContainer}>
+                            <View style={{alignItems: 'center'}}>
+                                <Image style={{width: 125, height: 125}} source={appData.app.LOGO_URL}/>
                             </View>
-                            <View style={[styles.formContainer]}>
-                                <Input
-                                    leftIcon={
-                                        <Icon
-                                            name="envelope-o"
-                                            color="rgba(255, 255, 255, 1)"
-                                            size={25}
-                                            style={{backgroundColor: 'transparent', fontSize:18,}}
-                                        />
-                                    }
-                                    value={email}
-                                    keyboardType="email-address"
-                                    inputStyle={{marginLeft: 10,color:Colors.white,}}
-                                    placeholder={'Email'}
-                                    placeholderTextColor={Colors.white}
-                                    containerStyle={{
-                                        borderBottomColor: 'rgba(255, 255, 255, 1)',
-                                    }}
-                                    onChangeText={email => this.setState({email})}
-                                    errorMessage={errors.email ? errors.email : null}
-                                />
-                                <Input
-                                    leftIcon={
-                                        <SimpleIcon
-                                            name="lock"
-                                            color="rgba(255, 255, 255, 1)"
-                                            size={25}
-                                            style={{backgroundColor: 'transparent', fontSize:16,}}
-                                        />
-                                    }
-                                    value={password}
-                                    secureTextEntry={true}
-                                    containerStyle={{
-                                        marginTop: 16,
-                                        borderBottomColor: Colors.white,
-                                    }}
-                                    inputStyle={{marginLeft: 10,color:Colors.white,}}
-                                    placeholder={'Password'}
-                                    onChangeText={password => this.setState({password})}
-                                    errorMessage={errors.password ? errors.password : null}
-                                />
-                                <Button
-                                    buttonStyle={styles.loginButton}
-                                    containerStyle={styles.loginButtonContainer}
-                                    activeOpacity={0.8}
-                                    title="Login"
-                                    onPress={this.normalLoginHandler}
-                                    titleStyle={styles.loginTextButton}
-                                    loading={isLoading}
-                                    disabled={isLoading}
-                                />
-                            </View>
-                            <View style={styles.helpContainer}>
-                                <Button
-                                    title={'Forgot Password?'}
-                                    titleStyle={{color:  Colors.white,fontSize:14}}
-                                    buttonStyle={styles.mainLink}
-                                    underlayColor="transparent"
-                                    onPress={() => this.props.navigation.navigate('ForgotPasswordScreen')}
-                                />
-                                <Button
-                                    title={'Register'}
-                                    titleStyle={{color:  Colors.white,fontSize:14}}
-                                    buttonStyle={[styles.mainLink,styles.registerLink]}
-                                    underlayColor="transparent"
-                                    onPress={() => this.props.navigation.navigate('RegisterScreen')}
-                                />
-                            </View>
-                            <View style={styles.facebookContainer}>
-                                <Button
-                                    title={'Login with Facebook'}
-                                    titleStyle={{color: 'white'}}
-                                    buttonStyle={styles.facebookLoginButton}
-                                    underlayColor="transparent"
-                                    onPress={this.facebookLoginHandler}
-                                />
-                            </View>
-                        </KeyboardAvoidingView>
-
-                    </ImageBackground>
+                        </View>
+                        <View style={[styles.formContainer]}>
+                            <Input
+                                leftIcon={
+                                    <Icon
+                                        name="envelope-o"
+                                        color={Colors.primary}
+                                        size={25}
+                                        style={globalStyles.inputIcon}
+                                    />
+                                }
+                                value={email}
+                                keyboardType="email-address"
+                                placeholder={'Email'}
+                                inputStyle={globalStyles.inputStyle}
+                                inputContainerStyle={globalStyles.inputContainerStyle}
+                                onChangeText={email => this.setState({email})}
+                                errorMessage={errors.email ? errors.email : null}
+                                autoCapitalize='none'
+                            />
+                            <Input
+                                leftIcon={
+                                    <SimpleIcon
+                                        name="lock"
+                                        color={Colors.primary}
+                                        size={25}
+                                        style={globalStyles.inputIcon}
+                                    />
+                                }
+                                value={password}
+                                secureTextEntry={true}
+                                containerStyle={globalStyles.inputViewContainer}
+                                inputContainerStyle={globalStyles.inputContainerStyle}
+                                inputStyle={globalStyles.inputStyle}
+                                placeholder={'Password'}
+                                onChangeText={password => this.setState({password})}
+                                errorMessage={errors.password ? errors.password : null}
+                            />
+                            <Button
+                                buttonStyle={globalStyles.btnPrimary}
+                                containerStyle={globalStyles.btnPrimaryContainer}
+                                activeOpacity={0.8}
+                                title="Login"
+                                onPress={this.normalLoginHandler}
+                                titleStyle={globalStyles.btnPrimaryTitle}
+                                loading={isLoading}
+                                disabled={isLoading}
+                            />
+                        </View>
+                        <View style={styles.helpContainer}>
+                            <Button
+                                title={'Forgot Password?'}
+                                titleStyle={globalStyles.btnLinkTitle}
+                                buttonStyle={[globalStyles.btnLink]}
+                                underlayColor="transparent"
+                                onPress={() => this.props.navigation.navigate('ForgotPasswordScreen')}
+                            />
+                            <Button
+                                title={'Register'}
+                                titleStyle={globalStyles.btnLinkTitle}
+                                buttonStyle={[globalStyles.btnLink, globalStyles.btnLinkRight]}
+                                underlayColor="transparent"
+                                onPress={() => this.props.navigation.navigate('RegisterScreen')}
+                            />
+                        </View>
+                        <View style={styles.facebookContainer}>
+                            <Button
+                                title={'Login with Facebook'}
+                                titleStyle={{color: 'white'}}
+                                buttonStyle={styles.facebookLoginButton}
+                                underlayColor="transparent"
+                                onPress={this.facebookLoginHandler}
+                            />
+                        </View>
+                    </KeyboardAvoidingView>
                 </View>
             ) : <AppLoading/>
         );
@@ -266,21 +247,12 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
     },
-    loginButton: {
-        backgroundColor: '#f53756',
-        borderRadius: 5,
-        height: 50,
-        width:  SCREEN_WIDTH - 65,
-    },
-    loginButtonContainer: {
-        marginTop: 32, 
-        flex: 1,
-    },
+    
     facebookLoginButton: {
         backgroundColor: socialColor.facebook,
-        borderRadius: 5,
-        height: 50,
-        width:  SCREEN_WIDTH - 65,
+        borderRadius: 25,
+        height: 40,
+        width:  appData.app.SCREEN_WIDTH - 65,
     },
     titleContainer: {
         backgroundColor: 'transparent',
@@ -288,7 +260,7 @@ const styles = StyleSheet.create({
     },
     formContainer: {
         backgroundColor: 'transparent',
-        width: SCREEN_WIDTH - 50,
+        width: appData.app.SCREEN_WIDTH - 50,
         borderRadius: 10,
         paddingTop: 32,
         paddingBottom: 32,
@@ -316,31 +288,22 @@ const styles = StyleSheet.create({
         opacity: 1,
     },
     titleText: {
-        color: Colors.white,
+        color: Colors.black,
         fontSize: 30,
         fontWeight: 'bold'
     },
     helpContainer: {
         height: 'auto',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         display:'flex',
         flexDirection:'row-reverse',
         marginBottom:30,
         marginTop:20,
-        width: SCREEN_WIDTH - 65,
-        justifyContent:'center',
-    },
-    mainLink: {
-        backgroundColor:'transparent',
-        borderRadius:0,
-        marginLeft:55,
-    },
-    registerLink: {
-        marginLeft:0,
-        marginRight:55,
+        width: appData.app.SCREEN_WIDTH - 65,
+        justifyContent: 'space-between',
     },
     facebookContainer: {
-        height: 64,
+        height: 45,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -351,7 +314,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         opacity: 0.90,
-    }
+    },
 });
 
 const mapStateToProps = state => {

@@ -1,24 +1,17 @@
 import React, {Component} from 'react';
-import {Dimensions, KeyboardAvoidingView, ScrollView,ImageBackground, StyleSheet, Text, UIManager, View,} from 'react-native';
+import appData from "../../constants/app";
+import {KeyboardAvoidingView, ScrollView, StyleSheet, Text, UIManager, View} from 'react-native';
 import {connect} from 'react-redux';
-import {AppLoading, LinearGradient} from 'expo';
 import {Button, CheckBox, Image, Input} from 'react-native-elements';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import socialColor from "../../constants/socialColors";
 import {tryAuth} from '../../store/actions/authActions';
-import {APP_NAME} from "../../constants/app";
 import Colors from "../../constants/colors";
 import {getDeviceId, validateEmail} from "../../utils/helper/helper";
 import * as _ from "lodash";
-
-const SCREEN_WIDTH = Dimensions.get('window').width;
-const SCREEN_HEIGHT = Dimensions.get('window').height;
-
-const LogoUrl = require('../../../assets/icons/icon.png');
-const BG_IMAGE = require('../../../assets/images/wallpaper_4.jpg');
-
+import globalStyles from "../../constants/globalStyle";
 
 // Enable LayoutAnimation on Android
 UIManager.setLayoutAnimationEnabledExperimental &&
@@ -130,10 +123,7 @@ class RegisterScreen extends Component {
         } = this.state;
         return (
             <ScrollView style={[styles.container]}>
-                <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
-                    <LinearGradient
-                            colors={[ '#f53554', '#ffc4c4']}
-                            style={styles.overlay}/>
+
                     <KeyboardAvoidingView style={{
                         flex: 1, justifyContent: 'center',
                         alignItems: 'center', marginTop: 100, marginBottom: 100
@@ -142,8 +132,7 @@ class RegisterScreen extends Component {
                     >
                         <View style={styles.titleContainer}>
                             <View style={{alignItems: 'center'}}>
-                                <Image style={{width: 100, height: 100}} source={LogoUrl}/>
-                                <Text style={styles.titleText}>{APP_NAME}</Text>
+                                <Image style={{width: 100, height: 100}} source={appData.app.LOGO_URL}/>
                             </View>
                         </View>
                         <View style={styles.formContainer}>
@@ -151,40 +140,35 @@ class RegisterScreen extends Component {
                                 leftIcon={
                                     <Icon
                                         name="envelope-o"
-                                        color="rgba(255, 255, 255, 1)"
+                                        color={Colors.primary}
                                         size={25}
                                         style={{backgroundColor: 'transparent', fontSize:16,}}
                                     />
                                 }
                                 value={email}
                                 keyboardType="email-address"
-                                inputStyle={{marginLeft: 10,color:Colors.white,}}
                                 placeholder={'Email'}
-                                placeholderTextColor={Colors.white}
-                                containerStyle={{
-                                    borderBottomColor: 'rgba(0, 0, 0, 0.38)',
-                                }}
+                                inputStyle={globalStyles.inputStyle}
+                                inputContainerStyle={globalStyles.inputContainerStyle}
                                 onChangeText={email => this.setState({email})}
                                 errorMessage={errors.email ? errors.email : null}
+                                autoCapitalize='none'
                             />
                             <Input
                                 leftIcon={
                                     <SimpleIcon
                                         name="lock"
-                                        color="rgba(255, 255, 255, 1)"
+                                        color={Colors.primary}
                                         size={25}
                                         style={{backgroundColor: 'transparent', fontSize:16,}}
                                     />
                                 }
                                 value={password}
                                 secureTextEntry={true}
-                                containerStyle={{
-                                    marginTop: 16,
-                                    borderBottomColor: 'rgba(0, 0, 0, 0.38)',
-                                }}
-                                inputStyle={{marginLeft: 10,color:Colors.white,}}
+                                inputStyle={globalStyles.inputStyle}
+                                containerStyle={globalStyles.inputViewContainer}
+                                inputContainerStyle={globalStyles.inputContainerStyle}
                                 placeholder={'Password'}
-                                placeholderTextColor={Colors.white}
                                 onChangeText={password => this.setState({password})}
                                 errorMessage={errors.password ? errors.password : null}
                             />
@@ -193,20 +177,17 @@ class RegisterScreen extends Component {
                                 leftIcon={
                                     <SimpleIcon
                                         name="lock"
-                                        color="rgba(255, 255, 255, 1)"
+                                        color={Colors.primary}
                                         size={25}
                                         style={{backgroundColor: 'transparent', fontSize:16,}}
                                     />
                                 }
                                 value={confirmPassword}
                                 secureTextEntry={true}
-                                containerStyle={{
-                                    marginTop: 16,
-                                    borderBottomColor: Colors.white,
-                                }}
-                                inputStyle={{marginLeft: 10,color:Colors.white,}}
+                                containerStyle={globalStyles.inputViewContainer}
+                                inputStyle={globalStyles.inputStyle}
+                                inputContainerStyle={globalStyles.inputContainerStyle}
                                 placeholder={'Confirm password'}
-                                placeholderTextColor={Colors.white}
                                 onChangeText={confirmPassword => this.setState({confirmPassword})}
                                 errorMessage={errors.confirmPassword ? errors.confirmPassword : null}
                             />
@@ -216,19 +197,16 @@ class RegisterScreen extends Component {
                                 leftIcon={
                                     <SimpleIcon
                                         name="notebook"
-                                        color="rgba(255, 255, 255, 1)"
+                                        color={Colors.primary}
                                         size={25}
                                         style={{backgroundColor: 'transparent', fontSize:16,}}
                                     />
                                 }
                                 value={firstName}
-                                containerStyle={{
-                                    marginTop: 16,
-                                    borderBottomColor: 'rgba(255, 255, 255, 1))',
-                                }}
-                                inputStyle={{marginLeft: 10,color:Colors.white,}}
+                                containerStyle={globalStyles.inputViewContainer}
+                                inputStyle={globalStyles.inputStyle}
+                                inputContainerStyle={globalStyles.inputContainerStyle}
                                 placeholder={'First Name'}
-                                placeholderTextColor={Colors.white}
                                 onChangeText={firstName => this.setState({firstName})}
                                 errorMessage={errors.firstName ? errors.firstName : null}
                             />
@@ -238,19 +216,16 @@ class RegisterScreen extends Component {
                                 leftIcon={
                                     <SimpleIcon
                                         name="notebook"
-                                        color="rgba(255, 255, 255, 1)"
+                                        color={Colors.primary}
                                         size={25}
                                         style={{backgroundColor: 'transparent', fontSize:16,}}
                                     />
                                 }
                                 value={lastName}
-                                containerStyle={{
-                                    marginTop: 16,
-                                    borderBottomColor: 'rgba(255, 255, 255, 1)',
-                                }}
-                                inputStyle={{marginLeft: 10,color:Colors.white,}}
+                                containerStyle={globalStyles.inputViewContainer}
+                                inputStyle={globalStyles.inputStyle}
+                                inputContainerStyle={globalStyles.inputContainerStyle}
                                 placeholder={'Last Name'}
-                                placeholderTextColor={Colors.white}
                                 onChangeText={lastName => this.setState({lastName})}
                                 errorMessage={errors.lastName ? errors.lastName : null}
                             />
@@ -259,19 +234,16 @@ class RegisterScreen extends Component {
                                 leftIcon={
                                     <SimpleIcon
                                         name="phone"
-                                        color="rgba(255, 255, 255, 1)"
+                                        color={Colors.primary}
                                         size={25}
                                         style={{backgroundColor: 'transparent', fontSize:16,}}
                                     />
                                 }
                                 value={contactNumber}
-                                containerStyle={{
-                                    marginTop: 16,
-                                    borderBottomColor: 'rgba(255, 255, 255, 1)',
-                                }}
-                                inputStyle={{marginLeft: 10,color:Colors.white,}}
+                                containerStyle={globalStyles.inputViewContainer}
+                                inputStyle={globalStyles.inputStyle}
+                                inputContainerStyle={globalStyles.inputContainerStyle}
                                 placeholder={'Mobile No.'}
-                                placeholderTextColor={Colors.white}
                                 onChangeText={contactNumber => this.setState({contactNumber})}
                                 errorMessage={errors.contactNumber ? errors.contactNumber : null}
                             />
@@ -281,6 +253,7 @@ class RegisterScreen extends Component {
                                     containerStyle={{width: '30%', backgroundColor: 'transparent', borderColor: 'transparent'}}
                                     title='Male'
                                     checkedIcon='dot-circle-o'
+                                    checkedColor={Colors.primary}
                                     uncheckedIcon='circle-o'
                                     checked={gender === 'male'}
                                     onPress={() => this.setState({gender: "male"})}
@@ -291,6 +264,7 @@ class RegisterScreen extends Component {
                                     containerStyle={{width: '30%', backgroundColor: 'transparent', borderColor: 'transparent'}}
                                     title='Female'
                                     checkedIcon='dot-circle-o'
+                                    checkedColor={Colors.primary}
                                     uncheckedIcon='circle-o'
                                     checked={gender === 'female'}
                                     size={30}
@@ -298,20 +272,34 @@ class RegisterScreen extends Component {
                                 />
                             </View>
 
-
                             <Button
-                                buttonStyle={styles.loginButton}
-                                containerStyle={{marginTop: 32, flex: 0}}
+                                buttonStyle={globalStyles.btnPrimary}
+                                containerStyle={globalStyles.btnPrimaryContainer}
+                                titleStyle={globalStyles.btnPrimaryTitle}
                                 activeOpacity={0.8}
                                 title="Register"
                                 onPress={this.registerHandler}
-                                titleStyle={styles.loginTextButton}
                                 loading={isLoading}
                                 disabled={isLoading}
                             />
+                            <View style={styles.helpContainer}>
+                                <Button
+                                    title={'Forgot Password?'}
+                                    titleStyle={globalStyles.btnLinkTitle}
+                                    buttonStyle={[globalStyles.btnLink]}
+                                    underlayColor="transparent"
+                                    onPress={() => this.props.navigation.navigate('ForgotPasswordScreen')}
+                                />
+                                <Button
+                                    title={'Login'}
+                                    titleStyle={globalStyles.btnLinkTitle}
+                                    buttonStyle={[globalStyles.btnLink, globalStyles.btnLinkRight]}
+                                    underlayColor="transparent"
+                                    onPress={() => this.props.navigation.navigate('LoginScreen')}
+                                />
+                            </View>
                         </View>
-                    </KeyboardAvoidingView>
-                </ImageBackground>
+                    </KeyboardAvoidingView> 
             </ScrollView>
         );
     }
@@ -352,10 +340,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     loginButton: {
-        backgroundColor: '#f53756',
-        borderRadius: 5,
+        backgroundColor: Colors.primary,
+        borderRadius: 25,
         height: 50,
-        width:  SCREEN_WIDTH - 65,
+        width:  appData.app.SCREEN_WIDTH - 65,
     },
     facebookLoginButton: {
         backgroundColor: socialColor.facebook,
@@ -368,7 +356,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     formContainer: {
-        width: SCREEN_WIDTH - 50,
+        width: appData.app.SCREEN_WIDTH - 50,
         borderRadius: 10,
         paddingTop: 32,
         paddingBottom: 32,
@@ -397,15 +385,15 @@ const styles = StyleSheet.create({
     selectedCategoryText: {
         opacity: 1,
     },
-    titleText: {
-        color: Colors.white,
-        fontSize: 30,
-        fontWeight: 'bold',
-    },
     helpContainer: {
-        height: 64,
-        alignItems: 'center',
-        justifyContent: 'center',
+        height: 'auto',
+        alignItems: 'flex-start',
+        display:'flex',
+        flexDirection:'row-reverse',
+        marginBottom:30,
+        marginTop:20,
+        width: appData.app.SCREEN_WIDTH - 65,
+        justifyContent: 'space-between',
     },
     facebookContainer: {
         height: 64,

@@ -86,17 +86,17 @@ class PostItem extends Component {
                 <View style={{paddingLeft: 20, paddingRight: 20}}>
                     <View style={styles.postMainWrapper}>
 
-                        <View style={{width:'100%',flex: 1, marginBottom: 5,}}>
+                        <View style={{width:'100%',flex: 2, marginBottom: 5,}}>
                             <TouchableOpacity onPress={() => this.selectPostHandler(post)}>
                                 <Image source={featuredImage} resizeMode={'contain'}
-                                       style={{width:60, height:80, marginBottom: 5, borderRadius:10,}}
+                                       style={{width:120, height:120, marginBottom: 5, borderRadius:10,}}
                                        PlaceholderContent={<ActivityIndicator/>}
                                 />
                             </TouchableOpacity>
                              
                         </View>
 
-                        <View style={{flex: 3}}>
+                        <View style={{flex: 2}}>
 
                             <TouchableOpacity onPress={() => this.selectPostHandler(post)}>
                                 <Text style={styles.postTitle}>{post.title}</Text>
@@ -107,8 +107,6 @@ class PostItem extends Component {
                                 <Text style={styles.postDateMeta}>Deadline: {toReadable(post.expire_at)}</Text>
                                 <Text style={styles.postCatMeta}>Category: {post.category.name}</Text>
                             </TouchableOpacity>
-
-                            <Text style={styles.postContent}>{post.body}</Text>
                             
                             <View style={styles.postButtonWrap}>
                                 {(type === 'my') &&
@@ -194,11 +192,11 @@ const styles = StyleSheet.create({
         backgroundColor:'#ffffff',
         padding:20,
         alignItems:'flex-start',
-        borderRadius:10
+        borderRadius:8
         ,shadowColor: '#000',
         shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
         elevation: 2.2,
         marginBottom:20,
     },
