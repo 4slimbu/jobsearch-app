@@ -4,7 +4,7 @@ import {ListView, ScrollView, StyleSheet, View} from 'react-native';
 import {ListItem, Text,} from 'react-native-elements/src/index';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import colors from '../../constants/colors';
+import Colors from '../../constants/colors';
 
 const log = () => {
     console.log('list clicked');
@@ -13,27 +13,27 @@ const log = () => {
 const managePostList = [
     {
         name: 'New Post',
-        icon: 'av-timer',
-        linearGradientColors: ['#FF9800', '#F44336'],
-        target: 'AddPost'
+        icon: 'plus-circle',
+        target: 'AddPost',
+        type: 'font-awesome',
     },
     {
         name: 'My Posts',
-        icon: 'flight-takeoff',
-        linearGradientColors: ['#3F51B5', '#2196F3'],
-        target: 'MyPosts'
+        icon: 'file-text-o',
+        target: 'MyPosts',
+        type: 'font-awesome',
     },
     {
         name: 'My Comments',
-        icon: 'fingerprint',
-        linearGradientColors: ['#FFD600', '#FF9800'],
-        target: 'MyComments'
+        icon: 'comments-o',
+        target: 'MyComments',
+        type: 'font-awesome',
     },
     {
         name: 'My Saved Posts',
-        icon: 'lightbulb-outline',
-        linearGradientColors: ['#4CAF50', '#8BC34A'],
-        target: 'MySavedPosts'
+        icon: 'star-o',
+        target: 'MySavedPosts',
+        type: 'font-awesome',
     },
 ];
 
@@ -68,21 +68,20 @@ class ManagePostsScreen extends Component {
     render() {
         return (
             <ScrollView>
-                <View style={styles.headerContainer}>
-                    <Icon color="white" name="list" size={62}/>
-                    <Text style={styles.heading}>Manage Posts</Text>
-                </View>
                 <View style={styles.list}>
                     {managePostList.map((l, i) => (
                         <ListItem
                             leftIcon={{
                                 name: l.icon,
-                                size: 40
+                                type: l.type,
+                                size: 25,
+                                color: Colors.mediumGray,
                             }}
                             key={i}
                             onPress={() => this.props.navigation.navigate(l.target)}
                             title={l.name}
                             subtitle={l.subtitle}
+                            titleStyle={{ color: Colors.darkGray,}}
                             chevron
                             bottomDivider
                         />

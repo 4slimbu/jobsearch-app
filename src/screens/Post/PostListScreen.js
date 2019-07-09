@@ -120,9 +120,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     heading: {
-        color: Colors.primary,
-        fontSize: 22,
-        fontWeight: 'bold',
+        color: Colors.darkGray,
+        fontSize: 14,
+        fontWeight: 'normal',
     },
 });
 

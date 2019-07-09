@@ -61,7 +61,7 @@ class CategoriesScreen extends Component {
     }
 
     render() {
-        const {isLoading} = this.state;
+        const {isLoading} = this.state.isLoading;
         const categoryListProps = {
             categories: this.props.categories,
             onSelectCategory: this.onSelectCategory
