@@ -19,8 +19,8 @@ const AdditionalImages = (props) => {
             return;
         }
         return (
-            <View style={styles.postAddtionalImg}>
-                <Image key={key} source={image} resizeMode={'contain'}
+            <View key = {key} style={styles.postAddtionalImg}>
+                <Image source={image} resizeMode={'contain'}
                    style={{width:'100%', height:100,}}
                    PlaceholderContent={<ActivityIndicator/>}
                 />
@@ -132,8 +132,7 @@ class PostDetailScreen extends Component {
                                         </View>
                                     </View>
                                     <View>
-                                        <AdditionalImages {...additionalImagesProps} style={styles.additionalImg}>
-                                        </AdditionalImages>
+                                        <AdditionalImages {...additionalImagesProps} style={styles.additionalImg} />
                                         <Text style={styles.postContent}>{post.body}</Text>
                                         <PostComments/>
                                     </View>
