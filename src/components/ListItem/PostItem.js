@@ -85,7 +85,7 @@ class PostItem extends Component {
             <View style={styles.postMainWrapper}>
                 <View style={styles.postFeaturedImageWrapper}>
                     <TouchableOpacity onPress={() => this.selectPostHandler(post)}>
-                        <Image source={featuredImage} resizeMode={'contain'}
+                        <Image source={featuredImage} resizeMode={'cover'}
                             style={styles.postFeaturedImage}
                             PlaceholderContent={<ActivityIndicator />}
                         />
@@ -97,8 +97,7 @@ class PostItem extends Component {
                             <Text style={styles.postTitle}>{post.title}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.selectPostHandler(post)} style={styles.postMetaWrapper}>
-                            <Text style={styles.postAuthorMeta}>By: {post.author && post.author.full_name}</Text>
-                            <Text style={styles.postCatMeta}>Category: {post.category.name}</Text>
+                            <Text style={styles.postLocation}>near Epping</Text>
                         </TouchableOpacity>
                         <View style={styles.postButtonWrap}>
                             {(type === 'my') &&
@@ -145,14 +144,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     postTitle: {
-        color: Colors.primary,
+        color: Colors.darkGray,
         marginBottom: 5,
         fontSize: 14,
         fontWeight: '600',
         textTransform: 'capitalize',
     },
-    postAuthorMeta: {
-        color: Colors.darkGray,
+    postLocation: {
+        color: Colors.primary,
         marginBottom: 3,
         fontSize: 13,
         marginRight: 5,

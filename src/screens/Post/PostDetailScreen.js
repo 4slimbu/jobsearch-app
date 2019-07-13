@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
+import appData from "../../constants/app";
 import {ActivityIndicator, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View} from 'react-native';
-
 import Colors from '../../constants/colors';
-import {Button, Image} from "react-native-elements";
+import {Button, Image, Icon} from "react-native-elements";
 import * as _ from "lodash";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import {connect} from "react-redux";
@@ -14,13 +14,13 @@ import PostComments from "./PostComments";
 const AdditionalImages = (props) => {
     const {post} = props;
     return _.map(post.postImages, (postImage, key) => {
-        const image = postImage.url ? {uri: postImage.url} : require('../../../assets/images/placeholder.png');
+        
         if (postImage.is_primary) {
             return;
         }
         return (
             <View style={styles.postAddtionalImg}>
-                <Image key={key} source={image} resizeMode={'contain'}
+                <Image key={key} source={appData.app.PLACE_HOLDER_IMAGE_URL} resizeMode={'contain'}
                    style={{width:'100%', height:100,}}
                    PlaceholderContent={<ActivityIndicator/>}
                 />
@@ -88,7 +88,7 @@ class PostDetailScreen extends Component {
         const {isReady} = this.state;
         const {post} = this.props.posts;
         const primaryImage = _.find(post.postImages, {"is_primary": true});
-        const featuredImage = primaryImage ? {uri: primaryImage.url} : require('../../../assets/images/placeholder.png');
+        const featuredImage = primaryImage ? {uri: primaryImage.url} : appData.app.PLACE_HOLDER_IMAGE_URL;
         const additionalImagesProps = {
             post: post
         };
@@ -99,8 +99,26 @@ class PostDetailScreen extends Component {
                                       behavior="padding"
                 >
                     <View style={[styles.contentView]}>
+                        <View style={{flex: 1}}>
+                            <Image source={featuredImage} resizeMode={'cover'}
+                                    style={{width: '100%', height: 250}}
+                                    PlaceholderContent={<ActivityIndicator/>}
+                            />
+                        </View>
                         <View style={styles.headerContainer}>
                             <Text style={styles.heading}>{post.title}</Text>
+                            <Text style={styles.price}>$160</Text>
+                            <View style={styles.locationContainer}>
+                                <Icon
+                                    name="map-marker"
+                                    size={14}
+                                    type="font-awesome"
+                                    color={Colors.mediumGray}
+                                    containerStyle={{marginRight: 10}}
+                                />
+                                <Text style={styles.location}>Epping NSW 2121, Australia</Text>
+                            </View>
+                            
                         </View>
 
                         {
@@ -114,27 +132,23 @@ class PostDetailScreen extends Component {
                                                    style={{width: '100%', height: 100, marginBottom: 5}}
                                                    PlaceholderContent={<ActivityIndicator/>}
                                             />
-                                            <Button title={this.state.isSaved ? 'Saved' : 'Save'}
+                                            {/* <Button title={this.state.isSaved ? 'Saved' : 'Save'}
                                                     buttonStyle={[
                                                         {marginBottom: 5, paddingTop: 5, paddingBottom: 5},
                                                         this.state.isSaved && {backgroundColor: 'grey'}
                                                     ]}
-                                                    buttonSize={5} onPress={() => this.savePostHandler(post.id)}/>
+                                                    buttonSize={5} onPress={() => this.savePostHandler(post.id)}/> */}
                                             
                                         </View>
                                         <View style={{flex: 3}}>
                                             <Text style={styles.postAuthorMeta}>By: {post.author && post.author.full_name}</Text>
                                             <Text style={styles.postDateMeta}>Deadline: {toReadable(post.expire_at)}</Text>
-                                            
-
-                                            
-
                                         </View>
                                     </View>
-                                    <View>
-                                        <AdditionalImages {...additionalImagesProps} style={styles.additionalImg}>
-                                        </AdditionalImages>
+                                    <View style={styles.postContentContainer}>
                                         <Text style={styles.postContent}>{post.body}</Text>
+                                    </View>
+                                    <View>
                                         <PostComments/>
                                     </View>
                                 </View>
@@ -153,9 +167,8 @@ const styles = StyleSheet.create({
     },
     headerContainer: {
         justifyContent: 'center',
-        alignItems: 'center',
-        padding: 40,
-        backgroundColor: '#acacac',
+        padding: 20,
+        backgroundColor: Colors.lightGray,
         marginBottom: 20,
     },
     keyboardAvoidingViewInner: {
@@ -203,10 +216,25 @@ const styles = StyleSheet.create({
         marginTop:15,
     },
     heading: {
-        color: 'white',
-        marginTop: 10,
-        fontSize: 22,
+        color: Colors.darkGray,
+        fontSize: 18,
+        fontWeight: 'normal',
+        marginBottom: 10,
+    },
+    price: {
+        color: Colors.darkGray,
+        fontSize: 18,
         fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    locationContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    location: {
+        color: Colors.mediumGray,
+        fontSize: 12,
+        fontWeight: 'normal',
     },
     additionalImg: {
         display:'flex',

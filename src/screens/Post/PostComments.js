@@ -64,7 +64,7 @@ class PostComments extends Component {
         const userImageUrl = user.profile_pic;
         const authorImageUrl = post.author && post.author.profile_pic;
         const userImageSrc = userImageUrl.length > 0 ? {uri: userImageUrl} : require('../../../assets/images/placeholder.png');
-        const authorImageSrc = authorImageUrl.length > 0 ? {uri: authorImageUrl} : require('../../../assets/images/placeholder.png');
+        const authorImageSrc = authorImageUrl ? {uri: authorImageUrl} : require('../../../assets/images/placeholder.png');
 
         return _.map(comments, (comment, key) => {
             return (

@@ -8,6 +8,7 @@ export default {
         SCREEN_HEIGHT: Dimensions.get('window').height,
         LOGO_URL: require('../../assets/icons/icon.png'),
         LOGO_INNER_URL: require('../../assets/images/logo-inner.jpg'),
+        PLACE_HOLDER_IMAGE_URL: require('../../assets/images/placeholder.png'),
         BG_IMAGE: require('../../assets/images/wallpaper_4.jpg'),
     }
 };
