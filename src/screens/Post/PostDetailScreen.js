@@ -19,8 +19,8 @@ const AdditionalImages = (props) => {
             return;
         }
         return (
-            <View style={styles.postAddtionalImg}>
-                <Image key={key} source={appData.app.PLACE_HOLDER_IMAGE_URL} resizeMode={'contain'}
+            <View key = {key} style={styles.postAddtionalImg}>
+                <Image source={image} resizeMode={'contain'}
                    style={{width:'100%', height:100,}}
                    PlaceholderContent={<ActivityIndicator/>}
                 />
