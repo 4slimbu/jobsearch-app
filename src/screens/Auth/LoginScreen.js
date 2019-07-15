@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import appData from "../../constants/app";
-import {KeyboardAvoidingView, StyleSheet, UIManager, View,} from 'react-native';
+import {KeyboardAvoidingView, StyleSheet, TouchableOpacity, UIManager, View,} from 'react-native';
 import {connect} from 'react-redux';
 import {AppLoading, LinearGradient} from 'expo';
 import {Button, Image, Input} from 'react-native-elements';
@@ -129,7 +129,9 @@ class LoginScreen extends Component {
                     >   
                         <View style={styles.titleContainer}>
                             <View style={{alignItems: 'center'}}>
-                                <Image style={{width: 125, height: 125}} source={appData.app.LOGO_URL}/>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('LoginScreen')}>
+                                    <Image style={{width: 125, height: 125}} source={appData.app.LOGO_URL}/>
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <View style={[styles.formContainer]}>
