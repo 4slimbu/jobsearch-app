@@ -9,6 +9,7 @@ import {authUpdatePreferences} from "../../store/actions/authActions";
 import alertMessage from "../../components/Alert";
 import ContentLoading from "../../components/ContentLoading";
 import Colors from '../../constants/colors';
+import {setPostsByCategory} from "../../store/actions/postActions";
 
 class PostListScreen extends Component {
     constructor(props) {
@@ -45,6 +46,11 @@ class PostListScreen extends Component {
 
     componentWillUnmount() {
         this._isMounted = false;
+        this.props.setPostsByCategory({
+            data: [],
+            links: {},
+            meta: {}
+        });
     }
 
     onSelectPost(postId) {
@@ -145,7 +151,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onLoadPostsByCategory: (categoryId) => dispatch(loadPostsByCategory(categoryId)),
-        onUpdatePreferences: (preferences) => dispatch(authUpdatePreferences(preferences))
+        onUpdatePreferences: (preferences) => dispatch(authUpdatePreferences(preferences)),
+        setPostsByCategory: (data) => dispatch(setPostsByCategory(data))
     };
 };
 
