@@ -14,7 +14,7 @@ const navigationOptions = ({navigation}) => ({
             size={30}
             type="ionicons"
             containerStyle={{marginLeft: 10}}
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.navigate('Categories')}
         />
     ),
     headerRight: (

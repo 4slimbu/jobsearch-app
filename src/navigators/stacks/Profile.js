@@ -1,6 +1,6 @@
 import React from 'react';
 import {createStackNavigator, DrawerActions} from 'react-navigation';
-import {Icon, Image} from 'react-native-elements/src/index';
+import {Icon} from 'react-native-elements';
 import PostDetailScreen from "../../screens/Post/PostDetailScreen";
 import PageDetailScreen from "../../screens/Page/PageDetailScreen";
 import MyProfileScreen from "../../screens/ManagePosts/MyProfileScreen";
@@ -12,9 +12,15 @@ const ProfileStacks = createStackNavigator({
         screen: MyProfileScreen,
         path: '/',
         navigationOptions: ({navigation}) => ({
-            title: 'Loksewa',
+            title: '',
             headerLeft: (
-                <Image style={{marginLeft: 10, width: 40, height: 40}} source={LogoUrl}/>
+                <Icon
+                    name="arrow-back"
+                    size={30}
+                    type="ionicons"
+                    containerStyle={{marginLeft: 10}}
+                    onPress={() => navigation.navigate('Categories')}
+                />
             ),
             headerRight: (
                 <Icon
