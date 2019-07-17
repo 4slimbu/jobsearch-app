@@ -60,7 +60,6 @@ class SearchScreen extends Component {
     }
 
     onSelectPost(postId) {
-        console.log('on Select Post', postId);
         this.props.navigation.navigate('PostDetail', {postId: postId});
     }
 
@@ -77,7 +76,6 @@ class SearchScreen extends Component {
             savedPosts: savedPosts
         };
         this.props.onUpdatePreferences(preferences);
-        console.log('onSavePost', postId);
     }
 
     async scrollHandler(e){
@@ -109,10 +107,10 @@ class SearchScreen extends Component {
         };
         return (
             <ScrollView style={styles.container} keyboardShouldPersistTaps="handled" onScrollEndDrag={this.scrollHandler}>
-                <View style={styles.headerContainer}>
-                    <Icon color="white" name="search" size={62}/>
-                    <Text style={styles.heading}>Search Posts</Text>
-                </View>
+                {/*<View style={styles.headerContainer}>*/}
+                    {/*<Icon color="white" name="search" size={62}/>*/}
+                    {/*<Text style={styles.heading}>Search Posts</Text>*/}
+                {/*</View>*/}
                 <SearchBar lightTheme placeholder="Search Posts"
                     showLoading={isLoading}
                     value={searchText}
@@ -122,6 +120,7 @@ class SearchScreen extends Component {
                 <View style={{marginTop: 20}}>
                      <PostList {...postListProps}/>
                 </View>
+
                 <View style={{height: 100}}>
                     {
                         isLoading && <ContentLoading/>

@@ -53,7 +53,6 @@ class AddPostScreen extends Component {
                     categories: this.props.categories
                 });
             }).catch(err => {
-                console.log(err);
             });
         } else {
             this.setState({
@@ -68,8 +67,6 @@ class AddPostScreen extends Component {
     }
 
     removeImageHandler(type, key) {
-        console.log('additional iamge leng', this.state.additionalImages.length);
-        console.log('remove image handler pressed', type, key);
         if (type === 'featured') {
             this.setState({
                 featuredImage: null

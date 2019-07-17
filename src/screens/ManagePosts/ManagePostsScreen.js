@@ -7,7 +7,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/colors';
 
 const log = () => {
-    console.log('list clicked');
 };
 
 const managePostList = [

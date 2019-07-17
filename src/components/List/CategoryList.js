@@ -8,7 +8,6 @@ import CategoryItem from "../ListItem/CategoryItem";
 const CategoryList = (props) => {
     const {categories, onSelectCategory} = props;
     return map(categories, (category, key) => {
-        console.log('catcat', category);
         return (
             <CategoryItem
                 key={key}

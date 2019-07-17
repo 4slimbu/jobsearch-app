@@ -8,7 +8,6 @@ class LogoutScreen extends React.Component {
         await this.props.onAuthLogout().then((res) => {
             this.props.navigation.navigate('Auth');
         }).catch(err => {
-            console.log('LogoutScreen Error: ', err);
         });
     }
 

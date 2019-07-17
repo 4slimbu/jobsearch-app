@@ -81,7 +81,6 @@ class PostDetailScreen extends Component {
             savedPosts: savedPosts
         };
         this.props.onUpdatePreferences(preferences);
-        console.log('savePostHandler', postId);
     }
 
     render() {

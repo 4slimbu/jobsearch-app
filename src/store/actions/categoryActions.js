@@ -48,13 +48,11 @@ export const loadPostsByCategory = (categoryId) => {
             }
         })
             .catch(err => {
-                console.log(err);
                 alert("Unable to get categories!");
                 // dispatch(uiStopLoading());
             })
             .then(res => res.json())
             .then(parsedRes => {
-                console.log(parsedRes);
                 if (!parsedRes.data) {
                     alert("Unable to get categories!");
                 } else {
@@ -64,13 +62,11 @@ export const loadPostsByCategory = (categoryId) => {
                 }
             })
             .catch(function() {
-                console.log("error");
             });
     };
 };
 
 export const setCategories = (categories) => {
-    console.log('setCategories', categories);
     return {
         type: CATEGORIES_SET,
         categories: categories
@@ -78,7 +74,6 @@ export const setCategories = (categories) => {
 };
 
 export const setPostsByCategory = (payload) => {
-    console.log('setPostsByCategory', payload);
     return {
         type: POSTS_BY_CATEGORY_SET,
         payload: payload

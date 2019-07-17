@@ -56,7 +56,6 @@ class CategoriesScreen extends Component {
     }
 
     onSelectCategory(categoryId) {
-        console.log(categoryId);
         this.props.navigation.navigate('PostList', {categoryId: categoryId});
     }
 

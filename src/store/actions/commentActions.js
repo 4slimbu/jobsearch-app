@@ -13,7 +13,6 @@ export const saveComment = (commentData) => {
             parent_id: commentData.parent_id ? commentData.parent_id : undefined
         };
 
-        console.log('comment body', body);
         fetch(url, {
             method: "POST",
             body: JSON.stringify(body),
@@ -24,24 +23,18 @@ export const saveComment = (commentData) => {
             }
         })
             .catch(err => {
-                console.log('Save comment error: ', err);
                 // dispatch(uiStopLoading());
             })
             .then(res => res.json())
             .then(parsedRes => {
-                console.log(parsedRes);
                 if (!parsedRes.data) {
-                    console.log('Category Fetch Error', err);
                 } else {
-                    console.log('post_id', commentData.post_id);
-                    console.log('Comment saved response', parsedRes);
                     dispatch(
                         getComments(commentData.post_id)
                     );
                 }
             })
             .catch(function() {
-                console.log("error");
             });
     };
 };
@@ -61,14 +54,11 @@ export const getComments = (postId) => {
             }
         })
             .catch(err => {
-                console.log('Get comment error: ', err);
                 // dispatch(uiStopLoading());
             })
             .then(res => res.json())
             .then(parsedRes => {
-                console.log(parsedRes);
                 if (!parsedRes.data) {
-                    console.log('Get comment error', err);
                 } else {
                     dispatch(
                         setPostComments(parsedRes.data)
@@ -76,7 +66,6 @@ export const getComments = (postId) => {
                 }
             })
             .catch(function() {
-                console.log("error");
             });
     };
 };
@@ -103,13 +92,11 @@ export const loadPostsByCategory = (categoryId) => {
             }
         })
             .catch(err => {
-                console.log(err);
                 alert("Unable to get categories!");
                 // dispatch(uiStopLoading());
             })
             .then(res => res.json())
             .then(parsedRes => {
-                console.log(parsedRes);
                 if (!parsedRes.data) {
                     alert("Unable to get categories!");
                 } else {
@@ -119,13 +106,11 @@ export const loadPostsByCategory = (categoryId) => {
                 }
             })
             .catch(function() {
-                console.log("error");
             });
     };
 };
 
 export const setCategories = (categories) => {
-    console.log('setCategories', categories);
     return {
         type: CATEGORIES_SET,
         categories: categories
@@ -133,7 +118,6 @@ export const setCategories = (categories) => {
 };
 
 export const setPostsByCategory = (payload) => {
-    console.log('setPostsByCategory', payload);
     return {
         type: POSTS_BY_CATEGORY_SET,
         payload: payload
@@ -155,14 +139,11 @@ export const getMyComments = () => {
             }
         })
             .catch(err => {
-                console.log('Get comment error: ', err);
                 // dispatch(uiStopLoading());
             })
             .then(res => res.json())
             .then(parsedRes => {
-                console.log(parsedRes);
                 if (!parsedRes.data) {
-                    console.log('Get comment error', err);
                 } else {
                     dispatch(
                         setMyComments(parsedRes)
@@ -170,7 +151,6 @@ export const getMyComments = () => {
                 }
             })
             .catch(function() {
-                console.log("error");
             });
     };
 };

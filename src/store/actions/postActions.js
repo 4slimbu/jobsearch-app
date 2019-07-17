@@ -24,14 +24,11 @@ export const getPost = (postId) => {
                 }
             })
                 .catch(err => {
-                    console.log('Get Post Error', err);
                     // dispatch(uiStopLoading());
                 })
                 .then(res => res.json())
                 .then(parsedRes => {
-                    console.log(parsedRes);
                     if (!parsedRes.data) {
-                        console.log('Get Post Error', err);
                     } else {
                         dispatch(
                             setPost(parsedRes.data)
@@ -41,7 +38,6 @@ export const getPost = (postId) => {
                 })
                 .catch(function() {
                     reject();
-                    console.log("error");
                 });
         })
     };
@@ -69,13 +65,11 @@ export const loadPostsByCategory = (categoryId) => {
             }
         })
             .catch(err => {
-                console.log(err);
                 alert("Unable to get categoriesReducers!");
                 // dispatch(uiStopLoading());
             })
             .then(res => res.json())
             .then(parsedRes => {
-                console.log(parsedRes);
                 if (!parsedRes.data) {
                     alert("Unable to get categoriesReducers!");
                 } else {
@@ -85,13 +79,11 @@ export const loadPostsByCategory = (categoryId) => {
                 }
             })
             .catch(function() {
-                console.log("error");
             });
     };
 };
 
 export const setCategories = (categories) => {
-    console.log('setCategories', categories);
     return {
         type: CATEGORIES_SET,
         categories: categories
@@ -99,7 +91,6 @@ export const setCategories = (categories) => {
 };
 
 export const setPostsByCategory = (payload) => {
-    console.log('setPostsByCategory', payload);
     return {
         type: POSTS_BY_CATEGORY_SET,
         payload: payload
@@ -141,7 +132,6 @@ export const searchPosts = (text, url=null) => {
                     resolve(parsedRes);
                 })
                 .catch(err => {
-                    console.log(err);
                     reject();
                 });
         });
@@ -175,7 +165,6 @@ export const getMyPosts = (url = null) => {
         if (!url) {
             url = appData.app.API_BASE_URL + '/posts?type=my';
         }
-        console.log('get my posts url', url);
         const token = getState().auth.token;
 
         return new Promise((resolve, reject) => {
@@ -189,9 +178,7 @@ export const getMyPosts = (url = null) => {
             })
                 .then(res => res.json())
                 .then(parsedRes => {
-                    console.log(parsedRes);
                     if (!parsedRes.data) {
-                        console.log("Unable to get posts!");
                         reject();
                     } else {
                         dispatch(
@@ -202,14 +189,12 @@ export const getMyPosts = (url = null) => {
                 })
                 .catch(function() {
                     reject();
-                    console.log("error");
                 });
         });
     };
 };
 
 export const setPostsByMe = (payload) => {
-    console.log('setPostsByMe', payload);
     return {
         type: POSTS_BY_ME_SET,
         payload: payload
@@ -231,29 +216,11 @@ export const getSavedPosts = () => {
             }
         })
             .catch(err => {
-                console.log(err);
-                alert("Unable to search posts!");
-                // dispatch(uiStopLoading());
-            })
-            .then(res => res.json())
-            .then(parsedRes => {
-                console.log(parsedRes);
-                if (!parsedRes.data) {
-                    alert("Unable to search posts!");
-                } else {
-                    dispatch(
-                        setPostsSavedByMe(parsedRes)
-                    );
-                }
-            })
-            .catch(function() {
-                console.log("error");
             });
     };
 };
 
 export const setPostsSavedByMe = (payload) => {
-    console.log('setPostsByMe', payload);
     return {
         type: POSTS_SAVED_BY_ME_SET,
         payload: payload
@@ -275,12 +242,6 @@ export const addPost = (formData) => {
                 }
             })
                 .then((res) => {
-                    console.log(res);
-                    resolve();
-                })
-                .catch(function () {
-                    reject();
-                    console.log("error");
                 });
         });
     };
@@ -303,7 +264,6 @@ export const deletePost = (id = 0) => {
             })
                 // .then(res => res.json())
                 .then(parsedRes => {
-                    console.log(parsedRes);
                     if (!parsedRes.error) {
                         dispatch(deleteMyPost(id));
                     }
@@ -344,9 +304,7 @@ export const updatePost = (postId, formData) => {
             })
                 .then(res => res.json())
                 .then(parsedRes => {
-                    console.log('update post response', parsedRes);
                     if (!parsedRes.data) {
-                        console.log('Get Post Error', err);
                     } else {
                         dispatch(
                             getMyPosts()
@@ -356,7 +314,6 @@ export const updatePost = (postId, formData) => {
                 })
                 .catch(function() {
                     reject();
-                    console.log("error");
                 });
         });
     };

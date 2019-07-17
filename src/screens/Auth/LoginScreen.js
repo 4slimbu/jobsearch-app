@@ -106,7 +106,6 @@ class LoginScreen extends Component {
             .then((res) => {
                 this.props.navigation.navigate('App');
             }).catch(err => {
-            console.log(err);
         });
     }
 

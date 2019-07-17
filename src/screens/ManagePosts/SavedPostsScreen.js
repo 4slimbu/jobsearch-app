@@ -23,7 +23,6 @@ class SavedPostsScreen extends Component {
     }
 
     onSelectPost(postId) {
-        console.log('on Select Post', postId);
         this.props.navigation.navigate('PostDetail', {postId: postId});
     }
 

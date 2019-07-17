@@ -7,7 +7,6 @@ import {toReadable} from "../../utils/helper/helper";
 
 const CommentItem = props => {
     const {comment, isFirst} = props;
-    console.log('comment item', comment.body);
     return (
         <View style={{width: '100%'}}>
             { !isFirst &&  <Divider style={styles.divider}/> }
