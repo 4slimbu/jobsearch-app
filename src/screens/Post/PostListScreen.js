@@ -96,7 +96,7 @@ class PostListScreen extends Component {
                     {/*<View style={styles.headerContainer}>*/}
                         {/*<Text style={styles.heading}>Browsing {category.name}</Text>*/}
                     {/*</View>*/}
-                    <View>
+                    <View style={{marginLeft: 20, marginRight: 20}}>
                         <Picker
                             selectedValue={this.state.selectedCategoryId}
                             style={{height: 50, width: '100%'}}

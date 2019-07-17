@@ -1,9 +1,9 @@
 import {
     CATEGORIES_SET, DELETE_SAVED_POST,
     POST_SET,
-    POSTS_BY_CATEGORY_SET, POSTS_BY_ME_DELETE,
+    POSTS_BY_CATEGORY_SET, POSTS_BY_ME_DELETE, POSTS_BY_ME_RESET,
     POSTS_BY_ME_SET, POSTS_BY_SEARCH_RESET,
-    POSTS_BY_SEARCH_SET, POSTS_BY_SEARCH_UPDATE,
+    POSTS_BY_SEARCH_SET, POSTS_BY_SEARCH_UPDATE, POSTS_SAVED_BY_ME_RESET,
     POSTS_SAVED_BY_ME_SET, UPDATE_EDITED_POST
 } from "./actionTypes";
 import appData from "../../constants/app";
@@ -160,11 +160,17 @@ export const resetSearchedPosts = () => {
     }
 };
 
-export const getMyPosts = (url = null) => {
+export const getMyPosts = (url = null, query = null) => {
     return (dispatch, getState) => {
         if (!url) {
             url = appData.app.API_BASE_URL + '/posts?type=my';
         }
+
+        if (query) {
+            url = url + query
+        }
+
+        console.log(url);
         const token = getState().auth.token;
 
         return new Promise((resolve, reject) => {
@@ -201,12 +207,16 @@ export const setPostsByMe = (payload) => {
     }
 };
 
-export const getSavedPosts = () => {
+export const getSavedPosts = (url = null, query = null) => {
     return (dispatch, getState) => {
         let url = appData.app.API_BASE_URL + '/posts?type=saved';
 
-        const token = getState().auth.token;
+        if (query) {
+            url = url + query
+        }
 
+        const token = getState().auth.token;
+        console.log(url);
         fetch(url, {
             method: "GET",
             headers: {
@@ -216,6 +226,20 @@ export const getSavedPosts = () => {
             }
         })
             .catch(err => {
+                alert("Unable to search posts!");
+                // dispatch(uiStopLoading());
+            })
+            .then(res => res.json())
+            .then(parsedRes => {
+                if (!parsedRes.data) {
+                    alert("Unable to search posts!");
+                } else {
+                    dispatch(
+                        setPostsSavedByMe(parsedRes)
+                    );
+                }
+            })
+            .catch(function() {
             });
     };
 };
@@ -323,5 +347,19 @@ export const updateEditedPost = (post) => {
     return {
         type: UPDATE_EDITED_POST,
         post: post
+    }
+};
+
+export const resetPostsByMe = (payload) => {
+    return {
+        type: POSTS_BY_ME_RESET,
+        payload: payload
+    }
+};
+
+export const resetSavedPosts = (payload) => {
+    return {
+        type: POSTS_SAVED_BY_ME_RESET,
+        payload: payload
     }
 };
