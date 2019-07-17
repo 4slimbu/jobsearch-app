@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Picker, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {loadPostsByCategory} from "../../store/actions/categoryActions";
@@ -17,12 +17,14 @@ class PostListScreen extends Component {
         this.state = {
             category: {},
             categoryPosts: [{}],
+            selectedCategoryId: null,
             isLoading: false,
             isReady: false,
         };
 
         this.onSelectPost = this.onSelectPost.bind(this);
         this.onSavePost = this.onSavePost.bind(this);
+        this.onSelectCategory = this.onSelectCategory.bind(this);
     }
 
     async componentDidMount() {
@@ -40,8 +42,10 @@ class PostListScreen extends Component {
 
         this.setState({
             category: category,
+            selectedCategoryId: categoryId,
             isReady: true
         });
+
     }
 
     componentWillUnmount() {
@@ -72,6 +76,11 @@ class PostListScreen extends Component {
         this.props.onUpdatePreferences(preferences);
     }
 
+    async onSelectCategory(categoryId) {
+        this.setState({selectedCategoryId: categoryId});
+        this._isMounted && await this.props.onLoadPostsByCategory(categoryId);
+    }
+
     render() {
         const {category, isReady} = this.state;
         const {postsByCategory, preferences} = this.props;
@@ -84,8 +93,24 @@ class PostListScreen extends Component {
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.contentView}>
-                    <View style={styles.headerContainer}>
-                        <Text style={styles.heading}>Browsing {category.name}</Text>
+                    {/*<View style={styles.headerContainer}>*/}
+                        {/*<Text style={styles.heading}>Browsing {category.name}</Text>*/}
+                    {/*</View>*/}
+                    <View>
+                        <Picker
+                            selectedValue={this.state.selectedCategoryId}
+                            style={{height: 50, width: '100%'}}
+                            onValueChange={(itemValue, itemIndex) => this.onSelectCategory(itemValue)}
+                        >
+                            <Picker.Item value="" label="Select Category"/>
+                            {
+                                _.map(this.props.categories, (category, key) => {
+                                    return (
+                                        <Picker.Item key={key} value={category.id} label={category.name}/>
+                                    )
+                                })
+                            }
+                        </Picker>
                     </View>
 
                     {

@@ -1,12 +1,12 @@
 import React from 'react';
 
 import {createStackNavigator, DrawerActions} from 'react-navigation';
-import {Icon, Image} from 'react-native-elements';
+import {Image} from 'react-native-elements';
 
 import Search from '../../screens/Search/SearchScreen';
 import PostListScreen from "../../screens/Post/PostListScreen";
 import PostDetailScreen from "../../screens/Post/PostDetailScreen";
-import Feather from "@expo/vector-icons";
+import {Feather} from "@expo/vector-icons";
 import appData from "../../constants/app";
 import Colors from "../../constants/colors";
 

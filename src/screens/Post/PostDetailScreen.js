@@ -14,7 +14,7 @@ import PostComments from "./PostComments";
 const AdditionalImages = (props) => {
     const {post} = props;
     return _.map(post.postImages, (postImage, key) => {
-        
+        const image = postImage.url ? {uri: postImage.url} : require('../../../assets/images/placeholder.png');
         if (postImage.is_primary) {
             return;
         }
@@ -118,6 +118,8 @@ class PostDetailScreen extends Component {
                                 />
                                 <Text style={styles.location}>Epping NSW 2121, Australia</Text>
                             </View>
+                            <Text style={styles.postAuthorMeta}>By: {post.author && post.author.full_name}</Text>
+                            <Text style={styles.postDateMeta}>Deadline: {toReadable(post.expire_at)}</Text>
                             
                         </View>
 
@@ -126,26 +128,27 @@ class PostDetailScreen extends Component {
                                 <ContentLoading/>
                                 :
                                 <View style={[{paddingLeft: 20, paddingRight: 20, marginBottom: 20}]}>
-                                    <View style={{flex: 1, flexDirection: 'row'}}>
-                                        <View style={{flex: 1, marginRight: 15}}>
-                                            <Image source={featuredImage} resizeMode={'contain'}
-                                                   style={{width: '100%', height: 100, marginBottom: 5}}
-                                                   PlaceholderContent={<ActivityIndicator/>}
-                                            />
-                                            {/* <Button title={this.state.isSaved ? 'Saved' : 'Save'}
-                                                    buttonStyle={[
-                                                        {marginBottom: 5, paddingTop: 5, paddingBottom: 5},
-                                                        this.state.isSaved && {backgroundColor: 'grey'}
-                                                    ]}
-                                                    buttonSize={5} onPress={() => this.savePostHandler(post.id)}/> */}
-                                            
-                                        </View>
-                                        <View style={{flex: 3}}>
-                                            <Text style={styles.postAuthorMeta}>By: {post.author && post.author.full_name}</Text>
-                                            <Text style={styles.postDateMeta}>Deadline: {toReadable(post.expire_at)}</Text>
-                                        </View>
-                                    </View>
+                                    {/*<View style={{flex: 1, flexDirection: 'row'}}>*/}
+                                        {/*<View style={{flex: 1, marginRight: 15}}>*/}
+                                            {/*<Image source={featuredImage} resizeMode={'contain'}*/}
+                                                   {/*style={{width: '100%', height: 100, marginBottom: 5}}*/}
+                                                   {/*PlaceholderContent={<ActivityIndicator/>}*/}
+                                            {/*/>*/}
+                                            {/*/!* <Button title={this.state.isSaved ? 'Saved' : 'Save'}*/}
+                                                    {/*buttonStyle={[*/}
+                                                        {/*{marginBottom: 5, paddingTop: 5, paddingBottom: 5},*/}
+                                                        {/*this.state.isSaved && {backgroundColor: 'grey'}*/}
+                                                    {/*]}*/}
+                                                    {/*buttonSize={5} onPress={() => this.savePostHandler(post.id)}/> *!/*/}
+                                            {/**/}
+                                        {/*</View>*/}
+                                        {/*<View style={{flex: 3}}>*/}
+                                            {/*<Text style={styles.postAuthorMeta}>By: {post.author && post.author.full_name}</Text>*/}
+                                            {/*<Text style={styles.postDateMeta}>Deadline: {toReadable(post.expire_at)}</Text>*/}
+                                        {/*</View>*/}
+                                    {/*</View>*/}
                                     <View style={styles.postContentContainer}>
+                                        <AdditionalImages {...additionalImagesProps}/>
                                         <Text style={styles.postContent}>{post.body}</Text>
                                     </View>
                                     <View>
