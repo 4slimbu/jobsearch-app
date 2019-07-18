@@ -228,7 +228,7 @@ class EditPostScreen extends Component {
                         <View>
                             <Text style={styles.postTitle}>Post Content</Text>
                             <View>
-                                <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
+                                <TextInput style={{borderWidth: 1, borderColor: Colors.grey3, textAlignVertical: 'top'}}
                                            multiline={true}
                                            numberOfLines={15}
                                            value={postContent}

@@ -184,7 +184,7 @@ class AddPostScreen extends Component {
                         <View>
                             <Text style={styles.postTitle}>Post Content</Text>
                             <View>
-                                <TextInput style={{borderWidth: 1, borderColor: Colors.grey3, height:44,}}
+                                <TextInput style={{borderWidth: 1, borderColor: Colors.grey3, textAlignVertical: 'top'}}
                                            multiline={true}
                                            numberOfLines={15}
                                            onChangeText={postContent => this.setState({postContent})}
