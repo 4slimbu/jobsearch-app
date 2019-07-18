@@ -9,7 +9,7 @@ import {
     ImageBackground,
     Text,
     UIManager,
-    View,
+    View, TouchableOpacity,
 } from 'react-native';
 import {AppLoading, LinearGradient} from 'expo';
 import {Button, Image, Input} from 'react-native-elements';
@@ -160,7 +160,9 @@ class ForgotPasswordScreen extends Component {
                 >
                     <View style={styles.titleContainer}>
                         <View style={{alignItems: 'center'}}>
-                            <Image style={{width: 100, height: 100}} source={appData.app.LOGO_URL}/>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('LoginScreen')}>
+                                <Image style={{width: 100, height: 100}} source={appData.app.LOGO_URL}/>
+                            </TouchableOpacity>
                             <Text style={styles.titleText}>LokSewa</Text>
                         </View>
                     </View>

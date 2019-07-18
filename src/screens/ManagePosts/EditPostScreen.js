@@ -58,7 +58,6 @@ class EditPostScreen extends Component {
                     categories: this.props.categories
                 });
             }).catch(err => {
-                console.log(err);
             });
         } else {
             this.setState({
@@ -82,7 +81,6 @@ class EditPostScreen extends Component {
                 date: post.expire_at
             });
         }).catch(err => {
-            console.log(err);
         });
 
     }

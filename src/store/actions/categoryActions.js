@@ -48,7 +48,6 @@ export const loadPostsByCategory = (categoryId) => {
             }
         })
             .catch(err => {
-                console.log(err);
                 alert("Unable to get categories!");
                 // dispatch(uiStopLoading());
             })
@@ -63,7 +62,6 @@ export const loadPostsByCategory = (categoryId) => {
                 }
             })
             .catch(function() {
-                console.log("error");
             });
     };
 };

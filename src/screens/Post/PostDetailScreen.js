@@ -14,7 +14,7 @@ import PostComments from "./PostComments";
 const AdditionalImages = (props) => {
     const {post} = props;
     return _.map(post.postImages, (postImage, key) => {
-        
+        const image = postImage.url ? {uri: postImage.url} : require('../../../assets/images/placeholder.png');
         if (postImage.is_primary) {
             return;
         }
@@ -81,7 +81,6 @@ class PostDetailScreen extends Component {
             savedPosts: savedPosts
         };
         this.props.onUpdatePreferences(preferences);
-        console.log('savePostHandler', postId);
     }
 
     render() {
@@ -89,7 +88,6 @@ class PostDetailScreen extends Component {
         const {post} = this.props.posts;
         const primaryImage = _.find(post.postImages, {"is_primary": true});
         const featuredImage = primaryImage ? {uri: primaryImage.url} : appData.app.PLACE_HOLDER_IMAGE_URL;
-        console.log(featuredImage);
         const additionalImagesProps = {
             post: post
         };
@@ -112,14 +110,13 @@ class PostDetailScreen extends Component {
                             <View style={styles.locationContainer}>
                                 <Icon
                                     name="map-marker"
-                                    size={14}
+                                    size={16}
                                     type="font-awesome"
-                                    color={Colors.mediumGray}
+                                    color={Colors.primary}
                                     containerStyle={{marginRight: 10}}
                                 />
                                 <Text style={styles.location}>Epping NSW 2121, Australia</Text>
-                            </View>
-                            
+                            </View>  
                         </View>
 
                         {
@@ -127,26 +124,20 @@ class PostDetailScreen extends Component {
                                 <ContentLoading/>
                                 :
                                 <View style={[{paddingLeft: 20, paddingRight: 20, marginBottom: 20}]}>
-                                    <View style={{flex: 1, flexDirection: 'row'}}>
-                                        <View style={{flex: 1, marginRight: 15}}>
-                                            <Image source={{uri: post.author.profile_pic}} resizeMode={'contain'}
-                                                   style={{width: 60, height: 60, borderRadius: 60/2}}
+                                    <View style={{flex: 1, flexDirection: 'row', alignItems: "center",}}>
+                                        <View style={styles.postAuthorProfilePicContainer}>
+                                            <Image source={{uri: post.author.profile_pic}} resizeMode={'cover'}
+                                                   style={styles.postAuthorProfilePic}
                                                    PlaceholderContent={<ActivityIndicator/>}
                                             />
-                                            {/* <Button title={this.state.isSaved ? 'Saved' : 'Save'}
-                                                    buttonStyle={[
-                                                        {marginBottom: 5, paddingTop: 5, paddingBottom: 5},
-                                                        this.state.isSaved && {backgroundColor: 'grey'}
-                                                    ]}
-                                                    buttonSize={5} onPress={() => this.savePostHandler(post.id)}/> */}
-                                            
                                         </View>
-                                        <View style={{flex: 3}}>
+                                        <View style={styles.postAuthorMetaData}>
                                             <Text style={styles.postAuthorMeta}>By: {post.author && post.author.full_name}</Text>
-                                            <Text style={styles.postDateMeta}>Deadline: {toReadable(post.expire_at)}</Text>
+                                            <Text style={styles.postDateMeta}>Posted at: {toReadable(post.created_at)}</Text>
                                         </View>
                                     </View>
                                     <View style={styles.postContentContainer}>
+                                        <Text style={styles.postContentTitle}>Description</Text>
                                         <Text style={styles.postContent}>{post.body}</Text>
                                     </View>
                                     <View>
@@ -197,28 +188,55 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
+    postAuthorProfilePicContainer: {
+        flex: 1,
+        marginRight: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
+        elevation: 2.0,
+        width: 60,
+        height: 60,
+        borderRadius: 60/2,
+    },
+    postAuthorProfilePic: {
+        width: 60,
+        height: 60,
+        borderRadius: 60/2,
+    },
+    postAuthorMetaData: {
+        flex: 3,
+    },
     postAuthorMeta: {
         color: Colors.grey1,
-        marginBottom: 3,
         fontSize: 16,
-        fontStyle: 'italic'
     },
     postDateMeta: {
-        color: Colors.grey1,
-        marginBottom: 15,
-        fontSize: 16,
-        fontWeight: 'bold'
+        color: Colors.mediumGray,
+        fontSize: 12,
+        fontWeight: 'normal',
+    },
+    postContentContainer: {
+        marginTop:15,
+        padding: 20,
+        backgroundColor: Colors.lightGray,
+        borderRadius: 5,
+    },
+    postContentTitle: {
+        fontSize: 18,
+        fontWeight: '100',
     },
     postContent: {
         color: Colors.grey1,
         fontSize: 16,
-        lineHeight: 20,
+        lineHeight: 24,
         marginBottom: 15,
-        marginTop:15,
+        marginTop: 10,
     },
     heading: {
         color: Colors.darkGray,
-        fontSize: 18,
+        fontSize: 24,
         fontWeight: 'normal',
         marginBottom: 10,
     },

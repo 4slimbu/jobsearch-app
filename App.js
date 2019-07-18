@@ -38,7 +38,6 @@ const registerForPushNotificationsAsync = async() => {
     deviceId = await Notifications.getExpoPushTokenAsync();
 
     AsyncStorage.setItem("loksewa:auth:deviceId", deviceId);
-    console.log('expo push token:' + deviceId);
 };
 
 const AppContainer = createAppContainer(MainNavigator);

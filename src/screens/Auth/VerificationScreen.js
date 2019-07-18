@@ -5,7 +5,7 @@ import {
     KeyboardAvoidingView,
     ScrollView,
     StyleSheet,
-    Text,
+    Text, TouchableOpacity,
     UIManager,
     View,
 } from 'react-native';
@@ -95,7 +95,9 @@ class VerificationScreen extends Component {
                 >
                     <View style={styles.titleContainer}>
                         <View style={{alignItems: 'center'}}>
-                            <Image style={{width: 100, height: 100}} source={LogoUrl}/>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('LoginScreen')}>
+                                <Image style={{width: 100, height: 100}} source={LogoUrl}/>
+                            </TouchableOpacity>
                             <Text style={styles.titleText}>LokSewa</Text>
                         </View>
                     </View>

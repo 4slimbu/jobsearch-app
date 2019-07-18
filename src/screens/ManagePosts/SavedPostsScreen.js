@@ -1,15 +1,21 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Picker, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Colors from '../../constants/colors';
 import {connect} from "react-redux";
-import {getSavedPosts} from "../../store/actions/postActions";
+import {getSavedPosts, resetSavedPosts} from "../../store/actions/postActions";
 import PostList from "../../components/List/PostList";
+import * as _ from "lodash";
 
 class SavedPostsScreen extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            selectedCategoryId: null,
+        };
+
         this.onSelectPost = this.onSelectPost.bind(this);
+        this.onSelectCategory = this.onSelectCategory.bind(this);
     }
 
     async componentDidMount() {
@@ -23,8 +29,13 @@ class SavedPostsScreen extends Component {
     }
 
     onSelectPost(postId) {
-        console.log('on Select Post', postId);
         this.props.navigation.navigate('PostDetail', {postId: postId});
+    }
+
+    async onSelectCategory(categoryId) {
+        this.setState({selectedCategoryId: categoryId});
+        this.props.resetSavedPosts();
+        this._isMounted && await this.props.onGetSavedPosts('', '&category=' + categoryId);
     }
 
     render() {
@@ -40,7 +51,23 @@ class SavedPostsScreen extends Component {
                     <View style={styles.headerContainer}>
                         <Text style={styles.heading}>Saved Posts</Text>
                     </View>
-                    <View style={{marginTop: 20}}>
+                    <View>
+                        <View style={{ marginLeft: 20, marginRight: 20}}>
+                            <Picker
+                                selectedValue={this.state.selectedCategoryId}
+                                style={{height: 50, width: '100%'}}
+                                onValueChange={(itemValue, itemIndex) => this.onSelectCategory(itemValue)}
+                            >
+                                <Picker.Item value="" label="Select Category"/>
+                                {
+                                    _.map(this.props.categories, (category, key) => {
+                                        return (
+                                            <Picker.Item key={key} value={category.id} label={category.name}/>
+                                        )
+                                    })
+                                }
+                            </Picker>
+                        </View>
                         {
                             savedPosts && <PostList {...postListProps}/>
                         }
@@ -109,13 +136,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        savedPosts: state.posts.savedPosts
+        savedPosts: state.posts.savedPosts,
+        categories: state.categories
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onGetSavedPosts: () => dispatch(getSavedPosts()),
+        onGetSavedPosts: (url = null, query = null) => dispatch(getSavedPosts(url, query)),
+        resetSavedPosts: () => dispatch(resetSavedPosts())
     };
 };
 

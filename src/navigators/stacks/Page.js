@@ -2,13 +2,20 @@ import React from 'react';
 import {createStackNavigator, DrawerActions} from 'react-navigation';
 import PageDetailScreen from "../../screens/Page/PageDetailScreen";
 import {Icon, Image} from 'react-native-elements';
+import {TouchableOpacity} from "react-native";
 
 const LogoUrl = require('../../../assets/icons/icon.png');
 
 const navigationOptions = ({navigation}) => ({
-    title: 'Loksewa',
+    title: '',
     headerLeft: (
-        <Image style={{marginLeft: 10, width: 40, height: 40}} source={LogoUrl}/>
+        <Icon
+            name="arrow-back"
+            size={30}
+            type="ionicons"
+            containerStyle={{marginLeft: 10}}
+            onPress={() => navigation.navigate('Categories')}
+        />
     ),
     headerRight: (
         <Icon

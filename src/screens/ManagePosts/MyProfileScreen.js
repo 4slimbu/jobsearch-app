@@ -86,8 +86,6 @@ class MyProfileScreen extends Component {
             aspect: [1, 1],
         });
 
-        console.log(result);
-
         if (!result.cancelled) {
             this.setState({
                 newProfilePicture: result,
@@ -112,9 +110,7 @@ class MyProfileScreen extends Component {
             formData.append('profile_pic', {uri: newProfilePicture.uri, name: 'newprofilepic.jpg', type: 'image/jpg'});
         }
         await this.props.updateMyProfile(formData).then(res => {
-            console.log(res);
         }).catch(err => {
-            console.log(err);
         });
 
         this.setData();
@@ -161,9 +157,7 @@ class MyProfileScreen extends Component {
         formData.append('contact_number', newContactNumber);
 
         await this.props.updateMyProfile(formData).then(res => {
-            console.log(res);
         }).catch(err => {
-            console.log(err);
         });
 
         this.setData();
@@ -204,9 +198,7 @@ class MyProfileScreen extends Component {
         };
 
         await this.props.updatePassword(formData).then(res => {
-            console.log(res);
         }).catch(err => {
-            console.log(err);
         });
 
         this.setData();

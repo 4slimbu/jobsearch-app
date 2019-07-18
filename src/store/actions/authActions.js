@@ -65,7 +65,6 @@ export const tryAuth = (authData, authMode = 'login') => {
     }
 
     return dispatch => {
-        console.log('body', body);
         return new Promise((resolve, reject) => {
             fetch(url, {
                 method: "POST",
@@ -76,7 +75,6 @@ export const tryAuth = (authData, authMode = 'login') => {
                 }
             })
                 .then(res => {
-                    console.log(res);
                     return res.json();
                 })
                 .then(parsedRes => {
@@ -226,7 +224,6 @@ export const authUpdatePreferences = (preferences) => {
             })
                 .then(res => res.json())
                 .then(parsedRes => {
-                    console.log('preferences', parsedRes);
                     if (!parsedRes.data) {
                         alert("Unable to get preferences!");
                     } else {
@@ -238,7 +235,6 @@ export const authUpdatePreferences = (preferences) => {
                 })
                 .catch(function () {
                     reject();
-                    console.log("error");
                 });
         })
     };
@@ -257,7 +253,6 @@ export const verifyEmail = (verificationCode) => {
                 }
             })
                 .catch(err => {
-                    console.log(err);
                 })
                 .then(res => res.json())
                 .then(parsedRes => {
@@ -271,7 +266,6 @@ export const verifyEmail = (verificationCode) => {
                 })
                 .catch(function () {
                     reject();
-                    console.log("error");
                 });
         });
     };
@@ -334,7 +328,6 @@ export const reSendVerificationCode = () => {
     let url = appData.app.API_BASE_URL + '/resend-verification-code';
     return (dispatch, getState) => {
         const token = getState().auth.token;
-        console.log('reSendVerificationCode', url, token);
         return new Promise((resolve, reject) => {
             fetch(url, {
                 method: "GET",
@@ -346,12 +339,10 @@ export const reSendVerificationCode = () => {
             })
                 // .then(res => res.json())
                 .then(parsedRes => {
-                    console.log(parsedRes);
                     resolve(parsedRes);
                 })
                 .catch(function () {
                     reject();
-                    console.log("error");
                 });
         });
     };
@@ -373,9 +364,7 @@ export const updateMyProfile = (formData) => {
             })
                 .then(res => res.json())
                 .then(parsedRes => {
-                    console.log('update profile response', parsedRes);
                     if (!parsedRes.data) {
-                        console.log('Get Post Error', err);
                     } else {
                         // Store user info in Async Storage
                         AsyncStorage.setItem("loksewa:auth:user", JSON.stringify(parsedRes.data));
@@ -388,7 +377,6 @@ export const updateMyProfile = (formData) => {
                 })
                 .catch(function() {
                     reject();
-                    console.log("error");
                 });
         });
     };
@@ -398,7 +386,6 @@ export const updatePassword = (formData) => {
     let url = appData.app.API_BASE_URL + '/me/reset-password';
     return (dispatch, getState) => {
         const token = getState().auth.token;
-        console.log(formData);
         return new Promise((resolve, reject) => {
             fetch(url, {
                 method: "PUT",
@@ -411,12 +398,10 @@ export const updatePassword = (formData) => {
             })
                 // .then(res => res.json())
                 .then(parsedRes => {
-                    console.log('update password response', parsedRes);
                     resolve(parsedRes);
                 })
                 .catch(function() {
                     reject();
-                    console.log("error");
                 });
         });
     };

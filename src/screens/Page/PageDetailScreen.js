@@ -1,23 +1,24 @@
 import React, {Component} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Colors from '../../constants/colors';
-
-const LogoUrl = require('../../../assets/icons/icon.png');
+import {connect} from "react-redux";
+import {getPage} from "../../store/actions/pageActions";
+import * as _ from "lodash";
 
 class PageDetailScreen extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            pageTitle: ""
-        }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this._isMounted = true;
         const {params} = this.props.navigation.state;
-        const pageTitle = params ? params.navTitle : "Default Page Title";
+        const {pages} = this.props.pages;
+        const page = _.find(pages, {slug: params && params.navTarget});
 
-        this._isMounted && this.setState({ pageTitle });
+        if (! page) {
+            this._isMounted && await this.props.getPage(params && params.navTarget);
+        }
     }
 
     componentWillUnmount() {
@@ -25,36 +26,19 @@ class PageDetailScreen extends Component {
     }
 
     render() {
-        const {pageTitle} = this.state;
+        const {params} = this.props.navigation.state;
+        const {pages} = this.props.pages;
+        const page = _.find(pages, {slug: params && params.navTarget});
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.contentView}>
                     <View style={styles.headerContainer}>
-                        <Text style={styles.heading}>{pageTitle}</Text>
+                        <Text style={styles.heading}>{page && page.title}</Text>
                     </View>
                     <View style={{paddingLeft: 20, paddingRight: 20, marginBottom: 20}}>
-                        <Text style={styles.postContent}>Lorem ipsum dolor sit amet, ipsum dolor sit amet,
-                            consectetur adipiscing elit. Pellentesque
-                            venenatis condimentum turpis sit amet malesuada.
-                            Lorem ipsum dolor sit amet, ipsum dolor sit amet,
-                            consectetur adipiscing elit. Pellentesque
-                            venenatis condimentum turpis sit amet malesuada.
-                            Lorem ipsum dolor sit amet, ipsum dolor sit amet,
-                            consectetur adipiscing elit. </Text>
-                        <Text style={styles.postContent}>Pellentesque
-                            venenatis condimentum turpis sit amet malesuada.
-                            Lorem ipsum dolor sit amet, ipsum dolor sit amet,
-                            consectetur adipiscing elit. Pellentesque
-                            venenatis condimentum turpis sit amet malesuada.
-                            Lorem ipsum dolor sit amet, ipsum dolor sit amet,
-                            consectetur adipiscing elit. </Text>
-                        <Text style={styles.postContent}>Pellentesque
-                            venenatis condimentum turpis sit amet malesuada.
-                            Lorem ipsum dolor sit amet, ipsum dolor sit amet,
-                            consectetur adipiscing elit. Pellentesque
-                            venenatis condimentum turpis sit amet malesuada.
-                            Lorem ipsum dolor sit amet, ipsum dolor sit amet,
-                            consectetur adipiscing elit. </Text>
+                        <Text style={styles.postContent}>
+                            { page && page.content }
+                        </Text>
                     </View>
 
                 </View>
@@ -120,4 +104,19 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PageDetailScreen;
+
+const mapStateToProps = state => {
+    return {
+        preferences: state.auth.user.preferences,
+        user: state.auth.user,
+        pages: state.pages
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getPage: (pageSlug) => dispatch(getPage(pageSlug)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PageDetailScreen);

@@ -57,5 +57,5 @@ module.exports = StyleSheet.create({
         fontSize: 17,
         textAlign: 'center',
         color: Colors.grey1,
-    }
+    },
 });

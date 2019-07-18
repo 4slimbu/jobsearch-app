@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import appData from "../../constants/app";
-import {KeyboardAvoidingView, ScrollView, StyleSheet, Text, UIManager, View} from 'react-native';
+import {KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, UIManager, View} from 'react-native';
 import {connect} from 'react-redux';
 import {Button, CheckBox, Image, Input} from 'react-native-elements';
 
@@ -132,7 +132,9 @@ class RegisterScreen extends Component {
                     >
                         <View style={styles.titleContainer}>
                             <View style={{alignItems: 'center'}}>
-                                <Image style={{width: 100, height: 100}} source={appData.app.LOGO_URL}/>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('LoginScreen')}>
+                                    <Image style={{width: 100, height: 100}} source={appData.app.LOGO_URL}/>
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <View style={styles.formContainer}>

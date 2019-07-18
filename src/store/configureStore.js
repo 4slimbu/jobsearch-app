@@ -7,11 +7,13 @@ import {composeWithDevTools} from "redux-devtools-extension";
 import categoriesReducers from "./reducers/categoriesReducers";
 import postsReducers from "./reducers/postsReducers";
 import commentsReducers from "./reducers/commentsReducers";
+import pagesReducers from "./reducers/pageReducers";
 
 const rootReducer = combineReducers({
     auth: authReducers,
     categories: categoriesReducers,
     posts: postsReducers,
+    pages: pagesReducers,
     comments: commentsReducers,
     ui: uiReducers,
 });

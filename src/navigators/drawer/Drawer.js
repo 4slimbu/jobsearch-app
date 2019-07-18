@@ -80,7 +80,7 @@ const CustomDrawerContentComponent = props => (
                     }}
                     titleStyle={{ color: Colors.darkGray,}}
                     key={i}
-                    onPress={() => props.navigation.navigate(l.target, {navTitle: l.name})}
+                    onPress={() => props.navigation.navigate(l.target, {navTarget: l.target})}
                     title={l.name}
                     subtitle={l.subtitle}
                     // chevron

@@ -1,9 +1,9 @@
 import {
     CATEGORIES_SET, DELETE_SAVED_POST,
     POST_SET,
-    POSTS_BY_CATEGORY_SET, POSTS_BY_ME_DELETE,
+    POSTS_BY_CATEGORY_SET, POSTS_BY_ME_DELETE, POSTS_BY_ME_RESET,
     POSTS_BY_ME_SET, POSTS_BY_SEARCH_RESET,
-    POSTS_BY_SEARCH_SET, POSTS_BY_SEARCH_UPDATE,
+    POSTS_BY_SEARCH_SET, POSTS_BY_SEARCH_UPDATE, POSTS_SAVED_BY_ME_RESET,
     POSTS_SAVED_BY_ME_SET, UPDATE_EDITED_POST
 } from "./actionTypes";
 import appData from "../../constants/app";
@@ -24,14 +24,11 @@ export const getPost = (postId) => {
                 }
             })
                 .catch(err => {
-                    console.log('Get Post Error', err);
                     // dispatch(uiStopLoading());
                 })
                 .then(res => res.json())
                 .then(parsedRes => {
-                    console.log(parsedRes);
                     if (!parsedRes.data) {
-                        console.log('Get Post Error', err);
                     } else {
                         dispatch(
                             setPost(parsedRes.data)
@@ -41,7 +38,6 @@ export const getPost = (postId) => {
                 })
                 .catch(function() {
                     reject();
-                    console.log("error");
                 });
         })
     };
@@ -69,7 +65,6 @@ export const loadPostsByCategory = (categoryId) => {
             }
         })
             .catch(err => {
-                console.log(err);
                 alert("Unable to get categoriesReducers!");
                 // dispatch(uiStopLoading());
             })
@@ -84,7 +79,6 @@ export const loadPostsByCategory = (categoryId) => {
                 }
             })
             .catch(function() {
-                console.log("error");
             });
     };
 };
@@ -138,7 +132,6 @@ export const searchPosts = (text, url=null) => {
                     resolve(parsedRes);
                 })
                 .catch(err => {
-                    console.log(err);
                     reject();
                 });
         });
@@ -167,12 +160,17 @@ export const resetSearchedPosts = () => {
     }
 };
 
-export const getMyPosts = (url = null) => {
+export const getMyPosts = (url = null, query = null) => {
     return (dispatch, getState) => {
         if (!url) {
             url = appData.app.API_BASE_URL + '/posts?type=my';
         }
-        console.log('get my posts url', url);
+
+        if (query) {
+            url = url + query
+        }
+
+        console.log(url);
         const token = getState().auth.token;
 
         return new Promise((resolve, reject) => {
@@ -186,9 +184,7 @@ export const getMyPosts = (url = null) => {
             })
                 .then(res => res.json())
                 .then(parsedRes => {
-                    console.log(parsedRes);
                     if (!parsedRes.data) {
-                        console.log("Unable to get posts!");
                         reject();
                     } else {
                         dispatch(
@@ -199,26 +195,28 @@ export const getMyPosts = (url = null) => {
                 })
                 .catch(function() {
                     reject();
-                    console.log("error");
                 });
         });
     };
 };
 
 export const setPostsByMe = (payload) => {
-    console.log('setPostsByMe', payload);
     return {
         type: POSTS_BY_ME_SET,
         payload: payload
     }
 };
 
-export const getSavedPosts = () => {
+export const getSavedPosts = (url = null, query = null) => {
     return (dispatch, getState) => {
         let url = appData.app.API_BASE_URL + '/posts?type=saved';
 
-        const token = getState().auth.token;
+        if (query) {
+            url = url + query
+        }
 
+        const token = getState().auth.token;
+        console.log(url);
         fetch(url, {
             method: "GET",
             headers: {
@@ -228,13 +226,11 @@ export const getSavedPosts = () => {
             }
         })
             .catch(err => {
-                console.log(err);
                 alert("Unable to search posts!");
                 // dispatch(uiStopLoading());
             })
             .then(res => res.json())
             .then(parsedRes => {
-                console.log(parsedRes);
                 if (!parsedRes.data) {
                     alert("Unable to search posts!");
                 } else {
@@ -244,13 +240,11 @@ export const getSavedPosts = () => {
                 }
             })
             .catch(function() {
-                console.log("error");
             });
     };
 };
 
 export const setPostsSavedByMe = (payload) => {
-    console.log('setPostsByMe', payload);
     return {
         type: POSTS_SAVED_BY_ME_SET,
         payload: payload
@@ -272,12 +266,6 @@ export const addPost = (formData) => {
                 }
             })
                 .then((res) => {
-                    console.log(res);
-                    resolve();
-                })
-                .catch(function () {
-                    reject();
-                    console.log("error");
                 });
         });
     };
@@ -300,7 +288,6 @@ export const deletePost = (id = 0) => {
             })
                 // .then(res => res.json())
                 .then(parsedRes => {
-                    console.log(parsedRes);
                     if (!parsedRes.error) {
                         dispatch(deleteMyPost(id));
                     }
@@ -341,9 +328,7 @@ export const updatePost = (postId, formData) => {
             })
                 .then(res => res.json())
                 .then(parsedRes => {
-                    console.log('update post response', parsedRes);
                     if (!parsedRes.data) {
-                        console.log('Get Post Error', err);
                     } else {
                         dispatch(
                             getMyPosts()
@@ -353,7 +338,6 @@ export const updatePost = (postId, formData) => {
                 })
                 .catch(function() {
                     reject();
-                    console.log("error");
                 });
         });
     };
@@ -363,5 +347,19 @@ export const updateEditedPost = (post) => {
     return {
         type: UPDATE_EDITED_POST,
         post: post
+    }
+};
+
+export const resetPostsByMe = (payload) => {
+    return {
+        type: POSTS_BY_ME_RESET,
+        payload: payload
+    }
+};
+
+export const resetSavedPosts = (payload) => {
+    return {
+        type: POSTS_SAVED_BY_ME_RESET,
+        payload: payload
     }
 };

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import appData from "../../constants/app";
 import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import Colors from '../../constants/colors';
@@ -63,8 +64,9 @@ class PostComments extends Component {
         const comments = post.postComments;
         const userImageUrl = user.profile_pic;
         const authorImageUrl = post.author && post.author.profile_pic;
-        const userImageSrc = userImageUrl.length > 0 ? {uri: userImageUrl} : require('../../../assets/images/placeholder.png');
-        const authorImageSrc = authorImageUrl && authorImageUrl.length > 0 ? {uri: authorImageUrl} : require('../../../assets/images/placeholder.png');
+        const userImageSrc = userImageUrl.length > 0 ? {uri: userImageUrl} : appData.app.PLACE_HOLDER_AVATAR_URL;
+        console.log(appData.app.PLACE_HOLDER_AVATAR_URL);
+        const authorImageSrc = authorImageUrl && authorImageUrl.length > 0 ? {uri: authorImageUrl} : {uri: appData.app.PLACE_HOLDER_AVATAR_URL};
 
         return _.map(comments, (comment, key) => {
             return (
@@ -72,9 +74,9 @@ class PostComments extends Component {
                     {
                         !comment.parent_id &&
                         <View>
-                            <View style={{flexDirection: 'row', marginBottom: 15}}>
-                                <View style={{width: '20%'}}>
-                                    <Image source={userImageSrc} resizeMode={'contain'}
+                            <View style={styles.commentsListWrapper}>
+                                <View style={styles.commentUserAvatar}>
+                                    <Image source={userImageSrc} resizeMode={'cover'}
                                            style={{
                                                width: 40,
                                                height: 40,
@@ -85,15 +87,9 @@ class PostComments extends Component {
                                            PlaceholderContent={<ActivityIndicator/>}
                                     />
                                 </View>
-                                <View style={{width: '80%'}}>
-                                    <TouchableOpacity style={{
-                                        width: '100%',
-                                        backgroundColor: '#fafafa',
-                                        borderRadius: 10,
-                                        padding: 10
-                                    }}
-                                                      onPress={() => this.selectCommentHandler(comment.id)}>
-                                        <Text styles={{marginLeft: 100, color: Colors.grey3,backgroundColor: '#f1f1f1',}}>{comment.body}</Text>
+                                <View style={styles.commentUserContent}>
+                                    <TouchableOpacity onPress={() => this.selectCommentHandler(comment.id)}>
+                                        <Text style={styles.commentUserContentText}>{comment.body}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -181,14 +177,14 @@ class PostComments extends Component {
             <View>
                 {
                     post.postComments && post.postComments.length > 0 &&
-                    <View>
+                    <View style={styles.commentsListContainer}>
 
-                        <Text style={styles.postTitle}>Comments</Text>
+                        <Text style={styles.sectionHeading}>Comments</Text>
                         {this.comments()}
                     </View>
                 }
                 <View>
-                    <Text style={styles.postTitle}>Leave a Comment</Text>
+                    <Text style={styles.sectionHeading}>Leave a Comment</Text>
                     <Text>Leave a comment to apply. This comment section is private for each
                         user.</Text>
                     <View style={{marginTop: 10}}>
@@ -250,35 +246,37 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         alignItems: 'center',
     },
-    postTitle: {
-        color: Colors.grey1,
-        marginBottom: 5,
-        fontSize: 20,
-        fontWeight: 'bold',
+    
+    sectionHeading: {
+        fontSize: 18,
+        fontWeight: '100',
+        marginTop: 5,
+        marginBottom: 10,
     },
-    postAuthorMeta: {
-        color: Colors.grey1,
-        marginBottom: 3,
-        fontSize: 16,
-        fontStyle: 'italic'
+    
+    commentsListContainer: {
+        marginTop: 20,
+        marginBottom: 20,
     },
-    postDateMeta: {
-        color: Colors.grey1,
+
+    commentsListWrapper: {
+        flexDirection: 'row',
         marginBottom: 15,
-        fontSize: 16,
-        fontWeight: 'bold'
     },
-    postContent: {
+    commentUserAvatar: {
+        flex: 1,
+    },
+    commentUserContent: {
+        flex: 3,
+        width: '100%',
+        backgroundColor: '#fafafa',
+        borderRadius: 10,
+        padding: 20,
+        fontSize: 13,
+        lineHeight: 24,
+    },
+    commentUserContentText: {
         color: Colors.grey1,
-        fontSize: 16,
-        lineHeight: 20,
-        marginBottom: 15
-    },
-    heading: {
-        color: 'white',
-        marginTop: 10,
-        fontSize: 22,
-        fontWeight: 'bold',
     },
 });
 

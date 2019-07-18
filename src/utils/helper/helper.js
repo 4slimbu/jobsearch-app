@@ -70,7 +70,6 @@ export async function getDeviceId() {
     try {
         deviceId =  await AsyncStorage.getItem('loksewa:auth:deviceId');
     } catch (error) {
-        console.log(error.message);
     }
     return deviceId;
 }
