@@ -89,6 +89,7 @@ class PostDetailScreen extends Component {
         const {post} = this.props.posts;
         const primaryImage = _.find(post.postImages, {"is_primary": true});
         const featuredImage = primaryImage ? {uri: primaryImage.url} : appData.app.PLACE_HOLDER_IMAGE_URL;
+        console.log(featuredImage);
         const additionalImagesProps = {
             post: post
         };
@@ -128,8 +129,8 @@ class PostDetailScreen extends Component {
                                 <View style={[{paddingLeft: 20, paddingRight: 20, marginBottom: 20}]}>
                                     <View style={{flex: 1, flexDirection: 'row'}}>
                                         <View style={{flex: 1, marginRight: 15}}>
-                                            <Image source={featuredImage} resizeMode={'contain'}
-                                                   style={{width: '100%', height: 100, marginBottom: 5}}
+                                            <Image source={{uri: post.author.profile_pic}} resizeMode={'contain'}
+                                                   style={{width: 60, height: 60, borderRadius: 60/2}}
                                                    PlaceholderContent={<ActivityIndicator/>}
                                             />
                                             {/* <Button title={this.state.isSaved ? 'Saved' : 'Save'}
