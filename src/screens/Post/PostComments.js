@@ -3,7 +3,7 @@ import appData from "../../constants/app";
 import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import Colors from '../../constants/colors';
-import {Button, Image} from "react-native-elements";
+import {Button, Image, Icon} from "react-native-elements";
 import * as _ from "lodash";
 import {connect} from "react-redux";
 import {saveComment} from "../../store/actions/commentActions";
@@ -62,11 +62,8 @@ class PostComments extends Component {
         const {activeCommentId, isLoading} = this.state;
         const {post, user} = this.props;
         const comments = post.postComments;
-        const userImageUrl = user.profile_pic;
         const authorImageUrl = post.author && post.author.profile_pic;
-        const userImageSrc = userImageUrl.length > 0 ? {uri: userImageUrl} : appData.app.PLACE_HOLDER_AVATAR_URL;
-        console.log(appData.app.PLACE_HOLDER_AVATAR_URL);
-        const authorImageSrc = authorImageUrl && authorImageUrl.length > 0 ? {uri: authorImageUrl} : {uri: appData.app.PLACE_HOLDER_AVATAR_URL};
+        const authorImageSrc = authorImageUrl && authorImageUrl.length > 0 ? {uri: authorImageUrl} : appData.app.PLACE_HOLDER_IMAGE_URL;
 
         return _.map(comments, (comment, key) => {
             return (
@@ -75,17 +72,8 @@ class PostComments extends Component {
                         !comment.parent_id &&
                         <View>
                             <View style={styles.commentsListWrapper}>
-                                <View style={styles.commentUserAvatar}>
-                                    <Image source={userImageSrc} resizeMode={'cover'}
-                                           style={{
-                                               width: 40,
-                                               height: 40,
-                                               marginBottom: 5,
-                                               marginRight: 10,
-                                               borderRadius: 100
-                                           }}
-                                           PlaceholderContent={<ActivityIndicator/>}
-                                    />
+                                <View style={styles.commentUserAvatarContainer}>
+                                    <Image source={authorImageSrc} style={styles.commentUserAvatar} />
                                 </View>
                                 <View style={styles.commentUserContent}>
                                     <TouchableOpacity onPress={() => this.selectCommentHandler(comment.id)}>
@@ -97,37 +85,17 @@ class PostComments extends Component {
                                 comment.replies && (
                                     _.map(comment.replies, (reply, key) => {
                                         return (
-                                            <View key={key}
-                                                  style={{flexDirection: 'row', marginBottom: 15, marginLeft: 25}}>
-                                                <View style={{width: '20%'}}>
-                                                    <Image source={authorImageSrc} resizeMode={'contain'}
-                                                           style={{
-                                                               width: 40,
-                                                               height: 40,
-                                                               marginBottom: 5,
-                                                               marginRight: 10,
-                                                               borderRadius: 100
-                                                           }}
-                                                           PlaceholderContent={<ActivityIndicator/>}
+                                            <View key={key} style={styles.commentsListWrapper}>
+                                                <View style={styles.commentUserAvatarContainer}>
+                                                    <Image
+                                                        source={authorImageSrc} resizeMode={'contain'}
+                                                        style={styles.commentUserAvatar}
+                                                        PlaceholderContent={<ActivityIndicator/>}
                                                     />
                                                 </View>
-                                                <View style={{
-                                                    width: '80%',
-                                                }}>
-                                                    <TouchableOpacity style={{
-                                                        width: '100%',
-                                                        backgroundColor: '#fafafa',
-                                                        borderRadius: 10,
-                                                        padding: 10
-                                                    }}
-                                                                      onPress={() => this.selectCommentHandler(comment.id)}>
-                                                        <Text styles={{
-                                                            marginLeft: 100,
-                                                            color: Colors.grey3,
-                                                            backgroundColor: '#f1f1f1',
-                                                        }}>
-                                                            {reply.body}
-                                                        </Text>
+                                                <View style={styles.commentUserContent}>
+                                                    <TouchableOpacity onPress={() => this.selectCommentHandler(comment.id)}>
+                                                        <Text style={styles.commentUserContentText}>{reply.body}</Text>
                                                     </TouchableOpacity>
                                                 </View>
                                             </View>
@@ -177,10 +145,20 @@ class PostComments extends Component {
             <View>
                 {
                     post.postComments && post.postComments.length > 0 &&
-                    <View style={styles.commentsListContainer}>
-
-                        <Text style={styles.sectionHeading}>Comments</Text>
-                        {this.comments()}
+                    <View>
+                        <View style={styles.commentsListHeaderContainer}>
+                            <Icon
+                                name="wechat"
+                                size={18}
+                                type="font-awesome"
+                                color={Colors.primary}
+                                containerStyle={styles.iconHeader}
+                            />
+                            <Text style={styles.sectionHeadingWithIcon}>Comments</Text>
+                        </View>
+                        <View style={styles.commentsListContainer}>
+                            {this.comments()}
+                        </View>
                     </View>
                 }
                 <View>
@@ -246,37 +224,73 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         alignItems: 'center',
     },
+
     
     sectionHeading: {
         fontSize: 18,
         fontWeight: '100',
-        marginTop: 5,
-        marginBottom: 10,
+        marginLeft: 10,
     },
-    
-    commentsListContainer: {
+
+    sectionHeadingWithIcon: {
+        fontSize: 18,
+        fontWeight: '100',
+        marginLeft: 5,
+    },
+
+    sectionHeading: {
+        fontSize: 18,
+        fontWeight: '100',
+    },
+
+    commentsListHeaderContainer: {
         marginTop: 20,
+        marginBottom: 10,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    commentsListContainer: {
+        marginTop: 10,
         marginBottom: 20,
     },
 
     commentsListWrapper: {
+        display: 'flex',
         flexDirection: 'row',
         marginBottom: 15,
     },
-    commentUserAvatar: {
+    commentUserAvatarContainer: {
         flex: 1,
+        paddingLeft: 20,
+        paddingTop: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
+        elevation: 2.0,
+        width: 40,
+        height: 40,
+        borderRadius: 40/2,
+    },
+    commentUserAvatar: {
+        width: 40,
+        height: 40,
+        borderRadius: 40/2,
     },
     commentUserContent: {
         flex: 3,
-        width: '100%',
         backgroundColor: '#fafafa',
         borderRadius: 10,
         padding: 20,
-        fontSize: 13,
-        lineHeight: 24,
+        borderWidth: 1,
+        borderColor: Colors.lightGray,
     },
     commentUserContentText: {
         color: Colors.grey1,
+        lineHeight: 24,
+        fontSize: 13,
     },
 });
 

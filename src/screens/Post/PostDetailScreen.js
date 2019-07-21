@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     },
     postAuthorProfilePicContainer: {
         flex: 1,
-        marginRight: 15,
+        marginRight: 5,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.2,
