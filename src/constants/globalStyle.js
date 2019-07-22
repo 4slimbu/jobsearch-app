@@ -19,7 +19,7 @@ module.exports = StyleSheet.create({
 
     btnPrimary: {
         backgroundColor: Colors.primary,
-        borderRadius: 25,
+        borderRadius: 5,
         height: 40,
         width:  appData.app.SCREEN_WIDTH - 75,
     },

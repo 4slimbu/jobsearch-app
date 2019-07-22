@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import appData from "../../constants/app";
+import globalStyles from "../../constants/globalStyle";
 import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import Colors from '../../constants/colors';
@@ -85,7 +86,7 @@ class PostComments extends Component {
                                 comment.replies && (
                                     _.map(comment.replies, (reply, key) => {
                                         return (
-                                            <View key={key} style={styles.commentsListWrapper}>
+                                            <View key={key} style={styles.commentsListWrapperInner}>
                                                 <View style={styles.commentUserAvatarContainer}>
                                                     <Image
                                                         source={authorImageSrc} resizeMode={'contain'}
@@ -105,23 +106,15 @@ class PostComments extends Component {
                             }
                             {
                                 activeCommentId === comment.id &&
-                                <View style={{marginLeft: '20%', marginBottom: 15}}>
-                                    <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
+                                <View style={{marginBottom: 15}}>
+                                    <TextInput style={styles.textArea}
                                                multiline={true}
                                                numberOfLines={2}
                                                value={this.state.comment}
                                                onChangeText={comment => this.setState({comment})}
                                     />
 
-                                    <Button title="Reply"
-                                            buttonStyle={{
-                                                marginTop: 10,
-                                                marginBottom: 5,
-                                                paddingTop: 5,
-                                                paddingBottom: 5,
-                                                width: 100,
-                                                backgroundColor:'#525252',
-                                            }}
+                                    <Button title="Reply" buttonStyle={globalStyles.btnPrimary}
                                             buttonSize={5}
                                             onPress={() => this.commentHandler(post.id, comment.id)}
                                             loading={isLoading}
@@ -161,25 +154,19 @@ class PostComments extends Component {
                         </View>
                     </View>
                 }
-                <View>
+                <View style={styles.commentsListContainer}>
                     <Text style={styles.sectionHeading}>Leave a Comment</Text>
-                    <Text>Leave a comment to apply. This comment section is private for each
+                    <Text style={styles.sectionSubHeading}>Leave a comment to apply. This comment section is private for each
                         user.</Text>
-                    <View style={{marginTop: 10}}>
-                        <TextInput style={{borderWidth: 1, borderColor: Colors.grey3, height:44,}}
+                    <View>
+                        <TextInput style={styles.textArea}
                                    multiline={true}
                                    numberOfLines={2}
                                    value={this.state.comment}
                                    onChangeText={comment => this.setState({comment})}
                         />
 
-                        <Button title="Comment" buttonStyle={{
-                            marginTop: 10,
-                            marginBottom: 5,
-                            paddingTop: 15,
-                            paddingBottom: 15,
-                            backgroundColor:'#525252',
-                        }}
+                        <Button title="Comment" buttonStyle={globalStyles.btnPrimary}
                                 onPress={() => this.commentHandler(post.id)}
                                 buttonSize={5}
                                 loading={isLoading}
@@ -229,7 +216,6 @@ const styles = StyleSheet.create({
     sectionHeading: {
         fontSize: 18,
         fontWeight: '100',
-        marginLeft: 10,
     },
 
     sectionHeadingWithIcon: {
@@ -238,9 +224,12 @@ const styles = StyleSheet.create({
         marginLeft: 5,
     },
 
-    sectionHeading: {
-        fontSize: 18,
+    sectionSubHeading: {
+        fontSize: 14,
         fontWeight: '100',
+        marginTop: 10,
+        marginBottom: 10,
+        color: Colors.mediumGray,
     },
 
     commentsListHeaderContainer: {
@@ -261,9 +250,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 15,
     },
+
+    commentsListWrapperInner: {
+        display: 'flex',
+        flexDirection: 'row',
+        marginBottom: 15,
+        marginLeft: 20,
+    },
+
     commentUserAvatarContainer: {
         flex: 1,
-        paddingLeft: 20,
+        paddingLeft: 0,
         paddingTop: 20,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 0 },
@@ -291,6 +288,16 @@ const styles = StyleSheet.create({
         color: Colors.grey1,
         lineHeight: 24,
         fontSize: 13,
+    },
+    textArea: {
+        borderWidth: 1,
+        borderColor: Colors.greyOutline,
+        height:104,
+        borderRadius: 5,
+        backgroundColor: Colors.lightGray,
+        padding: 5,
+        paddingVertical: 5,
+        marginBottom: 10,
     },
 });
 
