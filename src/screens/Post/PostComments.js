@@ -63,10 +63,11 @@ class PostComments extends Component {
         const {activeCommentId, isLoading} = this.state;
         const {post, user} = this.props;
         const comments = post.postComments;
-        const authorImageUrl = post.author && post.author.profile_pic;
-        const authorImageSrc = authorImageUrl && authorImageUrl.length > 0 ? {uri: authorImageUrl} : appData.app.PLACE_HOLDER_IMAGE_URL;
 
         return _.map(comments, (comment, key) => {
+            const commentProfileImageUrl = comment && comment.profile_pic;
+            const commentProfileImageSrc = commentProfileImageUrl && commentProfileImageUrl.length > 0 ? {uri: commentProfileImageUrl} : appData.app.PLACE_HOLDER_IMAGE_URL;
+
             return (
                 <View key={key}>
                     {
@@ -74,7 +75,7 @@ class PostComments extends Component {
                         <View>
                             <View style={styles.commentsListWrapper}>
                                 <View style={styles.commentUserAvatarContainer}>
-                                    <Image source={authorImageSrc} style={styles.commentUserAvatar} />
+                                    <Image source={commentProfileImageSrc} style={styles.commentUserAvatar} />
                                 </View>
                                 <View style={styles.commentUserContent}>
                                     <TouchableOpacity onPress={() => this.selectCommentHandler(comment.id)}>
@@ -85,11 +86,14 @@ class PostComments extends Component {
                             {
                                 comment.replies && (
                                     _.map(comment.replies, (reply, key) => {
+                                        const replyProfileImageUrl = reply && reply.profile_pic;
+                                        const replyProfileImageSrc = replyProfileImageUrl && replyProfileImageUrl.length > 0 ? {uri: replyProfileImageUrl} : appData.app.PLACE_HOLDER_IMAGE_URL;
+
                                         return (
                                             <View key={key} style={styles.commentsListWrapperInner}>
                                                 <View style={styles.commentUserAvatarContainer}>
                                                     <Image
-                                                        source={authorImageSrc} resizeMode={'contain'}
+                                                        source={replyProfileImageSrc} resizeMode={'contain'}
                                                         style={styles.commentUserAvatar}
                                                         PlaceholderContent={<ActivityIndicator/>}
                                                     />
