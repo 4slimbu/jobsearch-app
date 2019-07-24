@@ -66,56 +66,13 @@ class PostDetailScreen extends Component {
         this.props.onUpdatePreferences(preferences);
     }
 
-    _renderItem ({item, index}, parallaxProps) {
-        const image = item.url ? {uri: item.url} : require('../../../assets/images/placeholder.png');
-        // if (item.is_primary) {
-        //     return;
-        // }
-        return (
-            <View style={styles.item}>
-                <ParallaxImage
-                    source={image}
-                    containerStyle={styles.imageContainer}
-                    style={styles.image}
-                    parallaxFactor={0.4}
-                    {...parallaxProps}
-                />
-            </View>
-        );
-    }
-
-    get pagination () {
-        const { entries, activeSlide } = this.state;
-        return (
-            <Pagination
-                dotsLength={entries.length}
-                activeDotIndex={activeSlide}
-                containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
-                dotStyle={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: 5,
-                    marginHorizontal: 8,
-                    backgroundColor: 'rgba(255, 255, 255, 0.92)'
-                }}
-                inactiveDotStyle={{
-                    // Define styles for inactive dots here
-                }}
-                inactiveDotOpacity={0.4}
-                inactiveDotScale={0.6}
-            />
-        );
-    }
-
     render() {
         const {isReady} = this.state;
         const {post} = this.props.posts;
         const primaryImage = _.find(post.postImages, {"is_primary": true});
         const featuredImage = primaryImage ? {uri: primaryImage.url} : appData.app.PLACE_HOLDER_IMAGE_URL;
         const authorImage = post.author && post.author.profile_pic ? {uri: post.author.profile_pic} : appData.app.PLACE_HOLDER_AVATAR_URL;
-        const additionalImagesProps = {
-            post: post
-        };
+
         return (
             <ScrollView style={styles.container}>
                 {  post &&
