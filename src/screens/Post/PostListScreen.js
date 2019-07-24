@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Picker, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {loadPostsByCategory} from "../../store/actions/categoryActions";
@@ -10,6 +10,7 @@ import alertMessage from "../../components/Alert";
 import ContentLoading from "../../components/ContentLoading";
 import Colors from '../../constants/colors';
 import {setPostsByCategory} from "../../store/actions/postActions";
+import ListPicker from "../../components/Picker/ListPicker";
 
 class PostListScreen extends Component {
     constructor(props) {
@@ -97,20 +98,13 @@ class PostListScreen extends Component {
                         {/*<Text style={styles.heading}>Browsing {category.name}</Text>*/}
                     {/*</View>*/}
                     <View style={{marginLeft: 20, marginRight: 20}}>
-                        <Picker
-                            selectedValue={this.state.selectedCategoryId}
+                        <ListPicker
+                            placeholderLabel="Select Category"
+                            value={this.state.selectedCategoryId}
                             style={{height: 50, width: '100%'}}
-                            onValueChange={(itemValue, itemIndex) => this.onSelectCategory(itemValue)}
-                        >
-                            <Picker.Item value="" label="Select Category"/>
-                            {
-                                _.map(this.props.categories, (category, key) => {
-                                    return (
-                                        <Picker.Item key={key} value={category.id} label={category.name}/>
-                                    )
-                                })
-                            }
-                        </Picker>
+                            onSelect={this.onSelectCategory}
+                            items={this.props.categories}
+                        />
                     </View>
 
                     {

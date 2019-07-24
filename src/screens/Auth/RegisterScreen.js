@@ -14,7 +14,7 @@ import Colors from "../../constants/colors";
 import {getDeviceId, validateEmail} from "../../utils/helper/helper";
 import * as _ from "lodash";
 import globalStyles from "../../constants/globalStyle";
-import PickLocation from "../../components/PickLocation/PickLocation";
+import PickLocation from "../../components/Picker/LocationPicker";
 import {resetRegisterForm, updateRegisterForm} from "../../store/actions/formActions";
 
 // Enable LayoutAnimation on Android

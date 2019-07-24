@@ -88,6 +88,7 @@ class PostDetailScreen extends Component {
         const {post} = this.props.posts;
         const primaryImage = _.find(post.postImages, {"is_primary": true});
         const featuredImage = primaryImage ? {uri: primaryImage.url} : appData.app.PLACE_HOLDER_IMAGE_URL;
+        const authorImage = post.author && post.author.profile_pic ? {uri: post.author.profile_pic} : appData.app.PLACE_HOLDER_AVATAR_URL;
         const additionalImagesProps = {
             post: post
         };
@@ -126,7 +127,7 @@ class PostDetailScreen extends Component {
                                 <View style={[{paddingLeft: 20, paddingRight: 20, marginBottom: 20}]}>
                                     <View style={{flex: 1, flexDirection: 'row', alignItems: "center",}}>
                                         <View style={styles.postAuthorProfilePicContainer}>
-                                            <Image source={{uri: post.author.profile_pic}} resizeMode={'cover'}
+                                            <Image source={authorImage} resizeMode={'cover'}
                                                    style={styles.postAuthorProfilePic}
                                                    PlaceholderContent={<ActivityIndicator/>}
                                             />
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
     },
     postAuthorProfilePicContainer: {
         flex: 1,
-        marginRight: 5,
+        marginRight: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.2,

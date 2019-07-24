@@ -6,6 +6,7 @@ import {getMyPosts, resetPostsByMe, setPostsByMe} from "../../store/actions/post
 import PostList from "../../components/List/PostList";
 import ContentLoading from "../../components/ContentLoading";
 import * as _ from "lodash";
+import ListPicker from "../../components/Picker/ListPicker";
 
 class MyPostsScreen extends Component {
     constructor(props) {
@@ -72,20 +73,13 @@ class MyPostsScreen extends Component {
                     </View>
                     <View>
                         <View style={{ marginLeft: 20, marginRight: 20}}>
-                            <Picker
-                                selectedValue={this.state.selectedCategoryId}
+                            <ListPicker
+                                placeholderLabel="Select Category"
+                                value={this.state.selectedCategoryId}
                                 style={{height: 50, width: '100%'}}
-                                onValueChange={(itemValue, itemIndex) => this.onSelectCategory(itemValue)}
-                            >
-                                <Picker.Item value="" label="Select Category"/>
-                                {
-                                    _.map(this.props.categories, (category, key) => {
-                                        return (
-                                            <Picker.Item key={key} value={category.id} label={category.name}/>
-                                        )
-                                    })
-                                }
-                            </Picker>
+                                onSelect={this.onSelectCategory}
+                                items={this.props.categories}
+                            />
                         </View>
                         {
                             postsByMe && <PostList {...postListProps}/>

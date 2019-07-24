@@ -11,8 +11,9 @@ import {connect} from "react-redux";
 import DatePicker from 'react-native-datepicker';
 import {addPost} from "../../store/actions/postActions";
 import alertMessage from "../../components/Alert";
-import PickLocation from "../../components/PickLocation/PickLocation";
+import PickLocation from "../../components/Picker/LocationPicker";
 import {resetLocation} from "../../store/actions/formActions";
+import ListPicker from "../../components/Picker/ListPicker";
 
 const PostImages = (props) => {
     const {type, images, removeImageHandler} = props;
@@ -243,22 +244,15 @@ class AddPostScreen extends Component {
                         <View>
                             <Text style={styles.postTitle}>Category</Text>
 
-                            <Picker
-                                selectedValue={this.state.selectedCategoryId}
+                            <ListPicker
+                                placeholderLabel="Select Category"
+                                value={this.state.selectedCategoryId}
                                 style={{height: 50, width: '100%'}}
-                                onValueChange={(itemValue, itemIndex) =>
+                                onSelect={(itemValue, itemIndex) =>
                                     this.setState({selectedCategoryId: itemValue})
                                 }
-                            >
-                                <Picker.Item value="" label="Select Category"/>
-                                {
-                                    _.map(categories, (category, key) => {
-                                        return (
-                                            <Picker.Item key={key} value={category.id} label={category.name}/>
-                                        )
-                                    })
-                                }
-                            </Picker>
+                                items={categories}
+                            />
                             <Text style={{color: Colors.danger, marginTop: 5}}>{errors.selectedCategoryId ? errors.selectedCategoryId: ''}</Text>
                         </View>
                         <View>

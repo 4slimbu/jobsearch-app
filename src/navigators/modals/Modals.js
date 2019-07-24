@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from 'react-navigation';
 import ModalScreen from "../../screens/Modal/ModalScreen";
-import PickLocationModal from "../../components/PickLocation/PickLocationModal";
+import PickLocationModal from "../../screens/Modal/PickLocationModal";
 
 const Modals = createStackNavigator({
     PickLocationModal: { screen: PickLocationModal },

@@ -12,8 +12,9 @@ import DatePicker from 'react-native-datepicker';
 import {getPost, updatePost} from "../../store/actions/postActions";
 import {findAdditionalImages, findFeaturedImage} from "../../utils/helper/helper";
 import alertMessage from "../../components/Alert";
-import PickLocation from "../../components/PickLocation/PickLocation";
+import PickLocation from "../../components/Picker/LocationPicker";
 import {setLocation} from "../../store/actions/formActions";
+import ListPicker from "../../components/Picker/ListPicker";
 
 const PostImages = (props) => {
     const {type, images, removeImageHandler} = props;
@@ -292,21 +293,16 @@ class EditPostScreen extends Component {
                         <View>
                             <Text style={styles.postTitle}>Category</Text>
 
-                            <Picker
-                                selectedValue={selectedCategoryId}
+                            <ListPicker
+                                placeholderLabel="Select Category"
+                                value={this.state.selectedCategoryId}
                                 style={{height: 50, width: '100%'}}
-                                onValueChange={(itemValue, itemIndex) =>
+                                onSelect={(itemValue, itemIndex) =>
                                     this.setState({selectedCategoryId: itemValue})
-                                }>
-                                <Picker.Item value="" label="Select Category"/>
-                                {
-                                    _.map(categories, (category, key) => {
-                                        return (
-                                            <Picker.Item key={key} value={category.id} label={category.name}/>
-                                        )
-                                    })
                                 }
-                            </Picker>
+                                items={categories}
+                            />
+
                             <Text style={{color: Colors.danger, marginTop: 5}}>{errors.selectedCategoryId ? errors.selectedCategoryId: ''}</Text>
                         </View>
                         <View>

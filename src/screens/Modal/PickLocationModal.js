@@ -8,7 +8,7 @@ import {connect} from "react-redux";
 import {resetSearchedPosts, searchPosts} from "../../store/actions/postActions";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import ContentLoading from "../../components/ContentLoading";
-import LocationList from "../List/LocationList";
+import LocationList from "../../components/List/LocationList";
 import {resetLocation, setLocation} from "../../store/actions/formActions";
 
 class PickLocationModal extends Component {

@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import {getSavedPosts, resetSavedPosts} from "../../store/actions/postActions";
 import PostList from "../../components/List/PostList";
 import * as _ from "lodash";
+import ListPicker from "../../components/Picker/ListPicker";
 
 class SavedPostsScreen extends Component {
     constructor(props) {
@@ -53,20 +54,13 @@ class SavedPostsScreen extends Component {
                     </View>
                     <View>
                         <View style={{ marginLeft: 20, marginRight: 20}}>
-                            <Picker
-                                selectedValue={this.state.selectedCategoryId}
+                            <ListPicker
+                                placeholderLabel="Select Category"
+                                value={this.state.selectedCategoryId}
                                 style={{height: 50, width: '100%'}}
-                                onValueChange={(itemValue, itemIndex) => this.onSelectCategory(itemValue)}
-                            >
-                                <Picker.Item value="" label="Select Category"/>
-                                {
-                                    _.map(this.props.categories, (category, key) => {
-                                        return (
-                                            <Picker.Item key={key} value={category.id} label={category.name}/>
-                                        )
-                                    })
-                                }
-                            </Picker>
+                                onSelect={this.onSelectCategory}
+                                items={this.props.categories}
+                            />
                         </View>
                         {
                             savedPosts && <PostList {...postListProps}/>
