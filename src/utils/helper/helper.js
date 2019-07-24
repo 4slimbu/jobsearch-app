@@ -86,3 +86,7 @@ export function prettyDistance(distanceInKm) {
 
     return Number((distanceInKm * 1).toFixed(1)) + ' km';
 }
+
+export function onlyAdditionalImages(postImages) {
+    return _.filter(postImages, function(o) {return !o.is_primary});
+}

@@ -108,7 +108,7 @@ const Drawer = createDrawerNavigator(
     },
     {
         initialRouteName: 'Tabs',
-        drawerPosition: 'right',
+        drawerPosition: 'left',
         contentOptions: {
             activeTintColor: Colors.primary,
             activeBackgroundColor: 'transparent',
@@ -124,6 +124,7 @@ const Drawer = createDrawerNavigator(
         drawerOpenRoute: 'DrawerOpen',
         drawerCloseRoute: 'DrawerClose',
         drawerToggleRoute: 'DrawerToggle',
+        swipeEnabled: false,
     }
 );
 

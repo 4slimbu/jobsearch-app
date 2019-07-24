@@ -2,32 +2,15 @@ import React, {Component} from 'react';
 import appData from "../../constants/app";
 import {ActivityIndicator, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Colors from '../../constants/colors';
-import {Button, Image, Icon} from "react-native-elements";
+import {Icon, Image} from "react-native-elements";
 import * as _ from "lodash";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import {connect} from "react-redux";
 import {getPost} from "../../store/actions/postActions";
-import {prettyDistance, toReadable} from "../../utils/helper/helper";
+import {onlyAdditionalImages, prettyDistance, toReadable} from "../../utils/helper/helper";
 import ContentLoading from "../../components/ContentLoading";
 import PostComments from "./PostComments";
-
-const AdditionalImages = (props) => {
-    const {post} = props;
-    return _.map(post.postImages, (postImage, key) => {
-        const image = postImage.url ? {uri: postImage.url} : require('../../../assets/images/placeholder.png');
-        if (postImage.is_primary) {
-            return;
-        }
-        return (
-            <View key = {key} style={styles.postAddtionalImg}>
-                <Image source={image} resizeMode={'contain'}
-                   style={{width:'100%', height:100,}}
-                   PlaceholderContent={<ActivityIndicator/>}
-                />
-            </View>
-        );
-    });
-};
+import KCarousel from "../../components/Carousel/KCarousel";
 
 class PostDetailScreen extends Component {
     constructor(props) {
@@ -81,6 +64,47 @@ class PostDetailScreen extends Component {
             savedPosts: savedPosts
         };
         this.props.onUpdatePreferences(preferences);
+    }
+
+    _renderItem ({item, index}, parallaxProps) {
+        const image = item.url ? {uri: item.url} : require('../../../assets/images/placeholder.png');
+        // if (item.is_primary) {
+        //     return;
+        // }
+        return (
+            <View style={styles.item}>
+                <ParallaxImage
+                    source={image}
+                    containerStyle={styles.imageContainer}
+                    style={styles.image}
+                    parallaxFactor={0.4}
+                    {...parallaxProps}
+                />
+            </View>
+        );
+    }
+
+    get pagination () {
+        const { entries, activeSlide } = this.state;
+        return (
+            <Pagination
+                dotsLength={entries.length}
+                activeDotIndex={activeSlide}
+                containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
+                dotStyle={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: 5,
+                    marginHorizontal: 8,
+                    backgroundColor: 'rgba(255, 255, 255, 0.92)'
+                }}
+                inactiveDotStyle={{
+                    // Define styles for inactive dots here
+                }}
+                inactiveDotOpacity={0.4}
+                inactiveDotScale={0.6}
+            />
+        );
     }
 
     render() {
@@ -138,6 +162,7 @@ class PostDetailScreen extends Component {
                                         </View>
                                     </View>
                                     <View style={styles.postContentContainer}>
+                                        <KCarousel data={onlyAdditionalImages(post.postImages)}/>
                                         <Text style={styles.postContentTitle}>Description</Text>
                                         <Text style={styles.postContent}>{post.body}</Text>
                                     </View>
@@ -261,11 +286,12 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         paddingBottom:20,
     },
-    postAddtionalImg: {
-        width: '33.33%', 
-        height: 100, 
+    postAdditionalImg: {
+        backgroundColor: 'red',
+        width: '100%',
         marginBottom: 5,
-    }
+    },
+
 });
 
 const mapStateToProps = state => {
