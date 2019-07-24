@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import appData from "../../constants/app";
-import {KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, UIManager, View} from 'react-native';
+import * as Platform from 'react-native';
+import {KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, UIManager, View} from 'react-native';
+import {Constants} from 'expo';
 import {connect} from 'react-redux';
 import {Button, CheckBox, Image, Input} from 'react-native-elements';
 
@@ -13,6 +15,7 @@ import {getDeviceId, validateEmail} from "../../utils/helper/helper";
 import * as _ from "lodash";
 import globalStyles from "../../constants/globalStyle";
 import PickLocation from "../../components/PickLocation/PickLocation";
+import {resetRegisterForm, updateRegisterForm} from "../../store/actions/formActions";
 
 // Enable LayoutAnimation on Android
 UIManager.setLayoutAnimationEnabledExperimental &&
@@ -26,17 +29,10 @@ class RegisterScreen extends Component {
 
         this.state = {
             isLoading: false,
-            email: "",
-            password: "",
-            confirmPassword: "",
-            firstName: "",
-            lastName: "",
-            gender: "male",
-            contactNumber: "",
-            errors: {}
         };
 
         this.registerHandler = this.registerHandler.bind(this);
+        this.onChangeHandler = this.onChangeHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -49,7 +45,8 @@ class RegisterScreen extends Component {
     }
 
     isRegisterFormValid() {
-        const {email, firstName, lastName, password, confirmPassword, contactNumber} = this.state;
+        const {email, firstName, lastName, password, confirmPassword, contactNumber} = this.props.forms.register;
+        const {address} = this.props.forms.location;
         let errors = {};
 
         if (!validateEmail(email)) {
@@ -76,7 +73,11 @@ class RegisterScreen extends Component {
             errors.confirmPassword = "Confirm password should match password";
         }
 
-        this.setState({errors});
+        if (_.isEmpty(address)) {
+            errors.address = "Location is required";
+        }
+
+        this.props.updateRegisterForm({errors: errors});
         return _.isEmpty(errors);
     }
 
@@ -88,7 +89,8 @@ class RegisterScreen extends Component {
 
         // Start processing form
         this.setState({isLoading: true});
-        const {email, password, firstName, lastName, gender, contactNumber} = this.state;
+        const {email, password, firstName, lastName, gender, contactNumber} = this.props.forms.register;
+        const {address, latitude, longitude} = this.props.forms.location;
         const deviceId = await getDeviceId();
         await this.props.onTryAuth({
             email: email,
@@ -97,7 +99,10 @@ class RegisterScreen extends Component {
             lastName: lastName,
             gender: gender,
             contactNumber: contactNumber,
-            deviceId: deviceId
+            deviceId: deviceId,
+            address: address,
+            latitude: latitude,
+            longitude: longitude
         }, 'register').then(() => {
             if (this.props.auth.isLoggedIn && !this.props.auth.user.verified) {
                 this.props.navigation.navigate('VerificationScreen');
@@ -107,7 +112,14 @@ class RegisterScreen extends Component {
         }).catch(err => {
         });
 
+        this._isMounted && this.props.resetRegisterForm();
         this._isMounted && this.setState({isLoading: true});
+    }
+
+    onChangeHandler(data) {
+        const test = data;
+        console.log(data);
+        this.props.updateRegisterForm(test);
     }
 
     render() {
@@ -121,7 +133,7 @@ class RegisterScreen extends Component {
             gender,
             contactNumber,
             errors
-        } = this.state;
+        } = this.props.forms.register;
         return (
             <ScrollView style={[styles.container]}>
 
@@ -153,7 +165,7 @@ class RegisterScreen extends Component {
                             placeholder={'Email'}
                             inputStyle={globalStyles.inputStyle}
                             inputContainerStyle={globalStyles.inputContainerStyle}
-                            onChangeText={email => this.setState({email})}
+                            onChangeText={email => this.onChangeHandler({email})}
                             errorMessage={errors.email ? errors.email : null}
                             autoCapitalize='none'
                         />
@@ -172,7 +184,7 @@ class RegisterScreen extends Component {
                             containerStyle={globalStyles.inputViewContainer}
                             inputContainerStyle={globalStyles.inputContainerStyle}
                             placeholder={'Password'}
-                            onChangeText={password => this.setState({password})}
+                            onChangeText={password => this.onChangeHandler({password})}
                             errorMessage={errors.password ? errors.password : null}
                         />
 
@@ -191,7 +203,7 @@ class RegisterScreen extends Component {
                             inputStyle={globalStyles.inputStyle}
                             inputContainerStyle={globalStyles.inputContainerStyle}
                             placeholder={'Confirm password'}
-                            onChangeText={confirmPassword => this.setState({confirmPassword})}
+                            onChangeText={confirmPassword => this.onChangeHandler({confirmPassword})}
                             errorMessage={errors.confirmPassword ? errors.confirmPassword : null}
                         />
 
@@ -210,7 +222,7 @@ class RegisterScreen extends Component {
                             inputStyle={globalStyles.inputStyle}
                             inputContainerStyle={globalStyles.inputContainerStyle}
                             placeholder={'First Name'}
-                            onChangeText={firstName => this.setState({firstName})}
+                            onChangeText={firstName => this.onChangeHandler({firstName})}
                             errorMessage={errors.firstName ? errors.firstName : null}
                         />
 
@@ -221,7 +233,7 @@ class RegisterScreen extends Component {
                                     name="notebook"
                                     color={Colors.primary}
                                     size={25}
-                                    style={{backgroundColor: 'transparent', fontSize:16,}}
+                                    style={{backgroundColor: 'transparent', fontSize:16}}
                                 />
                             }
                             value={lastName}
@@ -229,7 +241,7 @@ class RegisterScreen extends Component {
                             inputStyle={globalStyles.inputStyle}
                             inputContainerStyle={globalStyles.inputContainerStyle}
                             placeholder={'Last Name'}
-                            onChangeText={lastName => this.setState({lastName})}
+                            onChangeText={lastName => this.onChangeHandler({lastName})}
                             errorMessage={errors.lastName ? errors.lastName : null}
                         />
 
@@ -247,13 +259,18 @@ class RegisterScreen extends Component {
                             inputStyle={globalStyles.inputStyle}
                             inputContainerStyle={globalStyles.inputContainerStyle}
                             placeholder={'Mobile No.'}
-                            onChangeText={contactNumber => this.setState({contactNumber})}
+                            onChangeText={contactNumber => this.onChangeHandler({contactNumber})}
                             errorMessage={errors.contactNumber ? errors.contactNumber : null}
                         />
 
-                        <PickLocation navigation={this.props.navigation}/>
+                        <PickLocation
+                            value={this.props.forms.location.address}
+                            navigation={this.props.navigation}
+                            errorMessage={errors.address ? errors.address : null}
+                            backScreen="RegisterScreen"
+                        />
 
-                        <View style={{marginLeft: 10, marginTop: 10, flexDirection: 'row', width: '100%'}}>
+                        <View style={{marginLeft: 10, flexDirection: 'row', width: '100%'}}>
                             <CheckBox
                                 containerStyle={{width: '30%', backgroundColor: 'transparent', borderColor: 'transparent'}}
                                 title='Male'
@@ -261,7 +278,7 @@ class RegisterScreen extends Component {
                                 checkedColor={Colors.primary}
                                 uncheckedIcon='circle-o'
                                 checked={gender === 'male'}
-                                onPress={() => this.setState({gender: "male"})}
+                                onPress={() => this.onChangeHandler({gender: "male"})}
                                 size={30}
                             />
 
@@ -273,7 +290,7 @@ class RegisterScreen extends Component {
                                 uncheckedIcon='circle-o'
                                 checked={gender === 'female'}
                                 size={30}
-                                onPress={() => this.setState({gender: "female"})}
+                                onPress={() => this.onChangeHandler({gender: "female"})}
                             />
                         </View>
 
@@ -314,6 +331,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor:'white',
+        marginTop: Platform.OS === 'ios' ? 0 : Constants.statusBarHeight
     },
     rowSelector: {
         height: 20,
@@ -417,13 +435,16 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        auth: state.auth
+        auth: state.auth,
+        forms: state.forms
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         onTryAuth: async (authData, authMode) => await dispatch(tryAuth(authData, authMode)),
+        updateRegisterForm: (data) => dispatch(updateRegisterForm(data)),
+        resetRegisterForm: () => dispatch(resetRegisterForm())
     };
 };
 

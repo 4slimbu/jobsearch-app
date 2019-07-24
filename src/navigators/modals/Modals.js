@@ -8,7 +8,7 @@ const Modals = createStackNavigator({
     Modal: { screen: ModalScreen }
 },{
     mode: 'modal',
-    headerMode: 'none'
+    // headerMode: 'none'
 });
 
 export default Modals;

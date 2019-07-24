@@ -3,7 +3,7 @@ import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } fr
 import PropTypes from "prop-types";
 import Colors from "../../constants/colors";
 import { Button, Image } from "react-native-elements";
-import { getFeaturedImageSrc, toReadable } from "../../utils/helper/helper";
+import {getFeaturedImageSrc, prettyDistance, toReadable} from "../../utils/helper/helper";
 import { connect } from "react-redux";
 import { authUpdatePreferences } from "../../store/actions/authActions";
 import { deletePost, deleteSavedPost } from "../../store/actions/postActions";
@@ -97,7 +97,7 @@ class PostItem extends Component {
                             <Text style={styles.postTitle}>{post.title}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.selectPostHandler(post)} style={styles.postMetaWrapper}>
-                            <Text style={styles.postLocation}>near Epping</Text>
+                            <Text style={styles.postLocation}>{ prettyDistance(post.distance) }</Text>
                         </TouchableOpacity>
                         <View style={styles.postButtonWrap}>
                             {(type === 'my') &&

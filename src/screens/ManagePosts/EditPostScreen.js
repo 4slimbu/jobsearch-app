@@ -12,6 +12,8 @@ import DatePicker from 'react-native-datepicker';
 import {getPost, updatePost} from "../../store/actions/postActions";
 import {findAdditionalImages, findFeaturedImage} from "../../utils/helper/helper";
 import alertMessage from "../../components/Alert";
+import PickLocation from "../../components/PickLocation/PickLocation";
+import {setLocation} from "../../store/actions/formActions";
 
 const PostImages = (props) => {
     const {type, images, removeImageHandler} = props;
@@ -80,6 +82,12 @@ class EditPostScreen extends Component {
                 selectedCategoryId: post.category && post.category.id,
                 date: post.expire_at
             });
+
+            this.props.setLocation({
+                address: post.address,
+                latitude: post.latitude,
+                longitude: post.longitude
+            })
         }).catch(err => {
         });
 
@@ -159,6 +167,7 @@ class EditPostScreen extends Component {
 
     submitHandler() {
         const {postId, postTitle, postContent, featuredImage,additionalImages, selectedCategoryId, imagesToRemove, date} = this.state;
+        const {address, latitude, longitude} = this.props.forms.location;
 
         if (!this.isFormValid()) {
             alertMessage({title: "Error", body: "Validation failed"});
@@ -170,7 +179,9 @@ class EditPostScreen extends Component {
         let formData = new FormData();
         formData.append('post_title', postTitle);
         formData.append('post_body', postContent);
-        formData.append('location_id', "1");
+        formData.append('address', address);
+        formData.append('latitude', latitude);
+        formData.append('longitude', longitude);
         formData.append('category_id', selectedCategoryId);
         formData.append('expire_at', date);
         formData.append('selected_image', 0);
@@ -329,6 +340,13 @@ class EditPostScreen extends Component {
                             <Text style={{color: Colors.danger, marginTop: 5}}>{errors.date ? errors.date: ''}</Text>
                         </View>
 
+                        <PickLocation
+                            value={this.props.forms.location.address}
+                            navigation={this.props.navigation}
+                            errorMessage={errors.address ? errors.address : null}
+                            backScreen="EditPost"
+                        />
+
                         <Button title="Save" buttonStyle={{marginTop: 25, marginBottom: 50}} onPress={this.submitHandler}
                                 buttonSize={5}
                                 loading={isLoading}
@@ -435,7 +453,8 @@ EditPostScreen.propTypes = {
 const mapStateToProps = state => {
     return {
         categories: state.categories,
-        post: state.posts.post
+        post: state.posts.post,
+        forms: state.forms
     }
 };
 
@@ -444,6 +463,7 @@ const mapDispatchToProps = (dispatch) => {
         onLoadCategories: () => dispatch(loadCategories()),
         updatePost: (postId, formData) => dispatch(updatePost(postId, formData)),
         getPost: (postId) => dispatch(getPost(postId)),
+        setLocation: (location) => dispatch(setLocation(location)),
     };
 };
 

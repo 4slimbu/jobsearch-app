@@ -7,7 +7,7 @@ import * as _ from "lodash";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import {connect} from "react-redux";
 import {getPost} from "../../store/actions/postActions";
-import {toReadable} from "../../utils/helper/helper";
+import {prettyDistance, toReadable} from "../../utils/helper/helper";
 import ContentLoading from "../../components/ContentLoading";
 import PostComments from "./PostComments";
 
@@ -106,7 +106,7 @@ class PostDetailScreen extends Component {
                         </View>
                         <View style={styles.headerContainer}>
                             <Text style={styles.heading}>{post.title}</Text>
-                            <Text style={styles.price}>$160</Text>
+                            <Text style={styles.price}>{ prettyDistance(post.distance) }</Text>
                             <View style={styles.locationContainer}>
                                 <Icon
                                     name="map-marker"
@@ -115,8 +115,8 @@ class PostDetailScreen extends Component {
                                     color={Colors.primary}
                                     containerStyle={{marginRight: 10}}
                                 />
-                                <Text style={styles.location}>Epping NSW 2121, Australia</Text>
-                            </View>  
+                                <Text style={styles.location}>{ post.address}</Text>
+                            </View>
                         </View>
 
                         {

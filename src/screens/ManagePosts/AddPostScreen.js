@@ -11,6 +11,8 @@ import {connect} from "react-redux";
 import DatePicker from 'react-native-datepicker';
 import {addPost} from "../../store/actions/postActions";
 import alertMessage from "../../components/Alert";
+import PickLocation from "../../components/PickLocation/PickLocation";
+import {resetLocation} from "../../store/actions/formActions";
 
 const PostImages = (props) => {
     const {type, images, removeImageHandler} = props;
@@ -59,6 +61,8 @@ class AddPostScreen extends Component {
                 categories: this.props.categories
             });
         }
+
+        this.props.resetLocation();
 
     }
 
@@ -127,6 +131,7 @@ class AddPostScreen extends Component {
 
     submitHandler() {
         const {postTitle, postContent, featuredImage,additionalImages, selectedCategoryId, date} = this.state;
+        const {address, latitude, longitude} = this.props.forms.location;
 
         if (!this.isFormValid()) {
             alertMessage({title: "Error", body: "Validation failed"});
@@ -138,7 +143,9 @@ class AddPostScreen extends Component {
         let formData = new FormData();
         formData.append('post_title', postTitle);
         formData.append('post_body', postContent);
-        formData.append('location_id', "1");
+        formData.append('address', address);
+        formData.append('latitude', latitude);
+        formData.append('longitude', longitude);
         formData.append('category_id', selectedCategoryId);
         formData.append('expire_at', date);
         formData.append('selected_image', 0);
@@ -285,6 +292,13 @@ class AddPostScreen extends Component {
                             <Text style={{color: Colors.danger, marginTop: 5}}>{errors.date ? errors.date: ''}</Text>
                         </View>
 
+                        <PickLocation
+                            value={this.props.forms.location.address}
+                            navigation={this.props.navigation}
+                            errorMessage={errors.address ? errors.address : null}
+                            backScreen="AddPost"
+                        />
+
                         <Button title="Save" buttonStyle={{marginTop: 25, marginBottom: 50, height:44,}} onPress={this.submitHandler}
                                 buttonSize={5}
                                 loading={isLoading}
@@ -391,6 +405,7 @@ AddPostScreen.propTypes = {
 const mapStateToProps = state => {
     return {
         categories: state.categories,
+        forms: state.forms
     }
 };
 
@@ -398,6 +413,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onLoadCategories: () => dispatch(loadCategories()),
         addPost: (formData) => dispatch(addPost(formData)),
+        resetLocation: () => dispatch(resetLocation()),
     };
 };
 

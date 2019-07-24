@@ -20,13 +20,13 @@ class PickLocation extends Component {
     }
 
     render() {
-        const {locationText, errors, navigation} = this.props;
+        const {value, errorMessage, navigation, backScreen} = this.props;
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('PickLocationModal')} style={{width: appData.app.SCREEN_WIDTH - 50,
+            <TouchableOpacity onPress={() => navigation.navigate('PickLocationModal', {backScreen: backScreen})} style={{width: appData.app.SCREEN_WIDTH - 50,
                 borderRadius: 10,
-                paddingTop: 32,
-                paddingBottom: 32,
-                alignItems: 'center',}}>
+                paddingTop: 7,
+                alignItems: 'center'
+            }}>
                 <Input
                     leftIcon={
                         <Icon
@@ -36,14 +36,14 @@ class PickLocation extends Component {
                             style={{backgroundColor: 'transparent', fontSize: 16,}}
                         />
                     }
-                    value={locationText}
-                    placeholder={'e.g: Sydney, AUS'}
+                    value={value}
+                    placeholder={'Location'}
                     inputStyle={globalStyles.inputStyle}
                     inputContainerStyle={globalStyles.inputContainerStyle}
-                    // onChangeText={locationText => this.setState({locationText})}
-                    // errorMessage={errors.locationText ? errors.locationText : null}
                     editable={false}
                     autoCapitalize='none'
+                    multiline={true}
+                    errorMessage={errorMessage ? errorMessage : null}
                 />
             </TouchableOpacity>
         );

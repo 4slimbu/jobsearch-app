@@ -253,6 +253,7 @@ export const setPostsSavedByMe = (payload) => {
 
 export const addPost = (formData) => {
     let url = appData.app.API_BASE_URL + '/posts';
+    console.log(formData, url);
     return (dispatch, getState) => {
         const token = getState().auth.token;
         return new Promise((resolve, reject) => {
@@ -266,6 +267,12 @@ export const addPost = (formData) => {
                 }
             })
                 .then((res) => {
+                    console.log(res);
+                    resolve();
+                })
+                .catch(function () {
+                    reject();
+                    console.log("error");
                 });
         });
     };

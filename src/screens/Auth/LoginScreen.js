@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import appData from "../../constants/app";
-import {KeyboardAvoidingView, StyleSheet, TouchableOpacity, UIManager, View,} from 'react-native';
+import {Platform, KeyboardAvoidingView, StyleSheet, TouchableOpacity, UIManager, View,} from 'react-native';
 import {connect} from 'react-redux';
-import {AppLoading, LinearGradient} from 'expo';
+import {AppLoading, LinearGradient, Constants} from 'expo';
 import {Button, Image, Input} from 'react-native-elements';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor:'white',
+        marginTop: Platform.OS === 'ios' ? 0 : Constants.statusBarHeight
     },
     rowSelector: {
         height: 20,

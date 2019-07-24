@@ -52,7 +52,10 @@ export const tryAuth = (authData, authMode = 'login') => {
             last_name: authData.lastName,
             gender: authData.gender,
             contact_number: authData.contactNumber,
-            device_id: authData.deviceId
+            device_id: authData.deviceId,
+            address: authData.address,
+            latitude: authData.latitude,
+            longitude: authData.longitude
         };
     }
 

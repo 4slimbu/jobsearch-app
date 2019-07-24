@@ -8,6 +8,7 @@ import categoriesReducers from "./reducers/categoriesReducers";
 import postsReducers from "./reducers/postsReducers";
 import commentsReducers from "./reducers/commentsReducers";
 import pagesReducers from "./reducers/pageReducers";
+import formsReducers from "./reducers/formsReducers";
 
 const rootReducer = combineReducers({
     auth: authReducers,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     pages: pagesReducers,
     comments: commentsReducers,
     ui: uiReducers,
+    forms: formsReducers
 });
 
 const configureStore = () => {
