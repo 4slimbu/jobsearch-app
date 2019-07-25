@@ -155,12 +155,14 @@ class EditPostScreen extends Component {
 
     isFormValid() {
         const {postTitle, postContent, selectedCategoryId, date} = this.state;
+        const {address} = this.props.forms.location;
         let errors = {};
 
         if (!postTitle) { errors.postTitle = 'Post Title is required!'; }
         if (!postContent) { errors.postContent = 'Post Content is required!'; }
         if (!selectedCategoryId) { errors.selectedCategoryId = 'Category is required!'; }
         if (!date) { errors.date = 'Deadline is required!'; }
+        if (_.isEmpty(address)) { errors.address = "Location is required"; }
 
         this.setState({errors});
         return _.isEmpty(errors);
