@@ -11,13 +11,6 @@ import ContentLoading from "../../components/ContentLoading";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-// on change text
-// call searchHandler
-// which will call onSearch action
-// which will call post search api
-// the returned data will be stored on postsReducers:search
-// on scroll show more post list
-
 class SearchScreen extends Component {
     constructor(props) {
         super(props);

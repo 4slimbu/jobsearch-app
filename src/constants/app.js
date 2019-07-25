@@ -7,6 +7,7 @@ export default {
         API_BASE_URL: "http://api.loksewa.test/api/v1",
         // API_BASE_URL: "http://api.kchahiyo.com/api/v1",
         FB_APP_KEY: "637805180007920",
+        GOOGLE_API_KEY: "AIzaSyBsLWTX7nI81gitMCcVrBZuRRNd49zQqj8",
         SCREEN_WIDTH: Dimensions.get('window').width,
         SCREEN_HEIGHT: Dimensions.get('window').height,
         LOGO_URL: require('../../assets/icons/icon.png'),

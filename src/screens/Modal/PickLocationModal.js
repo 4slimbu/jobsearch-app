@@ -10,6 +10,7 @@ import {authUpdatePreferences} from "../../store/actions/authActions";
 import ContentLoading from "../../components/ContentLoading";
 import LocationList from "../../components/List/LocationList";
 import {resetLocation, setLocation} from "../../store/actions/formActions";
+import appData from "../../constants/app";
 
 class PickLocationModal extends Component {
     static navigationOptions = ({navigation}) => {
@@ -36,7 +37,8 @@ class PickLocationModal extends Component {
             searchText: "",
             predictions: [{}],
             location: null,
-            isChanged: false
+            isChanged: false,
+            setTimeoutId: 0
         };
 
         this.onChange = this.onChange.bind(this);
@@ -74,41 +76,46 @@ class PickLocationModal extends Component {
             return;
         }
 
-        // Check if state is loading, then do nothing
-        if (!this.state.isLoading) {
-            // Initiate loading
-            this.setState({ isLoading: true });
+        // Clear setTimeoutId if field changes and populate new one
+        clearTimeout(this.state.setTimeoutId);
 
-            // Call action only after few milli seconds
-            setTimeout(() => {
-                fetch("https://maps.googleapis.com/maps/api/place/autocomplete/json?&input=" + searchText + "&key=AIzaSyBsLWTX7nI81gitMCcVrBZuRRNd49zQqj8", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
+        // Call action only after few milli seconds
+        this.setState({isLoading: true});
+        let setTimeoutId = setTimeout(() => {
+            const url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?&input=" + searchText + "&types=(cities)&key=" + appData.app.GOOGLE_API_KEY;
+            fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                }
+            })
+                .then(res => res.json())
+                .then(parsedRes => {
+                    if (!parsedRes.predictions) {
+                        return;
                     }
-                })
-                    .then(res => res.json())
-                    .then(parsedRes => {
-                        if (!parsedRes.predictions) {
-                            return;
-                        }
 
-                        this.setState({
-                            predictions: parsedRes.predictions
-                        })
+                    this.setState({
+                        predictions: parsedRes.predictions
                     })
-                    .catch(err => {
-                    });
+                })
+                .catch(err => {
+                });
 
-                // Stop Loading
-                this.setState({ isLoading: false });
-            }, 500);
-        }
+            // Stop Loading
+            this.setState({ isLoading: false });
+        }, 300);
+
+        console.log('setTimeout Id', setTimeoutId);
+        this.setState({setTimeoutId: setTimeoutId})
+
     }
 
     onSelectPlace(location) {
-        fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + location.description + "&key=AIzaSyBsLWTX7nI81gitMCcVrBZuRRNd49zQqj8", {
+        const url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + location.description + "&key=" + appData.app.GOOGLE_API_KEY;
+        console.log(url);
+        fetch(url, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
