@@ -7,7 +7,7 @@ import * as _ from "lodash";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import {connect} from "react-redux";
 import {getPost} from "../../store/actions/postActions";
-import {onlyAdditionalImages, prettyDistance, toReadable} from "../../utils/helper/helper";
+import {prettyDistance, toReadable} from "../../utils/helper/helper";
 import ContentLoading from "../../components/ContentLoading";
 import PostComments from "./PostComments";
 import KCarousel from "../../components/Carousel/KCarousel";
@@ -81,10 +81,11 @@ class PostDetailScreen extends Component {
                 >
                     <View style={[styles.contentView]}>
                         <View style={{flex: 1}}>
-                            <Image source={featuredImage} resizeMode={'cover'}
-                                    style={{width: '100%', height: 250}}
-                                    PlaceholderContent={<ActivityIndicator/>}
-                            />
+                            {/*<Image source={featuredImage} resizeMode={'cover'}*/}
+                                    {/*style={{width: '100%', height: 250}}*/}
+                                    {/*PlaceholderContent={<ActivityIndicator/>}*/}
+                            {/*/>*/}
+                            {post.postImages && <KCarousel data={post.postImages}/>}
                         </View>
                         <View style={styles.headerContainer}>
                             <Text style={styles.heading}>{post.title}</Text>
@@ -119,7 +120,6 @@ class PostDetailScreen extends Component {
                                         </View>
                                     </View>
                                     <View style={styles.postContentContainer}>
-                                        <KCarousel data={onlyAdditionalImages(post.postImages)}/>
                                         <Text style={styles.postContentTitle}>Description</Text>
                                         <Text style={styles.postContent}>{post.body}</Text>
                                     </View>

@@ -21,9 +21,6 @@ class KCarousel extends Component {
 
     renderItem ({item, index}, parallaxProps) {
         const image = item.url ? {uri: item.url} : require('../../../assets/images/placeholder.png');
-        if (item.is_primary) {
-            return;
-        }
         return (
             <View style={styles.item}>
                 <ParallaxImage
@@ -65,13 +62,14 @@ class KCarousel extends Component {
             <View>
                 <Carousel
                     ref={(c) => { this._carousel = c; }}
-                    sliderWidth={appData.app.SCREEN_WIDTH - 80}
-                    sliderHeight={appData.app.SCREEN_WIDTH - 80}
-                    itemWidth={appData.app.SCREEN_WIDTH - 80}
+                    sliderWidth={appData.app.SCREEN_WIDTH}
+                    sliderHeight={250}
+                    itemWidth={appData.app.SCREEN_WIDTH}
                     data={this.state.entries}
                     renderItem={this.renderItem}
                     hasParallaxImages={true}
                     loop={true}
+                    autoplay={true}
                     onSnapToItem={(index) => this.setState({ activeSlide: index }) }
                 />
                 { this.pagination }
@@ -93,7 +91,6 @@ const styles = StyleSheet.create({
         flex: 1,
         marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
         backgroundColor: 'white',
-        borderRadius: 8,
     },
     image: {
         ...StyleSheet.absoluteFillObject,
