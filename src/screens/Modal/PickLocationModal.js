@@ -107,14 +107,12 @@ class PickLocationModal extends Component {
             this.setState({ isLoading: false });
         }, 300);
 
-        console.log('setTimeout Id', setTimeoutId);
-        this.setState({setTimeoutId: setTimeoutId})
+        this.setState({setTimeoutId: setTimeoutId});
 
     }
 
     onSelectPlace(location) {
         const url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + location.description + "&key=" + appData.app.GOOGLE_API_KEY;
-        console.log(url);
         fetch(url, {
             method: "GET",
             headers: {

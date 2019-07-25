@@ -47,10 +47,6 @@ export const loadPostsByCategory = (categoryId) => {
                 "Authorization": "Bearer " + token
             }
         })
-            .catch(err => {
-                alert("Unable to get categories!");
-                // dispatch(uiStopLoading());
-            })
             .then(res => res.json())
             .then(parsedRes => {
                 if (!parsedRes.data) {

@@ -17,7 +17,8 @@ class SearchScreen extends Component {
 
         this.state = {
             isLoading: false,
-            searchText: ""
+            searchText: "",
+            setTimeoutId: 0
         };
 
         this.onChange = this.onChange.bind(this);
@@ -37,19 +38,18 @@ class SearchScreen extends Component {
             return;
         }
 
-        // Check if state is loading, then do nothing
-        if (!this.state.isLoading) {
-            // Initiate loading
-            this.setState({ isLoading: true });
+        clearTimeout(this.state.setTimeoutId);
+        // Initiate loading
+        this.setState({ isLoading: true });
+        // Call action only after few milli seconds
+        let setTimeoutId = setTimeout(() => {
+            this.props.onSearch(this.state.searchText);
 
-            // Call action only after few milli seconds
-            setTimeout(() => {
-               this.props.onSearch(this.state.searchText);
+            // Stop Loading
+            this.setState({ isLoading: false });
+        }, 300);
 
-                // Stop Loading
-                this.setState({ isLoading: false });
-            }, 500);
-        }
+        this.setState({setTimeoutId: setTimeoutId});
     }
 
     onSelectPost(postId) {
