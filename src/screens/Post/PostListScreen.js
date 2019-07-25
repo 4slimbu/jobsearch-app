@@ -11,6 +11,8 @@ import ContentLoading from "../../components/ContentLoading";
 import Colors from '../../constants/colors';
 import {setPostsByCategory} from "../../store/actions/postActions";
 import ListPicker from "../../components/Picker/ListPicker";
+import appData from "../../constants/app";
+import PostListMetaData from "../../components/PostListMetaData";
 
 class PostListScreen extends Component {
     constructor(props) {
@@ -82,6 +84,26 @@ class PostListScreen extends Component {
         this._isMounted && await this.props.onLoadPostsByCategory(categoryId);
     }
 
+    async scrollHandler(e){
+        if (this.state.searchText.length < 3) {
+            return;
+        }
+
+        let windowHeight = appData.app.SCREEN_HEIGHT,
+            height = e.nativeEvent.contentSize.height,
+            offset = e.nativeEvent.contentOffset.y;
+        if( windowHeight + offset >= height ){
+            if (this.props.searchedPosts.meta.to !== this.props.searchedPosts.meta.total) {
+                this.setState({isLoading: true});
+                await this.props.onSearch(this.state.searchText, this.props.searchedPosts.links.next).then(res => {
+                    this.setState({isLoading: false});
+                }).catch(err => {
+                    this.setState({isLoading: false});
+                });
+            }
+        }
+    }
+
     render() {
         const {category, isReady} = this.state;
         const {postsByCategory, preferences} = this.props;
@@ -92,27 +114,27 @@ class PostListScreen extends Component {
             savedPosts: preferences.savedPosts,
         };
         return (
-            <ScrollView style={styles.container}>
+            <ScrollView style={styles.container} keyboardShouldPersistTaps="handled" onScrollEndDrag={this.scrollHandler}>
                 <View style={styles.contentView}>
-                    {/*<View style={styles.headerContainer}>*/}
-                        {/*<Text style={styles.heading}>Browsing {category.name}</Text>*/}
+                    {/*<View style={{marginLeft: 20, marginRight: 20}}>*/}
+                        {/*<ListPicker*/}
+                            {/*placeholderLabel="Select Category"*/}
+                            {/*value={this.state.selectedCategoryId}*/}
+                            {/*style={{height: 50, width: '100%'}}*/}
+                            {/*onSelect={this.onSelectCategory}*/}
+                            {/*items={this.props.categories}*/}
+                        {/*/>*/}
                     {/*</View>*/}
-                    <View style={{marginLeft: 20, marginRight: 20}}>
-                        <ListPicker
-                            placeholderLabel="Select Category"
-                            value={this.state.selectedCategoryId}
-                            style={{height: 50, width: '100%'}}
-                            onSelect={this.onSelectCategory}
-                            items={this.props.categories}
-                        />
-                    </View>
+                    <PostListMetaData meta={postsByCategory.meta}/>
+                    <PostList {...postListProps}/>
 
-                    {
-                        !isReady ?
-                            <ContentLoading/>
-                            :
-                            <PostList {...postListProps}/>
-                    }
+                    <View style={{height: 100}}>
+                        {
+                            !isReady ? <ContentLoading/> :
+                                <PostListMetaData meta={postsByCategory.meta}/>
+
+                        }
+                    </View>
 
                 </View>
             </ScrollView>
