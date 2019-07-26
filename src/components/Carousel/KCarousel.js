@@ -40,13 +40,13 @@ class KCarousel extends Component {
             <Pagination
                 dotsLength={entries.length}
                 activeDotIndex={activeSlide}
-                containerStyle={{paddingTop: 15, paddingBottom: 15}}
+                containerStyle={{marginTop: -20, paddingTop: 0, paddingBottom: 15}}
                 dotStyle={{
                     width: 10,
                     height: 10,
                     borderRadius: 5,
                     marginHorizontal: 0,
-                    backgroundColor: 'rgba(0, 0, 0, 0.6)'
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)'
                 }}
                 inactiveDotStyle={{
                     // Define styles for inactive dots here
@@ -63,7 +63,7 @@ class KCarousel extends Component {
                 <Carousel
                     ref={(c) => { this._carousel = c; }}
                     sliderWidth={appData.app.SCREEN_WIDTH}
-                    sliderHeight={250}
+                    sliderHeight={appData.app.SCREEN_WIDTH * 3 / 5 }
                     itemWidth={appData.app.SCREEN_WIDTH}
                     data={this.state.entries}
                     renderItem={this.renderItem}
@@ -84,13 +84,12 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     item: {
-        width: appData.app.SCREEN_WIDTH - 60,
-        height: appData.app.SCREEN_WIDTH - 60,
+        width: appData.app.SCREEN_WIDTH,
+        height: appData.app.SCREEN_WIDTH * 3 / 5, // keeping aspect ratio 5:3
     },
     imageContainer: {
         flex: 1,
         marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-        backgroundColor: 'white',
     },
     image: {
         ...StyleSheet.absoluteFillObject,

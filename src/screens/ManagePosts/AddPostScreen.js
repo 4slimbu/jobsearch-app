@@ -92,7 +92,7 @@ class AddPostScreen extends Component {
     pickFeaturedImageHandler = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
-            aspect: [1, 1],
+            aspect: [5, 3],
         });
 
         if (!result.cancelled) {
@@ -103,7 +103,7 @@ class AddPostScreen extends Component {
     pickAdditionalImagesHandler = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
-            aspect: [1, 1],
+            aspect: [5, 3],
         });
 
         if (!result.cancelled) {
