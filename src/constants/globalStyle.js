@@ -21,7 +21,6 @@ module.exports = StyleSheet.create({
         backgroundColor: Colors.primary,
         borderRadius: 5,
         height: 40,
-        width:  appData.app.SCREEN_WIDTH - 75,
     },
     btnPrimaryContainer: {
         marginTop: 32, 

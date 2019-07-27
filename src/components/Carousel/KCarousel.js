@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import Carousel, {ParallaxImage, Pagination}  from 'react-native-snap-carousel';
+import Colors from '../../constants/colors';
+import Carousel, {Pagination}  from 'react-native-snap-carousel';
 import {Platform, StyleSheet, View} from "react-native";
+import {Image} from "react-native-elements";
 import appData from "../../constants/app";
 
 class KCarousel extends Component {
@@ -23,12 +25,11 @@ class KCarousel extends Component {
         const image = item.url ? {uri: item.url} : require('../../../assets/images/placeholder.png');
         return (
             <View style={styles.item}>
-                <ParallaxImage
+                <Image
                     source={image}
+                    resizeMode={'cover'}
                     containerStyle={styles.imageContainer}
                     style={styles.image}
-                    parallaxFactor={0.4}
-                    {...parallaxProps}
                 />
             </View>
         );
@@ -40,13 +41,13 @@ class KCarousel extends Component {
             <Pagination
                 dotsLength={entries.length}
                 activeDotIndex={activeSlide}
-                containerStyle={{paddingTop: 15, paddingBottom: 15}}
+                containerStyle={{paddingTop: 5, paddingBottom: 5, marginTop: -25}}
                 dotStyle={{
                     width: 10,
                     height: 10,
                     borderRadius: 5,
                     marginHorizontal: 0,
-                    backgroundColor: 'rgba(0, 0, 0, 0.6)'
+                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
                 }}
                 inactiveDotStyle={{
                     // Define styles for inactive dots here
@@ -69,7 +70,7 @@ class KCarousel extends Component {
                     renderItem={this.renderItem}
                     hasParallaxImages={true}
                     loop={true}
-                    autoplay={true}
+                    autoplay={false}
                     onSnapToItem={(index) => this.setState({ activeSlide: index }) }
                 />
                 { this.pagination }
@@ -84,8 +85,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     item: {
-        width: appData.app.SCREEN_WIDTH - 60,
-        height: appData.app.SCREEN_WIDTH - 60,
+        width: appData.app.SCREEN_WIDTH,
+        height: 250,
     },
     imageContainer: {
         flex: 1,
