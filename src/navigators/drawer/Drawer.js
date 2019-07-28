@@ -76,7 +76,7 @@ const CustomDrawerContentComponent = props => (
                         name: l.icon,
                         type: l.type,
                         size: 25,
-                        color: Colors.mediumGray,
+                        color: Colors.darkGray,
                     }}
                     titleStyle={{ color: Colors.darkGray,}}
                     key={i}

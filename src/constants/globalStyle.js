@@ -90,6 +90,10 @@ module.exports = StyleSheet.create({
         marginBottom: 10,
         fontSize: 16,
     },
+    
+    formRow: {
+        marginBottom: 15,
+    },
 
     textInput: {
         borderWidth: 1,
@@ -102,7 +106,7 @@ module.exports = StyleSheet.create({
     textArea: {
         borderWidth: 1,
         borderColor: Colors.greyOutline,
-        height:104,
+        minHeight:104,
         borderRadius: 5,
         backgroundColor: Colors.lightGray,
         padding: 5,

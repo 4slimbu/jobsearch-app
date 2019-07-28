@@ -21,9 +21,19 @@ const PostImages = (props) => {
     const {type, images, removeImageHandler} = props;
     return _.map(images, (image, key) => {
         return (
-            <View key={key}>
-                <Icon color={Colors.grey1} name="close" size={30} onPress={() => removeImageHandler(type, key, image)}/>
-                <Image source={{uri: image.uri}} style={{width: 100, height: 100, marginTop: 10, marginBottom: 10}}/>
+            <View style={{}} key={key}>
+                <Icon
+                    color={Colors.primary}
+                    style={styles.postThumbnailRemover}
+                    name="trash"
+                    type="font-awesome"
+                    size={22}
+                    onPress={() => removeImageHandler(type, key, image)}
+                />
+                <Image
+                    source={{uri: image.uri}}
+                    style={styles.postThumbnail}
+                />
             </View>
         )
     });
@@ -258,8 +268,11 @@ class EditPostScreen extends Component {
                             <Text style={globalStyles.formTitle}>Featured Image</Text>
                             {
                                 featuredImage &&
-                                <PostImages type="featured" images={[featuredImage]}
-                                            removeImageHandler={this.removeImageHandler}/>
+                                <PostImages
+                                    type="featured"
+                                    images={[featuredImage]}
+                                    removeImageHandler={this.removeImageHandler}
+                                />
                             }
                             {
                                 !featuredImage &&
@@ -287,8 +300,11 @@ class EditPostScreen extends Component {
                                         flexWrap: 'wrap',
                                         justifyContent: 'space-around'
                                     }}>
-                                        <PostImages type="additionalImages" images={additionalImages}
-                                                    removeImageHandler={this.removeImageHandler}/>
+                                        <PostImages
+                                            type="additionalImages"
+                                            images={additionalImages}
+                                            removeImageHandler={this.removeImageHandler}
+                                        />
                                     </View>
                                 }
                                 {
@@ -384,6 +400,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 10,
     },
+
+    postThumbnail: {
+        width: 100,
+        height: 100,
+        marginTop: 10,
+        marginBottom: 10,
+    },
+
 });
 
 EditPostScreen.propTypes = {

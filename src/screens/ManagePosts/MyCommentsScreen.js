@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Colors from '../../constants/colors';
+import globalStyles from "../../constants/globalStyle";
 import CommentList from "../../components/List/CommentList";
 import {connect} from "react-redux";
 import {getMyComments} from "../../store/actions/commentActions";
@@ -25,10 +26,10 @@ class MyCommentsScreen extends Component {
             comments: myComments.data
         };
         return (
-            <ScrollView style={styles.container}>
-                <View style={styles.contentView}>
-                    <View style={styles.headerContainer}>
-                        <Text style={styles.heading}>My Comments</Text>
+            <ScrollView style={globalStyles.scrollViewContainer}>
+                <View style={globalStyles.scrollViewContentView}>
+                    <View style={globalStyles.headerContainer}>
+                        <Text style={globalStyles.heading}>My Activities</Text>
                     </View>
 
                     <CommentList {...commentListProps} />
@@ -39,25 +40,7 @@ class MyCommentsScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'white',
-    },
-    headerContainer: {
-        justifyContent: 'center',
-        padding: 40,
-        paddingLeft: 20,
-        backgroundColor:'#acacac',
-        marginBottom: 20,
-    },
-    contentView: {
-        flex: 1,
-    },
-    heading: {
-        color: 'white',
-        marginTop: 10,
-        fontSize: 22,
-        fontWeight: 'bold',
-    },
+
 });
 
 const mapStateToProps = state => {

@@ -272,7 +272,7 @@ class AddPostScreen extends Component {
                             />
                             <Text style={{color: Colors.danger, marginTop: 5}}>{errors.selectedCategoryId ? errors.selectedCategoryId: ''}</Text>
                         </View> */}
-                        <View>
+                        <View style={globalStyles.formRow}>
                             <Text style={globalStyles.formTitle}>Post Location</Text>
                             <PickLocation
                                 value={this.props.forms.location.address}
@@ -282,7 +282,7 @@ class AddPostScreen extends Component {
                             />
                         </View>
                        
-                        <View style={styles.formRow}>
+                        <View>
                             <Button
                                 title="Save"
                                 onPress={this.submitHandler}

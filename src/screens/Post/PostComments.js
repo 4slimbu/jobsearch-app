@@ -162,21 +162,23 @@ class PostComments extends Component {
                     <Text style={styles.sectionHeading}>Leave a Comment</Text>
                     <Text style={styles.sectionSubHeading}>Leave a comment to apply. This comment section is private for each
                         user.</Text>
+                    <View style={globalStyles.formRow}>
+                        <TextInput
+                            style={globalStyles.textArea}
+                            multiline={true}
+                            numberOfLines={2}
+                            value={this.state.comment}
+                            onChangeText={comment => this.setState({comment})}
+                        />
+                    </View>
                     <View>
-                        <TextInput style={globalStyles.textArea}
-                                   multiline={true}
-                                   numberOfLines={2}
-                                   value={this.state.comment}
-                                   onChangeText={comment => this.setState({comment})}
+                        <Button
+                            title="Comment" buttonStyle={globalStyles.btnPrimary}
+                            onPress={() => this.commentHandler(post.id)}
+                            buttonSize={5}
+                            loading={isLoading}
+                            disabled={isLoading}
                         />
-
-                        <Button title="Comment" buttonStyle={globalStyles.btnPrimary}
-                                onPress={() => this.commentHandler(post.id)}
-                                buttonSize={5}
-                                loading={isLoading}
-                                disabled={isLoading}
-                        />
-
                     </View>
                 </View>
             </View>
@@ -233,7 +235,7 @@ const styles = StyleSheet.create({
         fontWeight: '100',
         marginTop: 10,
         marginBottom: 10,
-        color: Colors.mediumGray,
+        color: Colors.darkGray,
     },
 
     commentsListHeaderContainer: {

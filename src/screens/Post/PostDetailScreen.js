@@ -89,7 +89,7 @@ class PostDetailScreen extends Component {
                             <View style={styles.locationContainer}>
                                 <Icon
                                     name="map-marker"
-                                    size={16}
+                                    size={22}
                                     type="font-awesome"
                                     color={Colors.primary}
                                     containerStyle={{marginRight: 10}}
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     postDateMeta: {
-        color: Colors.mediumGray,
+        color: Colors.darkGray,
         fontSize: 12,
         fontWeight: 'normal',
     },
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     location: {
-        color: Colors.mediumGray,
+        color: Colors.darkGray,
         fontSize: 12,
         fontWeight: 'normal',
     },

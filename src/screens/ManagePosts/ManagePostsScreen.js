@@ -23,7 +23,7 @@ const managePostList = [
         type: 'font-awesome',
     },
     {
-        name: 'My Comments',
+        name: 'My Activities',
         icon: 'comments-o',
         target: 'MyComments',
         type: 'font-awesome',
