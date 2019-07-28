@@ -1,5 +1,7 @@
 import React from "react";
 import {StyleSheet, Text, View} from "react-native";
+import globalStyles from "../../constants/globalStyle";
+import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from "prop-types";
 import Colors from "../../constants/colors";
 import {Divider} from "react-native-elements";
@@ -8,13 +10,26 @@ import {toReadable} from "../../utils/helper/helper";
 const CommentItem = props => {
     const {comment, isFirst} = props;
     return (
-        <View style={{width: '100%'}}>
+        <View>
             { !isFirst &&  <Divider style={styles.divider}/> }
-
-            <View style={{paddingLeft: 20, paddingRight: 20, marginBottom: 20, width: '100%'}}>
-                <Text style={styles.title}>{comment.post_name}</Text>
-                <Text style={styles.dateMeta}>{toReadable(comment.created_at)}</Text>
-                <Text style={[styles.content, {borderWidth: 1, borderColor: Colors.grey4, padding: 10}]}>{comment.body}</Text>
+            <View style={styles.activityListContainer}>
+                <View style={styles.activityListHeaderContainer}>
+                    <View style={styles.activityIcon}>
+                        <Icon
+                            color={Colors.primary}
+                            name="wechat"
+                            type="font-awesome"
+                            size={22}
+                        />
+                    </View>
+                    <View style={styles.activityTitle}>
+                        <Text style={styles.activityName}>{comment.post_name}</Text>
+                        <Text style={styles.dateMeta}>{toReadable(comment.created_at)}</Text>
+                    </View>
+                </View>
+                <View style={styles.activityBodyContainer}>
+                    <Text style={styles.activityBody}>{comment.body}</Text>
+                </View>
             </View>
 
         </View>
@@ -23,27 +38,55 @@ const CommentItem = props => {
 
 const styles = StyleSheet.create({
     divider: {
-        backgroundColor: Colors.grey3,
-        marginTop: 20,
-        marginBottom: 20
-    },
-    title: {
-        color: Colors.grey1,
+        backgroundColor: Colors.mediumGray,
+        marginTop: 5,
         marginBottom: 5,
-        fontSize: 20,
+    },
+
+    activityListContainer: {
+        flex: 1,
+        flexDirection: 'column',
+        padding: 20,
+    },
+
+    activityListHeaderContainer: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+
+    activityIcon: {
+        justifyContent: "center",
+    },
+
+    activityTitle: {
+        paddingLeft: 10,
+    },
+
+    activityName: {
+        color: Colors.darkGray,
+        fontSize: 16,
         fontWeight: 'bold',
     },
+
+    activityBodyContainer: {
+
+    },
+
+    activityBody: {
+        backgroundColor: Colors.lighterGray,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: Colors.mediumGray,
+        padding: 20,
+        marginTop: 20,
+        flexGrow: 1,
+    },
+
     dateMeta: {
-        color: Colors.grey1,
-        marginBottom: 5,
-        fontSize: 14,
-        fontStyle: 'italic'
-    },
-    content: {
-        color: Colors.grey1,
-        fontSize: 16,
-        lineHeight: 20
-    },
+        color: Colors.darkGray,
+        fontSize: 12,
+    }
+
 });
 
 CommentItem.propTypes = {

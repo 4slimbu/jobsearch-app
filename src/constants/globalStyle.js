@@ -4,10 +4,20 @@ import Colors from "./colors";
 import appData from "./app";
 
 module.exports = StyleSheet.create({
+    keyboardAvoidingView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 100,
+        marginBottom: 100,
+    },
+
     inputContainerStyle: {
         borderColor: Colors.greyOutline,
-        borderWidth: 1,
         borderRadius: 4,
+        marginLeft: 0,
+        marginRight: 0,
+        borderWidth: 1,
     },
     inputViewContainer: {
         marginTop: 7,
@@ -15,28 +25,64 @@ module.exports = StyleSheet.create({
     inputStyle: {
         marginLeft: 10,
         color:Colors.grey1,
+      
     },
 
-    btnPrimary: {
-        backgroundColor: Colors.primary,
-        borderRadius: 5,
-        height: 40,
-        width:  appData.app.SCREEN_WIDTH - 75,
-    },
     btnPrimaryContainer: {
         marginTop: 32, 
         flex: 1,
     },
+    
+    btnPrimary: {
+        backgroundColor: Colors.primary,
+        borderRadius: 5,
+        height: 40,
+    },
+
     btnPrimaryTitle: {
         fontSize: 16,
         color: 'white',
         fontWeight: 'bold',
     },
 
+    btnPrimaryOutline: {
+        alignItems: 'center',
+        borderColor: Colors.primary,
+        borderRadius: 5,
+        borderWidth: 1,
+        backgroundColor: 'transparent',
+        color: Colors.primary,
+    },
+
+    btnPrimaryOutlineTitle: {
+        padding: 7,
+        color: Colors.primary,
+    },
+
+    btnSecondary: {
+        backgroundColor: Colors.mediumGray,
+        borderRadius: 5,
+        height: 40,
+    },
+
+    btnSecondaryOutline: {
+        maxWidth: 150,
+        alignItems: 'center',
+        borderColor: Colors.mediumGray,
+        borderRadius: 5,
+        borderWidth: 1,
+    },
+
+    btnSecondaryOutlineTitle: {
+        padding: 7,
+        color: Colors.mediumGray,
+    },
+
+
     btnLink: {
-        backgroundColor:'transparent',
-        borderRadius:0,
-        marginLeft:55,
+        backgroundColor: 'transparent',
+        borderRadius: 0,
+        marginLeft: 0,
     },
     btnLinkRight: {
         marginLeft:0,
@@ -58,4 +104,93 @@ module.exports = StyleSheet.create({
         textAlign: 'center',
         color: Colors.grey1,
     },
+
+    formTitle: {
+        color: Colors.darkGray,
+        marginTop: 5,
+        marginBottom: 10,
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    
+    formRow: {
+        width: '100%',
+        marginBottom: 5,
+    },
+
+    formFlexRow: {
+        width: '100%',
+        marginBottom: 5,
+        display: 'flex',
+        flexDirection: 'row',
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+
+    formFlexColumn: {
+        width: '100%',
+        marginBottom: 5,
+        display: 'flex',
+        flexDirection: 'column',
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+
+    textInput: {
+        borderWidth: 1,
+        borderRadius: 4,
+        borderColor: Colors.greyOutline,
+        height: 44,
+        padding: 4,
+    },
+
+    textArea: {
+        borderWidth: 1,
+        borderColor: Colors.greyOutline,
+        minHeight:104,
+        borderRadius: 5,
+        backgroundColor: Colors.lightGray,
+        padding: 5,
+        paddingVertical: 5,
+        marginBottom: 0,
+    },
+
+    textAreaLight: {
+        borderWidth: 1,
+        borderColor: Colors.greyOutline,
+        minHeight:104,
+        borderRadius: 5,
+        backgroundColor: 'white',
+        padding: 5,
+        paddingVertical: 5,
+        marginBottom: 0,
+    },
+
+    scrollViewContainer: {
+        backgroundColor: 'white',
+    },
+
+    scrollViewContentView: {
+        flex: 1,
+    },
+
+    headerContainer: {
+        padding: 10,
+        marginBottom: 20,
+        backgroundColor: Colors.lightGray,
+        flex: 1,
+        alignItems: "center",
+    },
+
+    heading: {
+        color: Colors.darkGray,
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+
+    error: {
+        color: Colors.danger,
+        marginTop: 5,
+        fontSize: 12,
+    }
 });

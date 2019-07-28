@@ -23,7 +23,7 @@ const managePostList = [
         type: 'font-awesome',
     },
     {
-        name: 'My Comments',
+        name: 'My Activities',
         icon: 'comments-o',
         target: 'MyComments',
         type: 'font-awesome',
@@ -74,7 +74,7 @@ class ManagePostsScreen extends Component {
                                 name: l.icon,
                                 type: l.type,
                                 size: 25,
-                                color: Colors.mediumGray,
+                                color: Colors.darkGray,
                             }}
                             key={i}
                             onPress={() => this.props.navigation.navigate(l.target)}

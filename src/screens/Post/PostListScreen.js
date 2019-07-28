@@ -110,15 +110,13 @@ class PostListScreen extends Component {
 
     render() {
         const {searchText, isReady, isLoading} = this.state;
-        console.log(this.props.navigation.state.params.type);
         const {posts, filter} = this.props.posts;
         const postListProps = {
             type: filter.type,
             posts: posts,
-            backScreen: filter.type === 'search' ? 'Search' : 'PostList'
+            backScreen: this.props.viewHistory[this.props.viewHistory.length - 1]
         };
 
-        console.log('post search screen', postListProps.backScreen);
 
         return (
             <ScrollView style={styles.container} keyboardShouldPersistTaps="handled" onScrollEndDrag={this.scrollHandler}>
@@ -205,6 +203,7 @@ const mapStateToProps = state => {
     return {
         preferences: state.auth.user.preferences,
         posts: state.posts,
+        viewHistory: state.ui.viewHistory
     }
 };
 

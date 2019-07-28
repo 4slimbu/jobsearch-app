@@ -33,11 +33,8 @@ const commentList = props => {
 
 const styles = StyleSheet.create({
     commentContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        flexWrap: 'wrap',
-        width: '100%',
-        marginTop: 20,
+        flex: 1,
+        flexDirection: 'column',
     },
 });
 

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Picker, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
+import globalStyles from "../../constants/globalStyle";
+import {Picker, ScrollView, StyleSheet, Text, TextInput, View, TouchableOpacity} from 'react-native';
 import PropTypes from "prop-types";
 import Colors from '../../constants/colors';
 import {Button, Image} from "react-native-elements";
@@ -20,9 +21,19 @@ const PostImages = (props) => {
     const {type, images, removeImageHandler} = props;
     return _.map(images, (image, key) => {
         return (
-            <View key={key}>
-                <Icon color={Colors.grey1} name="close" size={30} onPress={() => removeImageHandler(type, key, image)}/>
-                <Image source={{uri: image.uri}} style={{width: 100, height: 100, marginTop: 10, marginBottom: 10}}/>
+            <View style={{}} key={key}>
+                <Icon
+                    color={Colors.primary}
+                    style={styles.postThumbnailRemover}
+                    name="trash"
+                    type="font-awesome"
+                    size={22}
+                    onPress={() => removeImageHandler(type, key, image)}
+                />
+                <Image
+                    source={{uri: image.uri}}
+                    style={styles.postThumbnail}
+                />
             </View>
         )
     });
@@ -223,53 +234,64 @@ class EditPostScreen extends Component {
         const {postTitle, postContent, featuredImage, additionalImages, categories, selectedCategoryId, date, errors, isLoading} = this.state;
 
         return (
-            <ScrollView style={styles.container}>
-                <View style={styles.contentView}>
-                    <View style={styles.headerContainer}>
-                        <Text style={styles.heading}>Edit Post</Text>
+            <ScrollView style={globalStyles.scrollViewContainer}>
+                <View style={globalStyles.scrollViewContentView}>
+                    <View style={globalStyles.headerContainer}>
+                        <Text style={globalStyles.heading}>Edit Post</Text>
                     </View>
                     <View style={{marginLeft: 20, marginRight: 20}}>
                         <View>
-                            <Text style={styles.postTitle}>Post Title</Text>
+                            <Text style={globalStyles.formTitle}>Post Title</Text>
                             <View>
-                                <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
-                                           value={postTitle}
-                                           onChangeText={postTitle => this.setState({postTitle})}
+                                <TextInput
+                                    style={globalStyles.textInput}
+                                    value={postTitle}
+                                    onChangeText={postTitle => this.setState({postTitle})}
                                 />
-                                <Text style={{color: Colors.danger, marginTop: 5}}>{errors.postTitle ? errors.postTitle: ''}</Text>
+                                <Text style={globalStyles.error}>{errors.postTitle ? errors.postTitle: ''}</Text>
                             </View>
                         </View>
                         <View>
-                            <Text style={styles.postTitle}>Post Content</Text>
+                            <Text style={globalStyles.formTitle}>Post Content</Text>
                             <View>
-                                <TextInput style={{borderWidth: 1, borderColor: Colors.grey3, textAlignVertical: 'top'}}
-                                           multiline={true}
-                                           numberOfLines={15}
-                                           value={postContent}
-                                           onChangeText={postContent => this.setState({postContent})}
+                                <TextInput
+                                    style={globalStyles.textAreaLight}
+                                    multiline={true}
+                                    numberOfLines={15}
+                                    value={postContent}
+                                    onChangeText={postContent => this.setState({postContent})}
                                 />
-                                <Text style={{color: Colors.danger, marginTop: 5}}>{errors.postContent ? errors.postContent: ''}</Text>
+                                <Text style={globalStyles.error}>{errors.postContent ? errors.postContent: ''}</Text>
                             </View>
                         </View>
-                        <View>
-                            <Text style={styles.postTitle}>Featured Image</Text>
+                        <View style={styles.formRow}>
+                            <Text style={globalStyles.formTitle}>Featured Image</Text>
                             {
                                 featuredImage &&
-                                <PostImages type="featured" images={[featuredImage]}
-                                            removeImageHandler={this.removeImageHandler}/>
+                                <PostImages
+                                    type="featured"
+                                    images={[featuredImage]}
+                                    removeImageHandler={this.removeImageHandler}
+                                />
                             }
                             {
                                 !featuredImage &&
-                                <Button title="Pick Image"
-                                        buttonStyle={{marginBottom: 5, paddingTop: 5, paddingBottom: 5}}
-                                        buttonSize={5} type="outline"
-                                        onPress={this.pickFeaturedImageHandler}
-                                />
+                                <TouchableOpacity onPress={this.pickFeaturedImageHandler}>
+                                    <View style={styles.imagePicker}>
+                                        <Icon
+                                            name="photo"
+                                            type="font-awesome"
+                                            color={Colors.primary}
+                                            size={45}
+                                        />
+                                        <Text style={styles.imagePickerTitle}>Browse Image</Text>
+                                    </View>
+                                </TouchableOpacity>
                             }
                         </View>
 
-                        <View>
-                            <Text style={styles.postTitle}>Additional Images</Text>
+                        <View style={styles.formRow}>
+                            <Text style={globalStyles.formTitle}>Additional Images</Text>
                             <View>
                                 {
                                     additionalImages &&
@@ -278,21 +300,30 @@ class EditPostScreen extends Component {
                                         flexWrap: 'wrap',
                                         justifyContent: 'space-around'
                                     }}>
-                                        <PostImages type="additionalImages" images={additionalImages}
-                                                    removeImageHandler={this.removeImageHandler}/>
+                                        <PostImages
+                                            type="additionalImages"
+                                            images={additionalImages}
+                                            removeImageHandler={this.removeImageHandler}
+                                        />
                                     </View>
                                 }
                                 {
                                     additionalImages.length < 6 &&
-                                    <Button title="Pick Image"
-                                            buttonStyle={{marginBottom: 5, paddingTop: 5, paddingBottom: 5}}
-                                            buttonSize={5} type="outline"
-                                            onPress={this.pickAdditionalImagesHandler}
-                                    />
+                                    <TouchableOpacity onPress={this.pickAdditionalImagesHandler}>
+                                        <View style={styles.imagePicker}>
+                                            <Icon
+                                                name="photo"
+                                                type="font-awesome"
+                                                color={Colors.primary}
+                                                size={45}
+                                            />
+                                            <Text style={styles.imagePickerTitle}>Browse Image</Text>
+                                        </View>
+                                    </TouchableOpacity>
                                 }
                             </View>
                         </View>
-                        <View>
+                        {/* <View>
                             <Text style={styles.postTitle}>Category</Text>
 
                             <ListPicker
@@ -306,49 +337,25 @@ class EditPostScreen extends Component {
                             />
 
                             <Text style={{color: Colors.danger, marginTop: 5}}>{errors.selectedCategoryId ? errors.selectedCategoryId: ''}</Text>
-                        </View>
+                        </View> */}
                         <View>
-                            <Text style={styles.postTitle}>Deadline</Text>
-                            <DatePicker
-                                style={{width: '100%'}}
-                                date={date}
-                                mode="date"
-                                placeholder="select date"
-                                format="YYYY-MM-DD"
-                                minDate="2019-05-01"
-                                maxDate="2050-01-01"
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                customStyles={{
-                                    dateIcon: {
-                                        position: 'absolute',
-                                        left: 0,
-                                        top: 4,
-                                        marginLeft: 0
-                                    },
-                                    dateInput: {
-                                        marginLeft: 36
-                                    }
-                                    // ... You can check the source to find the other keys.
-                                }}
-                                onDateChange={(date) => {
-                                    this.setState({date: date})
-                                }}
+                            <Text style={globalStyles.formTitle}>Post Location</Text>
+                            <PickLocation
+                                value={this.props.forms.location.address}
+                                navigation={this.props.navigation}
+                                errorMessage={errors.address ? errors.address : null}
+                                backScreen="EditPost"
                             />
-                            <Text style={{color: Colors.danger, marginTop: 5}}>{errors.date ? errors.date: ''}</Text>
                         </View>
 
-                        <PickLocation
-                            value={this.props.forms.location.address}
-                            navigation={this.props.navigation}
-                            errorMessage={errors.address ? errors.address : null}
-                            backScreen="EditPost"
-                        />
-
-                        <Button title="Save" buttonStyle={{marginTop: 25, marginBottom: 50}} onPress={this.submitHandler}
-                                buttonSize={5}
-                                loading={isLoading}
-                                disabled={isLoading}
+                        <Button
+                            title="Save"
+                            onPress={this.submitHandler}
+                            buttonStyle={globalStyles.btnPrimary}
+                            containerStyle={globalStyles.btnPrimaryContainer}
+                            titleStyle={globalStyles.btnPrimaryTitle}
+                            loading={isLoading}
+                            disabled={isLoading}
                         />
 
                     </View>
@@ -360,19 +367,7 @@ class EditPostScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'white',
-    },
-    headerContainer: {
-        justifyContent: 'center',
-        padding: 40,
-        paddingLeft: 20,
-        backgroundColor: '#acacac',
-        marginBottom: 20,
-    },
-    contentView: {
-        flex: 1,
-    },
+    
     categoryContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
@@ -385,63 +380,34 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         alignItems: 'center',
     },
-    postTitle: {
-        color: Colors.grey1,
-        marginTop: 25,
-        marginBottom: 10,
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    postAuthorMeta: {
-        color: Colors.grey1,
-        marginBottom: 3,
-        fontSize: 14,
-    },
-    postDateMeta: {
-        color: Colors.grey1,
+
+    formRow: {
         marginBottom: 15,
-        fontSize: 14,
-        fontStyle: 'italic'
     },
-    postContent: {
-        color: Colors.grey1,
-        fontSize: 16,
-        lineHeight: 20,
-        marginBottom: 15
-    },
-    heading: {
-        color: 'white',
-        marginTop: 10,
-        fontSize: 22,
-        fontWeight: 'bold',
-    },
-    autocompletesContainer: {
-        paddingTop: 0,
-        zIndex: 1,
-        width: "100%",
-        paddingHorizontal: 8,
-    },
-    input: {maxHeight: 40},
-    inputContainer: {
-        display: "flex",
-        flexShrink: 0,
-        flexGrow: 0,
-        flexDirection: "row",
-        flexWrap: "wrap",
+
+    imagePicker: {
+        flex: 1,
+        borderColor: Colors.greyOutline,
+        borderRadius: 5,
+        borderWidth: 1,
+        padding: 20,
         alignItems: "center",
-        borderBottomWidth: 1,
-        borderColor: "#c7c6c1",
-        paddingVertical: 13,
-        paddingLeft: 12,
-        paddingRight: "5%",
-        width: "100%",
-        justifyContent: "flex-start",
     },
-    plus: {
-        position: "absolute",
-        left: 15,
-        top: 10,
+
+    imagePickerTitle: {
+        color: Colors.mediumGray,
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginTop: 10,
     },
+
+    postThumbnail: {
+        width: 100,
+        height: 100,
+        marginTop: 10,
+        marginBottom: 10,
+    },
+
 });
 
 EditPostScreen.propTypes = {

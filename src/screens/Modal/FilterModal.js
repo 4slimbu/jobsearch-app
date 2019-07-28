@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {BackHandler, ScrollView, StyleSheet, Text, TouchableOpacity, View, Button} from 'react-native';
+import {BackHandler, Button, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Icon, Slider,} from 'react-native-elements';
 import {connect} from "react-redux";
 import {resetPostFilter, updatePostFilter} from "../../store/actions/postActions";
@@ -7,10 +7,9 @@ import * as _ from "lodash";
 import Colors from "../../constants/colors";
 import {prettyDistance, toggleItemInArray} from "../../utils/helper/helper";
 
-let backScreen;
 class FilterModal extends Component {
     static navigationOptions = ({navigation}) => {
-        console.log('last screen', backScreen);
+        let backScreen = navigation.getParam('backScreen');
         return {
             title: 'Filter',
             headerLeft: (
@@ -19,7 +18,7 @@ class FilterModal extends Component {
                     size={30}
                     type="ionicons"
                     containerStyle={{marginLeft: 10}}
-                    onPress={() => navigation.navigate(backScreen.routeName, backScreen.params)}
+                    onPress={() => navigation.navigate(backScreen)}
                 />
             ),
         }
@@ -27,9 +26,6 @@ class FilterModal extends Component {
 
     constructor(props) {
         super(props);
-
-        backScreen = this.props.viewHistory[this.props.viewHistory.length - 1];
-        console.log('backscreen', backScreen);
 
         this.state = {
             setTimeoutId: 0
@@ -47,19 +43,17 @@ class FilterModal extends Component {
     }
 
     _onBackIconPress = () => {
+        let backScreen = this.props.navigation.getParam('backScreen');
         this.props.navigation.navigate(backScreen);
         return true;
     };
 
     changeHandler(type, value) {
         let filterData = {isOn: true};
-        console.log(type, value);
-        console.log(this.props.categories);
         if (type === 'category') { filterData.category = toggleItemInArray(this.props.postsFilter.category, value) }
         if (type === 'radius') { filterData.radius = _.ceil(value * 1000) }
         if (type === 'orderBy') { filterData.orderBy = value }
 
-        console.log(filterData);
         clearTimeout(this.state.setTimeoutId);
         let setTimeoutId = setTimeout(function () {
             this.props.updatePostFilter(filterData);

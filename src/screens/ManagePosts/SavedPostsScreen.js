@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Picker, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Colors from '../../constants/colors';
+import globalStyles from "../../constants/globalStyle";
 import {connect} from "react-redux";
 import {getSavedPosts, resetSavedPosts} from "../../store/actions/postActions";
 import PostList from "../../components/List/PostList";
@@ -47,13 +48,13 @@ class SavedPostsScreen extends Component {
             type: 'saved'
         };
         return (
-            <ScrollView style={styles.container}>
-                <View style={styles.contentView}>
-                    <View style={styles.headerContainer}>
-                        <Text style={styles.heading}>Saved Posts</Text>
+            <ScrollView style={globalStyles.scrollViewContainer}>
+                <View style={globalStyles.scrollViewContentView}>
+                    <View style={globalStyles.headerContainer}>
+                        <Text style={globalStyles.heading}>Saved Posts</Text>
                     </View>
                     <View>
-                        <View style={{ marginLeft: 20, marginRight: 20}}>
+                        {/* <View style={{ marginLeft: 20, marginRight: 20}}>
                             <ListPicker
                                 placeholderLabel="Select Category"
                                 value={this.state.selectedCategoryId}
@@ -61,7 +62,7 @@ class SavedPostsScreen extends Component {
                                 onSelect={this.onSelectCategory}
                                 items={this.props.categories}
                             />
-                        </View>
+                        </View> */}
                         {
                             savedPosts && <PostList {...postListProps}/>
                         }

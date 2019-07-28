@@ -35,7 +35,7 @@ const ManagePostsTab = createStackNavigator({
     },
     AddPost: {screen: AddPostScreen, navigationOptions: ({navigation}) => ({ title: 'Add Post'})},
     MyPosts: {screen: PostListScreen, params: {type: 'my'}, navigationOptions: ({navigation}) => ({ title: 'My Posts'})},
-    MyComments: {screen: MyCommentsScreen, navigationOptions: ({navigation}) => ({ title: 'My Comments'})},
+    MyComments: {screen: MyCommentsScreen, navigationOptions: ({navigation}) => ({ title: 'My Activities'})},
     MySavedPosts: {screen: PostListScreen, params: {type: 'saved'}, navigationOptions: ({navigation}) => ({ title: 'My Saved Posts'})},
     EditPost: {screen: EditPostScreen, navigationOptions: ({navigation}) => ({ title: 'Edit Post'})},
     ManagePostList: {screen: PostListScreen},

@@ -1,58 +1,42 @@
 import React from 'react';
-import {createStackNavigator, DrawerActions} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation';
 import PageDetailScreen from "../../screens/Page/PageDetailScreen";
-import {Icon, Image} from 'react-native-elements';
-import {TouchableOpacity} from "react-native";
-
-const LogoUrl = require('../../../assets/icons/icon.png');
-
-const navigationOptions = ({navigation}) => ({
-    title: '',
-    headerLeft: (
-        <Icon
-            name="arrow-back"
-            size={30}
-            type="ionicons"
-            containerStyle={{marginLeft: 10}}
-            onPress={() => navigation.navigate('Categories')}
-        />
-    ),
-    headerRight: (
-        <Icon
-            name="menu"
-            size={30}
-            type="entypo"
-            containerStyle={{marginRight: 10}}
-            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        />
-    ),
-});
 
 const Page = createStackNavigator({
     AboutUs: {
         screen: PageDetailScreen,
         path: '/about-us',
-        navigationOptions: navigationOptions,
+        params: {
+            title: 'About Us'
+        },
     },
     ContactUs: {
         screen: PageDetailScreen,
         path: '/contact-us',
-        navigationOptions: navigationOptions,
+        params: {
+            title: 'Contact Us'
+        },
     },
     Privacy: {
         screen: PageDetailScreen,
         path: '/privacy',
-        navigationOptions: navigationOptions,
+        params: {
+            title: 'Privacy'
+        },
     },
     TermsAndConditions: {
         screen: PageDetailScreen,
         path: '/terms-and-conditions',
-        navigationOptions: navigationOptions,
+        params: {
+            title: 'Terms and Conditions'
+        },
     },
     SecurityTips: {
         screen: PageDetailScreen,
         path: '/security-tips',
-        navigationOptions: navigationOptions,
+        params: {
+            title: 'Security Tips'
+        },
     }
 });
 
