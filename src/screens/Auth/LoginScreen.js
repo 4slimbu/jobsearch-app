@@ -170,16 +170,18 @@ class LoginScreen extends Component {
                                 onChangeText={password => this.setState({password})}
                                 errorMessage={errors.password ? errors.password : null}
                             />
-                            <Button
-                                buttonStyle={globalStyles.btnPrimary}
-                                containerStyle={globalStyles.btnPrimaryContainer}
-                                activeOpacity={0.8}
-                                title="Login"
-                                onPress={this.normalLoginHandler}
-                                titleStyle={globalStyles.btnPrimaryTitle}
-                                loading={isLoading}
-                                disabled={isLoading}
-                            />
+                            <View style={{width:'100%'}}>
+                                <Button
+                                    buttonStyle={globalStyles.btnPrimary}
+                                    containerStyle={globalStyles.btnPrimaryContainer}
+                                    titleStyle={globalStyles.btnPrimaryTitle}
+                                    activeOpacity={0.8}
+                                    title="Login"
+                                    onPress={this.normalLoginHandler}                                
+                                    loading={isLoading}
+                                    disabled={isLoading}
+                                />
+                            </View>
                         </View>
                         <View style={styles.helpContainer}>
                             <Button

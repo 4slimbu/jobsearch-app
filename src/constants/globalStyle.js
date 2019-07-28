@@ -17,15 +17,17 @@ module.exports = StyleSheet.create({
         color:Colors.grey1,
     },
 
+    btnPrimaryContainer: {
+        marginTop: 32, 
+        flex: 1,
+    },
+    
     btnPrimary: {
         backgroundColor: Colors.primary,
         borderRadius: 5,
         height: 40,
     },
-    btnPrimaryContainer: {
-        marginTop: 32, 
-        flex: 1,
-    },
+
     btnPrimaryTitle: {
         fontSize: 16,
         color: 'white',
@@ -37,11 +39,19 @@ module.exports = StyleSheet.create({
         borderColor: Colors.primary,
         borderRadius: 5,
         borderWidth: 1,
+        backgroundColor: 'transparent',
+        color: Colors.primary,
     },
 
     btnPrimaryOutlineTitle: {
         padding: 7,
         color: Colors.primary,
+    },
+
+    btnSecondary: {
+        backgroundColor: Colors.mediumGray,
+        borderRadius: 5,
+        height: 40,
     },
 
     btnSecondaryOutline: {
@@ -89,6 +99,7 @@ module.exports = StyleSheet.create({
         marginTop: 5,
         marginBottom: 10,
         fontSize: 16,
+        fontWeight: 'bold',
     },
     
     formRow: {

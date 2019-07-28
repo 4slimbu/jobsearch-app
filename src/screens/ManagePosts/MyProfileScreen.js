@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, View, TouchableOpacity} from 'react-native';
 import Colors from '../../constants/colors';
-import {Button, CheckBox, Divider, Image, Input} from "react-native-elements/src/index";
+import globalStyles from "../../constants/globalStyle";
+import {Button, CheckBox, Divider, Image, Input, Avatar} from "react-native-elements/src/index";
 import {connect} from "react-redux";
 import {ImagePicker} from "expo";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -261,210 +262,238 @@ class MyProfileScreen extends Component {
         } = this.state;
         const {address} = this.props.forms.location;
 
-        const profilePictureSource = profilePicture ? {uri: profilePicture} : require('../../../assets/images/placeholder.png');
+        const profilePictureSource = profilePicture ? {uri: profilePicture} : require('../../../assets/images/user-hp.png');
 
         return (
-            <ScrollView style={styles.container}>
-                <View style={styles.contentView}>
-                    <View style={styles.headerContainer}>
-                        <Text style={styles.heading}>My Profile</Text>
-                    </View>
-                    <View style={{paddingLeft: 20, paddingRight: 20, marginBottom: 20}}>
-                        <View style={{alignItems: 'center'}}>
+            <ScrollView style={globalStyles.scrollViewContainer}>
+                <View style={globalStyles.scrollViewContentView}>
+                    
+                    <View style={styles.profileContainer}>
+                        <View style={styles.profileAvatarContainer}>
                             {
                                 newProfilePicture && newProfilePicture.uri ?
                                 <View>
-                                    <Icon color={Colors.grey1} name="close" size={30} onPress={this.removeImageHandler}/>
-                                    <Image source={{uri: newProfilePicture.uri}} style={{width: 100, height: 100, marginTop: 10, marginBottom: 10}}/>
+                                    <Icon
+                                        color={Colors.primary}
+                                        name="trash"
+                                        type="font-awesome"
+                                        size={22}
+                                        onPress={this.removeImageHandler}
+                                    />
+                                    <Avatar
+                                        rounded
+                                        size="large"
+                                        source={{uri: newProfilePicture.uri}}
+                                    />
                                 </View>
                                 :
-                                <Image source={profilePictureSource} resizeMode={'contain'}
-                                       style={{width: 100, height: 100, marginBottom: 10}}
-                                       PlaceholderContent={<ActivityIndicator/>}
+                                <Avatar
+                                    rounded
+                                    size="large"
+                                    source={profilePictureSource}
                                 />
                             }
 
                         </View>
-                        <View >
-                            <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
-                                {
-                                    isSaveProfilePicture ?
-                                        <Button title="Save Profile Picture"
-                                                buttonStyle={{marginBottom: 5, paddingTop: 3, paddingBottom: 3, marginRight: 10}}
-                                                buttonSize={5} onPress={this.saveProfilePictureHandler}
-                                                loading={isSavingProfilePicture}
-                                                disabled={isSavingProfilePicture}
-                                        />
-                                        :
-                                        <Button title="Change Profile Picture"
-                                                buttonStyle={{marginBottom: 5, paddingTop: 3, paddingBottom: 3, marginRight: 10, backgroundColor: Colors.grey3}}
-                                                buttonSize={5} onPress={this.pickProfilePictureHandler}/>
-                                }
-                            </View>
-
+                        <View style={styles.profileAvatarActionContainer}>
+                            {
+                                isSaveProfilePicture ?
+                                    <TouchableOpacity
+                                        onPress={this.saveProfilePictureHandler}
+                                        disabled={this.isSaveProfilePicture}
+                                        loading={this.isSaveProfilePicture}
+                                    >
+                                        <View style={globalStyles.btnPrimaryOutline}>
+                                            <Text style={globalStyles.btnPrimaryOutlineTitle}>Save Profile Picture</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                    :
+                                    <TouchableOpacity onPress={this.pickProfilePictureHandler}>
+                                        <View style={globalStyles.btnPrimaryOutline}>
+                                            <Text style={globalStyles.btnPrimaryOutlineTitle}>Change Profile Picture</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                            }
                         </View>
-
                     </View>
 
-                    <Divider style={{backgroundColor: Colors.grey3}}/>
+                    <Divider style={{backgroundColor: Colors.mediumGray}}/>
 
-                    <View style={{paddingLeft: 20, paddingRight: 20, marginTop: 20, marginBottom: 20}}>
+                    <View style={styles.profileRowContainer}>
                         {
                             isSaveProfile ?
-                                <View style={{flex: 1, flexDirection: 'row'}}>
-                                    <View style={{flex: 2, marginRight: 15}}>
-                                        <Text style={styles.postTitle}>First Name</Text>
-                                    </View>
-                                    <View style={{flex: 3}}>
-                                        <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
-                                                   value={newFirstName}
-                                                   onChangeText={newFirstName => this.setState({newFirstName})}
-                                        />
-                                        <Text style={{color: Colors.danger, marginTop: 5}}>{errors.newFirstName ? errors.newFirstName: ''}</Text>
-                                    </View>
+                            <View style={styles.profileRow}>
+                                <View style={styles.profileLabel}>
+                                    <Text style={globalStyles.formTitle}>First Name</Text>
                                 </View>
-                                :
-                                <View style={{flex: 1, flexDirection: 'row'}}>
-                                    <View style={{flex: 2, marginRight: 15}}>
-                                        <Text style={styles.postTitle}>First Name</Text>
-                                    </View>
-                                    <View style={{flex: 3}}>
-                                        <Text style={styles.postContent}>{firstName}</Text>
-                                    </View>
+                                <View style={styles.profileInput}>
+                                    <TextInput
+                                        style={globalStyles.textInput}
+                                        value={newFirstName}
+                                        onChangeText={newFirstName => this.setState({newFirstName})}
+                                    />
+                                    <Text style={{color: Colors.danger, marginTop: 5}}>{errors.newFirstName ? errors.newFirstName: ''}</Text>
                                 </View>
+                            </View>
+                            :
+                            <View style={styles.profileRow}>
+                                <View style={styles.profileLabel}>
+                                    <Text style={globalStyles.formTitle}>First Name</Text>
+                                </View>
+                                <View style={styles.profileInput}>
+                                    <Text style={styles.postContent}>{firstName}</Text>
+                                </View>
+                            </View>
                         }
 
                     </View>
 
-                    <Divider style={{backgroundColor: Colors.grey3}}/>
+                    <Divider style={{backgroundColor: Colors.mediumGray}}/>
 
-                    <View style={{paddingLeft: 20, paddingRight: 20, marginTop: 20, marginBottom: 20}}>
+                    <View style={styles.profileRowContainer}>
                         {
                             isSaveProfile ?
-                                <View style={{flex: 1, flexDirection: 'row'}}>
-                                    <View style={{flex: 2, marginRight: 15}}>
-                                        <Text style={styles.postTitle}>Last Name</Text>
+                                <View style={styles.profileRow}>
+                                    <View style={styles.profileLabel}>
+                                        <Text style={globalStyles.formTitle}>Last Name</Text>
                                     </View>
-                                    <View style={{flex: 3}}>
-                                        <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
-                                                   value={newLastName}
-                                                   onChangeText={newLastName => this.setState({newLastName})}
+                                    <View style={styles.profileInput}>
+                                        <TextInput
+                                            style={globalStyles.textInput}
+                                            value={newLastName}
+                                            onChangeText={newLastName => this.setState({newLastName})}
                                         />
                                         <Text style={{color: Colors.danger, marginTop: 5}}>{errors.newLastName ? errors.newLastName: ''}</Text>
                                     </View>
                                 </View>
                                 :
-                                <View style={{flex: 1, flexDirection: 'row'}}>
-                                    <View style={{flex: 2, marginRight: 15}}>
-                                        <Text style={styles.postTitle}>Last Name</Text>
+                                <View style={styles.profileRow}>
+                                    <View style={styles.profileLabel}>
+                                        <Text style={globalStyles.formTitle}>Last Name</Text>
                                     </View>
-                                    <View style={{flex: 3}}>
+                                    <View style={styles.profileInput}>
                                         <Text style={styles.postContent}>{lastName}</Text>
                                     </View>
                                 </View>
                         }
                     </View>
 
-                    <Divider style={{backgroundColor: Colors.grey3}}/>
+                    <Divider style={{backgroundColor: Colors.mediumGray}}/>
 
-                    <View style={{paddingLeft: 20, paddingRight: 20, marginTop: 20, marginBottom: 20}}>
-                        <View style={{flex: 1, flexDirection: 'row'}}>
-                            <View style={{flex: 2, marginRight: 15}}>
-                                <Text style={styles.postTitle}>Email</Text>
+                    <View style={styles.profileRowContainer}>
+                        <View style={styles.profileRow}>
+                            <View style={styles.profileLabel}>
+                                <Text style={globalStyles.formTitle}>Email</Text>
                             </View>
-                            <View style={{flex: 3}}>
+                            <View style={styles.profileInput}>
                                 <Text style={styles.postContent}>{email}</Text>
                             </View>
                         </View>
                     </View>
 
-                    <Divider style={{backgroundColor: Colors.grey3}}/>
+                    <Divider style={{backgroundColor: Colors.mediumGray}}/>
 
-                    <View style={{paddingLeft: 20, paddingRight: 20, marginTop: 20, marginBottom: 20}}>
+                    <View style={styles.profileRowContainer}>
                         {
                             isSavePassword ?
                                 <View>
-                                    <View style={{flex: 1, flexDirection: 'row'}}>
-                                        <View style={{flex: 2, marginRight: 15}}>
-                                            <Text style={styles.postTitle}>Current Password</Text>
+                                    <View style={styles.profileRow}>
+                                        <View style={styles.profileLabel}>
+                                            <Text style={globalStyles.formTitle}>Current Password</Text>
                                         </View>
-                                        <View style={{flex: 3}}>
-                                            <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
-                                                       secureTextEntry={true}
-                                                       value={currentPassword}
-                                                       placeholder="Current Password"
-                                                       onChangeText={currentPassword => this.setState({currentPassword})}
+                                        <View style={styles.profileInput}>
+                                            <TextInput
+                                                style={globalStyles.textInput}
+                                                secureTextEntry={true}
+                                                value={currentPassword}
+                                                placeholder="Current Password"
+                                                onChangeText={currentPassword => this.setState({currentPassword})}
                                             />
                                             <Text style={{color: Colors.danger, marginTop: 5}}>{errors.currentPassword ? errors.currentPassword: ''}</Text>
                                         </View>
                                     </View>
-                                    <View style={{flex: 1, flexDirection: 'row', marginTop: 15}}>
-                                        <View style={{flex: 2, marginRight: 15}}>
-                                            <Text style={styles.postTitle}>New Password</Text>
+                                    <View style={styles.profileRow}>
+                                        <View style={styles.profileLabel}>
+                                            <Text style={globalStyles.formTitle}>New Password</Text>
                                         </View>
-                                        <View style={{flex: 3}}>
-                                            <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
-                                                       secureTextEntry={true}
-                                                       value={newPassword}
-                                                       placeholder="New Password"
-                                                       onChangeText={newPassword => this.setState({newPassword})}
+                                        <View style={styles.profileInput}>
+                                            <TextInput
+                                                style={globalStyles.textInput}
+                                                secureTextEntry={true}
+                                                value={newPassword}
+                                                placeholder="New Password"
+                                                onChangeText={newPassword => this.setState({newPassword})}
                                             />
                                             <Text style={{color: Colors.danger, marginTop: 5}}>{errors.newPassword ? errors.newPassword: ''}</Text>
                                         </View>
                                     </View>
-                                    <View style={{flex: 1, flexDirection: 'row', marginTop: 15}}>
-                                        <View style={{flex: 2, marginRight: 15}}>
-                                            <Text style={styles.postTitle}>Confirm Password</Text>
+                                    <View style={styles.profileRow}>
+                                        <View style={styles.profileLabel}>
+                                            <Text style={globalStyles.formTitle}>Confirm Password</Text>
                                         </View>
-                                        <View style={{flex: 3}}>
-                                            <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
-                                                       secureTextEntry={true}
-                                                       value={confirmNewPassword}
-                                                       placeholder="Confirm New Password"
-                                                       onChangeText={confirmNewPassword => this.setState({confirmNewPassword})}
+                                        <View style={styles.profileInput}>
+                                            <TextInput
+                                                style={globalStyles.textInput}
+                                                secureTextEntry={true}
+                                                value={confirmNewPassword}
+                                                placeholder="Confirm New Password"
+                                                onChangeText={confirmNewPassword => this.setState({confirmNewPassword})}
                                             />
                                             <Text style={{color: Colors.danger, marginTop: 5}}>{errors.confirmNewPassword ? errors.confirmNewPassword: ''}</Text>
                                         </View>
                                     </View>
-                                    <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
-                                        <Button title="Update password" buttonStyle={{ backgroundColor: Colors.danger,  marginBottom: 5, marginRight: 15, paddingTop: 3, paddingBottom: 3}}
-                                                buttonSize={5} onPress={this.savePasswordHandler}
-                                                loading={isSavingPassword} disabled={isSavingPassword}
+                                    <View style={styles.profileRowActions}>
+                                        <Button
+                                            title="Update password"
+                                            buttonStyle={globalStyles.btnPrimary}
+                                            buttonSize={5}
+                                            onPress={this.savePasswordHandler}
+                                            loading={isSavingPassword}
+                                            disabled={isSavingPassword}
                                         />
-                                        <Button title="Cancel" buttonStyle={{ backgroundColor: Colors.grey3,  marginBottom: 5, paddingTop: 3, paddingBottom: 3}}
-                                                buttonSize={5} onPress={() => this.cancelEditHandler('password')}/>
+                                        <Button
+                                            title="Cancel"
+                                            buttonStyle={globalStyles.btnSecondary}
+                                            buttonSize={5}
+                                            onPress={() => this.cancelEditHandler('password')}
+                                        />
                                     </View>
                                 </View>
                             :
-                                <View style={{flex: 1, flexDirection: 'row'}}>
-                                    <View style={{flex: 2, marginRight: 15}}>
-                                        <Text style={styles.postTitle}>Password</Text>
+                                <View style={styles.profileRow}>
+                                    <View style={styles.profileLabel}>
+                                        <Text style={globalStyles.formTitle}>Password</Text>
                                     </View>
-                                    <View style={{flex: 3}}>
-                                        <Button title="Update password" buttonStyle={{ backgroundColor: Colors.grey3,  marginBottom: 5, paddingTop: 3, paddingBottom: 3}}
-                                                buttonSize={5} onPress={this.editPasswordHandler}/>
+                                    <View style={styles.profileInput}>
+                                        <Button
+                                            title="Update password"
+                                            buttonStyle={globalStyles.btnPrimary}
+                                            buttonSize={5}
+                                            onPress={this.editPasswordHandler}
+                                        />
                                     </View>
                                 </View>
                         }
 
                     </View>
 
-                    <Divider style={{backgroundColor: Colors.grey3}}/>
+                    <Divider style={{backgroundColor: Colors.mediumGray}}/>
 
-                    <View style={{paddingLeft: 20, paddingRight: 20, marginTop: 20, marginBottom: 20}}>
+                    <View style={styles.profileRowContainer}>
                         {
                             isSaveProfile ?
-                                <View style={{flex: 1, flexDirection: 'row'}}>
-                                    <View style={{flex: 2, marginRight: 15}}>
-                                        <Text style={styles.postTitle}>Gender</Text>
+                                <View style={styles.profileRow}>
+                                    <View style={styles.profileLabel}>
+                                        <Text style={globalStyles.formTitle}>Gender</Text>
                                     </View>
-                                    <View style={{flex: 3}}>
+                                    <View style={styles.profileInput}>
                                         <View style={{flexDirection: 'row', width: '100%'}}>
                                             <CheckBox
                                                 containerStyle={{backgroundColor: 'white', borderColor: 'white', padding: 0 }}
                                                 title='Male'
                                                 checkedIcon='dot-circle-o'
                                                 uncheckedIcon='circle-o'
+                                                checkedColor={Colors.primary}
                                                 checked={newGender === 'male'}
                                                 onPress={() => this.setState({newGender: "male"})}
                                             />
@@ -473,6 +502,7 @@ class MyProfileScreen extends Component {
                                                 containerStyle={{backgroundColor: 'white', borderColor: 'white', padding: 0}}
                                                 title='Female'
                                                 checkedIcon='dot-circle-o'
+                                                checkedColor={Colors.primary}
                                                 uncheckedIcon='circle-o'
                                                 checked={newGender === 'female'}
                                                 onPress={() => this.setState({newGender: "female"})}
@@ -481,28 +511,28 @@ class MyProfileScreen extends Component {
                                     </View>
                                 </View>
                                 :
-                                <View style={{flex: 1, flexDirection: 'row'}}>
-                                    <View style={{flex: 2, marginRight: 15}}>
-                                        <Text style={styles.postTitle}>Gender</Text>
+                                <View style={styles.profileRow}>
+                                    <View style={styles.profileLabel}>
+                                        <Text style={globalStyles.formTitle}>Gender</Text>
                                     </View>
-                                    <View style={{flex: 3}}>
+                                    <View style={styles.profileInput}>
                                         <Text style={styles.postContent}>{gender}</Text>
                                     </View>
                                 </View>
                         }
                     </View>
 
-                    <Divider style={{backgroundColor: Colors.grey3}}/>
+                    <Divider style={{backgroundColor: Colors.mediumGray}}/>
 
-                    <View style={{paddingLeft: 20, paddingRight: 20, marginTop: 20, marginBottom: 20}}>
+                    <View style={styles.profileRowContainer}>
                         {
                             isSaveProfile ?
-                                <View style={{flex: 1, flexDirection: 'row'}}>
-                                    <View style={{flex: 2, marginRight: 15}}>
-                                        <Text style={styles.postTitle}>Phone No.</Text>
+                                <View style={styles.profileRow}>
+                                    <View style={styles.profileLabel}>
+                                        <Text style={globalStyles.formTitle}>Phone No.</Text>
                                     </View>
-                                    <View style={{flex: 3}}>
-                                        <TextInput style={{borderWidth: 1, borderColor: Colors.grey3}}
+                                    <View style={styles.profileInput}>
+                                        <TextInput style={globalStyles.textInput}
                                                    value={newContactNumber}
                                                    onChangeText={newContactNumber => this.setState({newContactNumber})}
                                         />
@@ -510,27 +540,27 @@ class MyProfileScreen extends Component {
                                     </View>
                                 </View>
                                 :
-                                <View style={{flex: 1, flexDirection: 'row'}}>
-                                    <View style={{flex: 2, marginRight: 15}}>
-                                        <Text style={styles.postTitle}>Phone No.</Text>
+                                <View style={styles.profileRow}>
+                                    <View style={styles.profileLabel}>
+                                        <Text style={globalStyles.formTitle}>Phone No.</Text>
                                     </View>
-                                    <View style={{flex: 3}}>
+                                    <View style={styles.profileInput}>
                                         <Text style={styles.postContent}>{contactNumber}</Text>
                                     </View>
                                 </View>
                         }
                     </View>
 
-                    <Divider style={{backgroundColor: Colors.grey3}}/>
+                    <Divider style={{backgroundColor: Colors.mediumGray}}/>
 
-                    <View style={{paddingLeft: 20, paddingRight: 20, marginTop: 20, marginBottom: 20}}>
+                    <View style={styles.profileRowContainer}>
                         {
                             isSaveProfile ?
-                                <View style={{flex: 1, flexDirection: 'row'}}>
-                                    <View style={{flex: 2, marginRight: 15}}>
-                                        <Text style={styles.postTitle}>Address</Text>
+                                <View style={styles.profileRow}>
+                                    <View style={styles.profileLabel}>
+                                        <Text style={globalStyles.formTitle}>Address</Text>
                                     </View>
-                                    <View style={{flex: 3}}>
+                                    <View style={styles.profileInput}>
                                         <PickLocation
                                             value={this.props.forms.location.address}
                                             navigation={this.props.navigation}
@@ -541,36 +571,42 @@ class MyProfileScreen extends Component {
                                     </View>
                                 </View>
                                 :
-                                <View style={{flex: 1, flexDirection: 'row'}}>
-                                    <View style={{flex: 2, marginRight: 15}}>
-                                        <Text style={styles.postTitle}>Address</Text>
+                                <View style={styles.profileRow}>
+                                    <View style={styles.profileLabel}>
+                                        <Text style={globalStyles.formTitle}>Address</Text>
                                     </View>
-                                    <View style={{flex: 3}}>
+                                    <View style={styles.profileInput}>
                                         <Text style={styles.postContent}>{address}</Text>
                                     </View>
                                 </View>
                         }
                     </View>
-                    <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
-                        {
-                            isSaveProfile ?
-                                <Button title="Save Profile" buttonStyle={{ marginBottom: 5, paddingTop: 3, paddingBottom: 3, marginRight: 15}}
-                                    buttonSize={5} onPress={this.saveProfileHandler}
-                                    loading={isSavingProfile} disabled={isSavingProfile}
-                                />
-
-                                :
-                                <Button title="Edit Profile" buttonStyle={{ marginBottom: 5, paddingTop: 3, paddingBottom: 3, backgroundColor: Colors.grey3, marginRight: 15}}
-                                        buttonSize={5} onPress={this.editProfileHandler}/>
-                        }
-                        {
-                            isSaveProfile &&
-                            <Button title="Cancel" buttonStyle={{ backgroundColor: Colors.grey3,  marginBottom: 5, paddingTop: 3, paddingBottom: 3}}
-                                    buttonSize={20} onPress={() => this.cancelEditHandler('profile')}/>
-                        }
-
-                    </View>
-
+                    
+                    {
+                        isSaveProfile ?
+                        <View style={styles.profileRowActions}>
+                            <Button
+                                title="Save Profile"
+                                buttonStyle={globalStyles.btnPrimary}
+                                buttonSize={5} onPress={this.saveProfileHandler}
+                                loading={isSavingProfile} disabled={isSavingProfile}
+                            />
+                            <Button
+                                title="Cancel"
+                                buttonStyle={globalStyles.btnSecondary}
+                                buttonSize={20}
+                                onPress={() => this.cancelEditHandler('profile')}
+                            />
+                        </View>
+                        :
+                        <View style={styles.profileRow}>
+                            <Button
+                                title="Edit Profile"
+                                buttonStyle={globalStyles.btnPrimary}
+                                buttonSize={5} onPress={this.editProfileHandler}
+                            />
+                        </View>
+                    }
                 </View>
             </ScrollView>
         );
@@ -578,20 +614,53 @@ class MyProfileScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'white',
-    },
-    headerContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 40,
-        backgroundColor: '#acacac',
+    
+    profileContainer: {
+        paddingLeft: 20,
+        paddingRight: 20,
         marginBottom: 20,
     },
-    contentView: {
-        flex: 1,
-        paddingBottom: 30
+
+    profileAvatarContainer: {
+        paddingTop: 20,
+        paddingBottom: 20,
+        alignItems: 'center',
     },
+
+    profileAvatarActionContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    profileRowContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+
+    profileRow: {
+        paddingLeft: 20,
+        paddingRight: 20,
+        marginTop: 10,
+        marginBottom: 10,
+    },
+
+    profileRowActions: {
+        paddingLeft: 20,
+        paddingRight: 20,
+        marginTop: 10,
+        marginBottom: 10,
+        display:'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+    },
+
+    profileLabel: {
+    },
+
+    profileInput: {
+    },
+
+
     categoryContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
