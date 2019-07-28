@@ -32,6 +32,32 @@ module.exports = StyleSheet.create({
         fontWeight: 'bold',
     },
 
+    btnPrimaryOutline: {
+        alignItems: 'center',
+        borderColor: Colors.primary,
+        borderRadius: 5,
+        borderWidth: 1,
+    },
+
+    btnPrimaryOutlineTitle: {
+        padding: 7,
+        color: Colors.primary,
+    },
+
+    btnSecondaryOutline: {
+        maxWidth: 150,
+        alignItems: 'center',
+        borderColor: Colors.mediumGray,
+        borderRadius: 5,
+        borderWidth: 1,
+    },
+
+    btnSecondaryOutlineTitle: {
+        padding: 7,
+        color: Colors.mediumGray,
+    },
+
+
     btnLink: {
         backgroundColor:'transparent',
         borderRadius:0,
@@ -57,4 +83,69 @@ module.exports = StyleSheet.create({
         textAlign: 'center',
         color: Colors.grey1,
     },
+
+    formTitle: {
+        color: Colors.darkGray,
+        marginTop: 5,
+        marginBottom: 10,
+        fontSize: 16,
+    },
+
+    textInput: {
+        borderWidth: 1,
+        borderRadius: 4,
+        borderColor: Colors.greyOutline,
+        height: 44,
+        padding: 4,
+    },
+
+    textArea: {
+        borderWidth: 1,
+        borderColor: Colors.greyOutline,
+        height:104,
+        borderRadius: 5,
+        backgroundColor: Colors.lightGray,
+        padding: 5,
+        paddingVertical: 5,
+        marginBottom: 0,
+    },
+
+    textAreaLight: {
+        borderWidth: 1,
+        borderColor: Colors.greyOutline,
+        minHeight:104,
+        borderRadius: 5,
+        backgroundColor: 'white',
+        padding: 5,
+        paddingVertical: 5,
+        marginBottom: 0,
+    },
+
+    scrollViewContainer: {
+        backgroundColor: 'white',
+    },
+
+    scrollViewContentView: {
+        flex: 1,
+    },
+
+    headerContainer: {
+        padding: 10,
+        marginBottom: 20,
+        backgroundColor: Colors.lightGray,
+        flex: 1,
+        alignItems: "center",
+    },
+
+    heading: {
+        color: Colors.darkGray,
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+
+    error: {
+        color: Colors.danger,
+        marginTop: 5,
+        fontSize: 12,
+    }
 });

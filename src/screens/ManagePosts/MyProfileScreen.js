@@ -8,6 +8,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {updateMyProfile, updatePassword} from "../../store/actions/authActions";
 import alertMessage from "../../components/Alert";
 import * as _ from "lodash";
+import {setLocation} from "../../store/actions/formActions";
+import PickLocation from "../../components/Picker/LocationPicker";
 
 class MyProfileScreen extends Component {
     constructor(props) {
@@ -70,6 +72,12 @@ class MyProfileScreen extends Component {
             email: user.email,
             profilePicture: user.profile_pic,
             newProfilePicture: null,
+        });
+
+        this.props.setLocation({
+            address: user.address,
+            latitude: user.latitude,
+            longitude: user.longitude
         })
     }
 
@@ -131,11 +139,14 @@ class MyProfileScreen extends Component {
 
     isProfileFormValid() {
         const {newFirstName, newLastName, newContactNumber} = this.state;
+        const {address} = this.props.forms.location;
+
         let errors = {};
 
         if (!newFirstName) { errors.newFirstName = 'First Name is required'; }
         if (!newLastName) { errors.newLastName = 'Last Name is required'; }
         if (!newContactNumber) { errors.newContactNumber = 'Contact number is required!'; }
+        if (_.isEmpty(address)) { errors.address = "Location is required"; }
 
         this.setState({errors});
         return _.isEmpty(errors);
@@ -143,6 +154,7 @@ class MyProfileScreen extends Component {
 
     async saveProfileHandler() {
         const {newFirstName, newLastName, newGender, newContactNumber} = this.state;
+        const {address, latitude, longitude} = this.props.forms.location;
 
         if (!this.isProfileFormValid()) {
             alertMessage({title: "Error", body: "Validation failed"});
@@ -155,6 +167,9 @@ class MyProfileScreen extends Component {
         formData.append('last_name', newLastName);
         formData.append('gender', newGender);
         formData.append('contact_number', newContactNumber);
+        formData.append('address', address);
+        formData.append('latitude', latitude);
+        formData.append('longitude', longitude);
 
         await this.props.updateMyProfile(formData).then(res => {
         }).catch(err => {
@@ -244,6 +259,8 @@ class MyProfileScreen extends Component {
             newFirstName, newLastName, newGender, newContactNumber,
             isSavingProfilePicture, isSavingProfile, isSavingPassword, errors
         } = this.state;
+        const {address} = this.props.forms.location;
+
         const profilePictureSource = profilePicture ? {uri: profilePicture} : require('../../../assets/images/placeholder.png');
 
         return (
@@ -504,19 +521,36 @@ class MyProfileScreen extends Component {
                         }
                     </View>
 
-                    {/*<Divider style={{backgroundColor: Colors.grey3}}/>*/}
+                    <Divider style={{backgroundColor: Colors.grey3}}/>
 
-                    {/*<View style={{paddingLeft: 20, paddingRight: 20, marginTop: 20, marginBottom: 20}}>*/}
-                    {/*    <View style={{flex: 1, flexDirection: 'row'}}>*/}
-                    {/*        <View style={{flex: 2, marginRight: 15}}>*/}
-                    {/*            <Text style={styles.postTitle}>Address</Text>*/}
-                    {/*        </View>*/}
-                    {/*        <View style={{flex: 3}}>*/}
-                    {/*            <Text style={styles.postContent}>Address Line</Text>*/}
-                    {/*            <Text style={styles.postContent}>City, State, Country</Text>*/}
-                    {/*        </View>*/}
-                    {/*    </View>*/}
-                    {/*</View>*/}
+                    <View style={{paddingLeft: 20, paddingRight: 20, marginTop: 20, marginBottom: 20}}>
+                        {
+                            isSaveProfile ?
+                                <View style={{flex: 1, flexDirection: 'row'}}>
+                                    <View style={{flex: 2, marginRight: 15}}>
+                                        <Text style={styles.postTitle}>Address</Text>
+                                    </View>
+                                    <View style={{flex: 3}}>
+                                        <PickLocation
+                                            value={this.props.forms.location.address}
+                                            navigation={this.props.navigation}
+                                            errorMessage={errors.address ? errors.address : null}
+                                            backScreen="MyProfile"
+                                        />
+                                        <Text style={{color: Colors.danger, marginTop: 5}}>{errors.newContactNumber ? errors.newContactNumber: ''}</Text>
+                                    </View>
+                                </View>
+                                :
+                                <View style={{flex: 1, flexDirection: 'row'}}>
+                                    <View style={{flex: 2, marginRight: 15}}>
+                                        <Text style={styles.postTitle}>Address</Text>
+                                    </View>
+                                    <View style={{flex: 3}}>
+                                        <Text style={styles.postContent}>{address}</Text>
+                                    </View>
+                                </View>
+                        }
+                    </View>
                     <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
                         {
                             isSaveProfile ?
@@ -602,7 +636,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        auth: state.auth
+        auth: state.auth,
+        forms: state.forms
     }
 };
 
@@ -610,6 +645,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         updateMyProfile: (formData) => dispatch(updateMyProfile(formData)),
         updatePassword: (formData) => dispatch(updatePassword(formData)),
+        updatePassword: (formData) => dispatch(updatePassword(formData)),
+        setLocation: (location) => dispatch(setLocation(location)),
     };
 };
 

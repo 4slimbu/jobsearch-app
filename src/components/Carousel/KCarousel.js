@@ -64,7 +64,7 @@ class KCarousel extends Component {
                 <Carousel
                     ref={(c) => { this._carousel = c; }}
                     sliderWidth={appData.app.SCREEN_WIDTH}
-                    sliderHeight={250}
+                    sliderHeight={appData.app.SCREEN_WIDTH * 3 / 5 }
                     itemWidth={appData.app.SCREEN_WIDTH}
                     data={this.state.entries}
                     renderItem={this.renderItem}
@@ -86,12 +86,11 @@ const styles = StyleSheet.create({
     },
     item: {
         width: appData.app.SCREEN_WIDTH,
-        height: 250,
+        height: appData.app.SCREEN_WIDTH * 3 / 5, // keeping aspect ratio 5:3
     },
     imageContainer: {
         flex: 1,
         marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-        backgroundColor: 'white',
     },
     image: {
         ...StyleSheet.absoluteFillObject,

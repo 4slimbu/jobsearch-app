@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import globalStyles from "../../constants/globalStyle";
 import {Constants, Location, Permissions} from "expo";
 import {ScrollView, StyleSheet, View, BackHandler} from 'react-native';
 import {Icon, SearchBar,} from 'react-native-elements';
@@ -187,14 +188,18 @@ class PickLocationModal extends Component {
         const {address} = this.props.location;
         const {searchText, isLoading, isChanged} = this.state;
         return (
-            <ScrollView style={styles.container}>
-                <SearchBar lightTheme placeholder="Search Location"
-                           showLoading={isLoading}
-                           value={isChanged ? searchText : address}
-                           multiline={true}
-                           onChangeText={searchText => this.onChange(searchText)}
+            <ScrollView style={globalStyles.scrollViewContainer}>
+                <SearchBar
+                    lightTheme
+                    containerStyle={{backgroundColor: Colors.lightGray, borderWidth: 0}}
+                    inputContainerStyle={{backgroundColor: Colors.mediumGray, borderWidth: 0, marginTop: 5, fontSize: 17}}
+                    inputStyle={{marginTop: 6}}
+                    placeholder="Search Location"
+                    showLoading={isLoading}
+                    value={isChanged ? searchText : address}
+                    multiline={true}
+                    onChangeText={searchText => this.onChange(searchText)}
                 />
-
                 <ScrollView style={{marginTop: 20}}>
                     <LocationList locations={this.state.predictions} onSelect={this.onSelectPlace} onPickMyLocation={this.onPickMyLocation}/>
                 </ScrollView>

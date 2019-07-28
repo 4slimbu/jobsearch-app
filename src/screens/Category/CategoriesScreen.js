@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import appData from "../../constants/app";
-import {ActivityIndicator, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, ScrollView, StyleSheet, View} from 'react-native';
 import PropTypes from "prop-types";
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { Feather } from '@expo/vector-icons';
+import {Feather} from '@expo/vector-icons';
 import {connect} from "react-redux";
 import {loadCategories} from "../../store/actions/categoryActions";
 import CategoryList from "../../components/List/CategoryList";

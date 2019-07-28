@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {Icon, SearchBar,} from 'react-native-elements';
+import {Dimensions, ScrollView, StyleSheet, View, Text} from 'react-native';
+import {SearchBar,} from 'react-native-elements';
 
 import Colors from "../../constants/colors";
 import {connect} from "react-redux";
@@ -8,8 +8,7 @@ import {resetSearchedPosts, searchPosts} from "../../store/actions/postActions";
 import PostList from "../../components/List/PostList";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import ContentLoading from "../../components/ContentLoading";
-
-const SCREEN_WIDTH = Dimensions.get('window').width;
+import PostListMetaData from "../../components/PostListMetaData";
 
 class SearchScreen extends Component {
     constructor(props) {
@@ -110,13 +109,15 @@ class SearchScreen extends Component {
                     onChangeText={searchText => this.onChange(searchText)}
                 />
 
+                <PostListMetaData meta={searchedPosts.meta}/>
                 <View style={{marginTop: 20}}>
                      <PostList {...postListProps}/>
                 </View>
 
                 <View style={{height: 100}}>
                     {
-                        isLoading && <ContentLoading/>
+                        isLoading ? <ContentLoading/> :
+                            <PostListMetaData meta={searchedPosts.meta}/>
                     }
                 </View>
             </ScrollView>

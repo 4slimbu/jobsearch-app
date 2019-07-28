@@ -80,11 +80,7 @@ class PostDetailScreen extends Component {
                                       behavior="padding"
                 >
                     <View style={[styles.contentView]}>
-                        <View style={{flex: 1}}>
-                            {/*<Image source={featuredImage} resizeMode={'cover'}*/}
-                                    {/*style={{width: '100%', height: 250}}*/}
-                                    {/*PlaceholderContent={<ActivityIndicator/>}*/}
-                            {/*/>*/}
+                        <View style={{flex: 1, height: appData.app.SCREEN_WIDTH * 3 / 5}}>
                             {post.postImages && <KCarousel data={post.postImages}/>}
                         </View>
                         <View style={styles.headerContainer}>

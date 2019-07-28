@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View, Dimensions, ActivityIndicator, Picker} from 'react-native';
+import {ScrollView, StyleSheet, Text, View, Dimensions, TouchableOpacity} from 'react-native';
 import Colors from '../../constants/colors';
+import globalStyles from "../../constants/globalStyle";
 import {connect} from "react-redux";
 import {getMyPosts, resetPostsByMe, setPostsByMe} from "../../store/actions/postActions";
-import PostList from "../../components/List/PostList";
+import MyPostList from "../../components/List/MyPostList";
 import ContentLoading from "../../components/ContentLoading";
 import * as _ from "lodash";
-import ListPicker from "../../components/Picker/ListPicker";
+
 
 class MyPostsScreen extends Component {
     constructor(props) {
@@ -14,11 +15,9 @@ class MyPostsScreen extends Component {
 
         this.state = {
             isLoading: false,
-            selectedCategoryId: null,
         };
 
         this.scrollHandler = this.scrollHandler.bind(this);
-        this.onSelectCategory = this.onSelectCategory.bind(this);
     }
 
     async componentDidMount() {
@@ -52,12 +51,6 @@ class MyPostsScreen extends Component {
         }
     }
 
-    async onSelectCategory(categoryId) {
-        this.setState({selectedCategoryId: categoryId});
-        this.props.resetPostsByMe();
-        this._isMounted && await this.props.onGetMyPosts('', '&category=' + categoryId);
-    }
-
     render() {
         const {isLoading} = this.state;
         const {postsByMe} = this.props;
@@ -66,23 +59,18 @@ class MyPostsScreen extends Component {
             posts: postsByMe
         };
         return (
-            <ScrollView style={styles.container} onScrollEndDrag={this.scrollHandler}>
-                <View style={styles.contentView}>
-                    <View style={styles.headerContainer}>
-                        <Text style={styles.heading}>My Posts</Text>
+            <ScrollView style={globalStyles.scrollViewContainer} onScrollEndDrag={this.scrollHandler}>
+                <View style={globalStyles.scrollViewContentView}>
+                    <View style={globalStyles.headerContainer}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('AddPost')}>
+                            <View style={globalStyles.btnPrimaryOutline}>
+                                <Text style={globalStyles.btnPrimaryOutlineTitle}>Create New Listing</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
                     <View>
-                        <View style={{ marginLeft: 20, marginRight: 20}}>
-                            <ListPicker
-                                placeholderLabel="Select Category"
-                                value={this.state.selectedCategoryId}
-                                style={{height: 50, width: '100%'}}
-                                onSelect={this.onSelectCategory}
-                                items={this.props.categories}
-                            />
-                        </View>
                         {
-                            postsByMe && <PostList {...postListProps}/>
+                            postsByMe && <MyPostList {...postListProps}/>
                         }
                     </View>
                     <View style={{height: 100}}>
@@ -97,19 +85,6 @@ class MyPostsScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'white',
-    },
-    headerContainer: {
-        justifyContent: 'center',
-        padding: 40,
-        paddingLeft: 20,
-        backgroundColor: '#acacac',
-        marginBottom: 20,
-    },
-    contentView: {
-        flex: 1,
-    },
     categoryContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
@@ -143,12 +118,6 @@ const styles = StyleSheet.create({
         color: Colors.grey1,
         fontSize: 16,
         lineHeight: 20
-    },
-    heading: {
-        color: 'white',
-        marginTop: 10,
-        fontSize: 22,
-        fontWeight: 'bold',
     },
 });
 
