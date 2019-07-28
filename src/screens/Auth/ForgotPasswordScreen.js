@@ -151,19 +151,16 @@ class ForgotPasswordScreen extends Component {
 
         return (
 
-            <ScrollView style={[styles.container]}>
-                <KeyboardAvoidingView style={{
-                    flex: 1, justifyContent: 'center',
-                    alignItems: 'center', marginTop: 100, marginBottom: 100
-                }}
-                                        behavior="padding"
+            <ScrollView style={[globalStyles.scrollViewContainer]}>
+                <KeyboardAvoidingView
+                    style={globalStyles.keyboardAvoidingView}
+                    behavior="padding"
                 >
                     <View style={styles.titleContainer}>
                         <View style={{alignItems: 'center'}}>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('LoginScreen')}>
                                 <Image style={{width: 100, height: 100}} source={appData.app.LOGO_URL}/>
                             </TouchableOpacity>
-                            <Text style={styles.titleText}>LokSewa</Text>
                         </View>
                     </View>
                     {
@@ -183,59 +180,65 @@ class ForgotPasswordScreen extends Component {
                                 </View>
                             </View>
                             <View style={[styles.formContainer]}>
-                                <Input
-                                    leftIcon={
-                                        <Icon
-                                            name="code"
-                                            color={Colors.primary}
-                                            size={25}
-                                            style={globalStyles.inputIcon}
-                                        />
-                                    }
-                                    value={passwordResetCode}
-                                    placeholder={'Enter Password Reset Code'}
-                                    containerStyle={globalStyles.inputViewContainer}
-                                    inputStyle={globalStyles.inputStyle}
-                                    inputContainerStyle={globalStyles.inputContainerStyle}
-                                    onChangeText={passwordResetCode => this.setState({passwordResetCode})}
-                                    errorMessage={errors.passwordResetCode ? errors.passwordResetCode : null}
-                                />
-                                <Input
-                                    leftIcon={
-                                        <Icon
-                                            name="lock"
-                                            color={Colors.primary}
-                                            size={25}
-                                            style={globalStyles.inputIcon}
-                                        />
-                                    }
-                                    value={password}
-                                    secureTextEntry={true}
-                                    placeholder={'Password'}
-                                    containerStyle={globalStyles.inputViewContainer}
-                                    inputStyle={globalStyles.inputStyle}
-                                    inputContainerStyle={globalStyles.inputContainerStyle}
-                                    onChangeText={password => this.setState({password})}
-                                    errorMessage={errors.password ? errors.password : null}
-                                />
-                                <Input
-                                    leftIcon={
-                                        <Icon
-                                            name="lock"
-                                            color={Colors.primary}
-                                            size={25}
-                                            style={globalStyles.inputIcon}
-                                        />
-                                    }
-                                    value={confirmPassword}
-                                    secureTextEntry={true}
-                                    placeholder={'Confirm Password'}
-                                    containerStyle={globalStyles.inputViewContainer}
-                                    inputStyle={globalStyles.inputStyle}
-                                    inputContainerStyle={globalStyles.inputContainerStyle}
-                                    onChangeText={confirmPassword => this.setState({confirmPassword})}
-                                    errorMessage={errors.confirmPassword ? errors.confirmPassword : null}
-                                />
+                                <View style={globalStyles.formRow}>
+                                    <Input
+                                        leftIcon={
+                                            <Icon
+                                                name="code"
+                                                color={Colors.primary}
+                                                size={25}
+                                                style={globalStyles.inputIcon}
+                                            />
+                                        }
+                                        value={passwordResetCode}
+                                        placeholder={'Enter Password Reset Code'}
+                                        containerStyle={globalStyles.inputViewContainer}
+                                        inputStyle={globalStyles.inputStyle}
+                                        inputContainerStyle={globalStyles.inputContainerStyle}
+                                        onChangeText={passwordResetCode => this.setState({passwordResetCode})}
+                                        errorMessage={errors.passwordResetCode ? errors.passwordResetCode : null}
+                                    />
+                                </View>
+                                <View style={globalStyles.formRow}>
+                                    <Input
+                                        leftIcon={
+                                            <Icon
+                                                name="lock"
+                                                color={Colors.primary}
+                                                size={25}
+                                                style={globalStyles.inputIcon}
+                                            />
+                                        }
+                                        value={password}
+                                        secureTextEntry={true}
+                                        placeholder={'Password'}
+                                        containerStyle={globalStyles.inputViewContainer}
+                                        inputStyle={globalStyles.inputStyle}
+                                        inputContainerStyle={globalStyles.inputContainerStyle}
+                                        onChangeText={password => this.setState({password})}
+                                        errorMessage={errors.password ? errors.password : null}
+                                    />
+                                </View>
+                                <View style={globalStyles.formRow}>
+                                    <Input
+                                        leftIcon={
+                                            <Icon
+                                                name="lock"
+                                                color={Colors.primary}
+                                                size={25}
+                                                style={globalStyles.inputIcon}
+                                            />
+                                        }
+                                        value={confirmPassword}
+                                        secureTextEntry={true}
+                                        placeholder={'Confirm Password'}
+                                        containerStyle={globalStyles.inputViewContainer}
+                                        inputStyle={globalStyles.inputStyle}
+                                        inputContainerStyle={globalStyles.inputContainerStyle}
+                                        onChangeText={confirmPassword => this.setState({confirmPassword})}
+                                        errorMessage={errors.confirmPassword ? errors.confirmPassword : null}
+                                    />
+                                </View>
 
                             </View>
                         </View>
@@ -258,9 +261,11 @@ class ForgotPasswordScreen extends Component {
                             </View>
                         </View>
                     }
+                    <View style={[styles.formContainer]}>
                     {
                         status === 'fresh' &&
-                        <View style={[styles.formContainer]}>
+                        
+                        <View style={globalStyles.formRow}>
                             <Input
                                 leftIcon={
                                     <Icon
@@ -278,32 +283,32 @@ class ForgotPasswordScreen extends Component {
                                 errorMessage={errors.email ? errors.email : null}
                             />
                         </View>
-
                     }
-                    <View style={[styles.formContainer]}>
-                        <Button
-                            buttonStyle={globalStyles.btnPrimary}
-                            titleStyle={globalStyles.btnPrimaryTitle}
-                            activeOpacity={0.8}
-                            title={submitButtonTitle}
-                            onPress={submitButtonPressHandler}
-                            titleStyle={styles.loginTextButton}
-                            loading={isLoading}
-                            disabled={isLoading}
-                        />
-
-                        {
-                            status === 'fresh' &&
+                        <View style={globalStyles.formRow}>
                             <Button
-                                buttonStyle={globalStyles.btnLink}
-                                titleStyle={globalStyles.btnLinkTitle}
+                                buttonStyle={globalStyles.btnPrimary}
+                                titleStyle={globalStyles.btnPrimaryTitle}
                                 activeOpacity={0.8}
-                                title="Have Password Reset Code? Reset Password"
-                                onPress={this.havePasswordResetCodeHandler}
+                                title={submitButtonTitle}
+                                onPress={submitButtonPressHandler}
+                                titleStyle={styles.loginTextButton}
                                 loading={isLoading}
                                 disabled={isLoading}
                             />
-                        }
+
+                            {
+                                status === 'fresh' &&
+                                <Button
+                                    buttonStyle={globalStyles.btnLink}
+                                    titleStyle={globalStyles.btnLinkTitle}
+                                    activeOpacity={0.8}
+                                    title="Have Password Reset Code? Reset Password"
+                                    onPress={this.havePasswordResetCodeHandler}
+                                    loading={isLoading}
+                                    disabled={isLoading}
+                                />
+                            }
+                        </View>
                     </View>
                 </KeyboardAvoidingView>
             </ScrollView>
@@ -312,10 +317,7 @@ class ForgotPasswordScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'white'
-    },
+    
     rowSelector: {
         height: 20,
         flexDirection: 'row',

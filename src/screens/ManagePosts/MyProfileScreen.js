@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {updateMyProfile, updatePassword} from "../../store/actions/authActions";
 import alertMessage from "../../components/Alert";
 import * as _ from "lodash";
+import * as Permissions from 'expo-permissions';
 import {setLocation} from "../../store/actions/formActions";
 import PickLocation from "../../components/Picker/LocationPicker";
 
@@ -90,16 +91,20 @@ class MyProfileScreen extends Component {
     }
 
     pickProfilePictureHandler = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            allowsEditing: true,
-            aspect: [1, 1],
-        });
-
-        if (!result.cancelled) {
-            this.setState({
-                newProfilePicture: result,
-                isSaveProfilePicture: true,
+        const { status } = await Permissions.getAsync(Permissions.CAMERA);
+        console.log(status);
+        if (status !== 'granted') {
+            let result = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                aspect: [1, 1],
             });
+    
+            if (!result.cancelled) {
+                this.setState({
+                    newProfilePicture: result,
+                    isSaveProfilePicture: true,
+                });
+            }
         }
     };
 

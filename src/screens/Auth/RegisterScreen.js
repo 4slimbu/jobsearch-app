@@ -135,9 +135,9 @@ class RegisterScreen extends Component {
             errors
         } = this.props.forms.register;
         return (
-            <ScrollView style={[styles.container]}>
-
-                <KeyboardAvoidingView style={{
+            <ScrollView style={globalStyles.scrollViewContainer}>
+                <View style={globalStyles.scrollViewContentView}>
+                    <KeyboardAvoidingView style={{
                     flex: 1, justifyContent: 'center',
                     alignItems: 'center', marginTop: 100, marginBottom: 100
                 }}
@@ -151,128 +151,138 @@ class RegisterScreen extends Component {
                         </View>
                     </View>
                     <View style={styles.formContainer}>
-                        <Input
-                            leftIcon={
-                                <Icon
-                                    name="envelope-o"
-                                    color={Colors.primary}
-                                    size={25}
-                                    style={{backgroundColor: 'transparent', fontSize:16,}}
-                                />
-                            }
-                            value={email}
-                            keyboardType="email-address"
-                            placeholder={'Email'}
-                            inputStyle={globalStyles.inputStyle}
-                            inputContainerStyle={globalStyles.inputContainerStyle}
-                            onChangeText={email => this.onChangeHandler({email})}
-                            errorMessage={errors.email ? errors.email : null}
-                            autoCapitalize='none'
-                        />
-                        <Input
-                            leftIcon={
-                                <SimpleIcon
-                                    name="lock"
-                                    color={Colors.primary}
-                                    size={25}
-                                    style={{backgroundColor: 'transparent', fontSize:16,}}
-                                />
-                            }
-                            value={password}
-                            secureTextEntry={true}
-                            inputStyle={globalStyles.inputStyle}
-                            containerStyle={globalStyles.inputViewContainer}
-                            inputContainerStyle={globalStyles.inputContainerStyle}
-                            placeholder={'Password'}
-                            onChangeText={password => this.onChangeHandler({password})}
-                            errorMessage={errors.password ? errors.password : null}
-                        />
+                        <View style={globalStyles.formRow}>
+                            <Input
+                                leftIcon={
+                                    <Icon
+                                        name="envelope-o"
+                                        color={Colors.primary}
+                                        size={25}
+                                        style={{backgroundColor: 'transparent', fontSize:16,}}
+                                    />
+                                }
+                                value={email}
+                                keyboardType="email-address"
+                                placeholder={'Email'}
+                                inputStyle={globalStyles.inputStyle}
+                                inputContainerStyle={globalStyles.inputContainerStyle}
+                                onChangeText={email => this.onChangeHandler({email})}
+                                errorMessage={errors.email ? errors.email : null}
+                                autoCapitalize='none'
+                            />
+                        </View>
+                        <View style={globalStyles.formRow}>
+                            <Input
+                                leftIcon={
+                                    <SimpleIcon
+                                        name="lock"
+                                        color={Colors.primary}
+                                        size={25}
+                                        style={{backgroundColor: 'transparent', fontSize:16,}}
+                                    />
+                                }
+                                value={password}
+                                secureTextEntry={true}
+                                inputStyle={globalStyles.inputStyle}
+                                containerStyle={globalStyles.inputViewContainer}
+                                inputContainerStyle={globalStyles.inputContainerStyle}
+                                placeholder={'Password'}
+                                onChangeText={password => this.onChangeHandler({password})}
+                                errorMessage={errors.password ? errors.password : null}
+                            />
+                        </View>
+                        <View style={globalStyles.formRow}>
+                            <Input
+                                leftIcon={
+                                    <SimpleIcon
+                                        name="lock"
+                                        color={Colors.primary}
+                                        size={25}
+                                        style={{backgroundColor: 'transparent', fontSize:16,}}
+                                    />
+                                }
+                                value={confirmPassword}
+                                secureTextEntry={true}
+                                containerStyle={globalStyles.inputViewContainer}
+                                inputStyle={globalStyles.inputStyle}
+                                inputContainerStyle={globalStyles.inputContainerStyle}
+                                placeholder={'Confirm password'}
+                                onChangeText={confirmPassword => this.onChangeHandler({confirmPassword})}
+                                errorMessage={errors.confirmPassword ? errors.confirmPassword : null}
+                            />
+                        </View>
+                        <View style={globalStyles.formRow}>
+                            <Input
+                                leftIcon={
+                                    <SimpleIcon
+                                        name="notebook"
+                                        color={Colors.primary}
+                                        size={25}
+                                        style={{backgroundColor: 'transparent', fontSize:16,}}
+                                    />
+                                }
+                                value={firstName}
+                                containerStyle={globalStyles.inputViewContainer}
+                                inputStyle={globalStyles.inputStyle}
+                                inputContainerStyle={globalStyles.inputContainerStyle}
+                                placeholder={'First Name'}
+                                onChangeText={firstName => this.onChangeHandler({firstName})}
+                                errorMessage={errors.firstName ? errors.firstName : null}
+                            />
+                        </View>
 
-                        <Input
-                            leftIcon={
-                                <SimpleIcon
-                                    name="lock"
-                                    color={Colors.primary}
-                                    size={25}
-                                    style={{backgroundColor: 'transparent', fontSize:16,}}
-                                />
-                            }
-                            value={confirmPassword}
-                            secureTextEntry={true}
-                            containerStyle={globalStyles.inputViewContainer}
-                            inputStyle={globalStyles.inputStyle}
-                            inputContainerStyle={globalStyles.inputContainerStyle}
-                            placeholder={'Confirm password'}
-                            onChangeText={confirmPassword => this.onChangeHandler({confirmPassword})}
-                            errorMessage={errors.confirmPassword ? errors.confirmPassword : null}
-                        />
+                        <View style={globalStyles.formRow}>
+                            <Input
+                                leftIcon={
+                                    <SimpleIcon
+                                        name="notebook"
+                                        color={Colors.primary}
+                                        size={25}
+                                        style={{backgroundColor: 'transparent', fontSize:16}}
+                                    />
+                                }
+                                value={lastName}
+                                containerStyle={globalStyles.inputViewContainer}
+                                inputStyle={globalStyles.inputStyle}
+                                inputContainerStyle={globalStyles.inputContainerStyle}
+                                placeholder={'Last Name'}
+                                onChangeText={lastName => this.onChangeHandler({lastName})}
+                                errorMessage={errors.lastName ? errors.lastName : null}
+                            />
+                        </View>
+                        <View style={globalStyles.formRow}>
+                            <Input
+                                leftIcon={
+                                    <SimpleIcon
+                                        name="phone"
+                                        color={Colors.primary}
+                                        size={25}
+                                        style={{backgroundColor: 'transparent', fontSize:16,}}
+                                    />
+                                }
+                                value={contactNumber}
+                                containerStyle={globalStyles.inputViewContainer}
+                                inputStyle={globalStyles.inputStyle}
+                                inputContainerStyle={globalStyles.inputContainerStyle}
+                                placeholder={'Mobile No.'}
+                                onChangeText={contactNumber => this.onChangeHandler({contactNumber})}
+                                errorMessage={errors.contactNumber ? errors.contactNumber : null}
+                            />
+                        </View>
+                        
+                        <View style={globalStyles.formFlexColumn}>
+                            <PickLocation
+                                value={this.props.forms.location.address}
+                                navigation={this.props.navigation}
+                                errorMessage={errors.address ? errors.address : null}
+                                backScreen="RegisterScreen"
+                            />
+                        </View>
 
-
-                        <Input
-                            leftIcon={
-                                <SimpleIcon
-                                    name="notebook"
-                                    color={Colors.primary}
-                                    size={25}
-                                    style={{backgroundColor: 'transparent', fontSize:16,}}
-                                />
-                            }
-                            value={firstName}
-                            containerStyle={globalStyles.inputViewContainer}
-                            inputStyle={globalStyles.inputStyle}
-                            inputContainerStyle={globalStyles.inputContainerStyle}
-                            placeholder={'First Name'}
-                            onChangeText={firstName => this.onChangeHandler({firstName})}
-                            errorMessage={errors.firstName ? errors.firstName : null}
-                        />
-
-
-                        <Input
-                            leftIcon={
-                                <SimpleIcon
-                                    name="notebook"
-                                    color={Colors.primary}
-                                    size={25}
-                                    style={{backgroundColor: 'transparent', fontSize:16}}
-                                />
-                            }
-                            value={lastName}
-                            containerStyle={globalStyles.inputViewContainer}
-                            inputStyle={globalStyles.inputStyle}
-                            inputContainerStyle={globalStyles.inputContainerStyle}
-                            placeholder={'Last Name'}
-                            onChangeText={lastName => this.onChangeHandler({lastName})}
-                            errorMessage={errors.lastName ? errors.lastName : null}
-                        />
-
-                        <Input
-                            leftIcon={
-                                <SimpleIcon
-                                    name="phone"
-                                    color={Colors.primary}
-                                    size={25}
-                                    style={{backgroundColor: 'transparent', fontSize:16,}}
-                                />
-                            }
-                            value={contactNumber}
-                            containerStyle={globalStyles.inputViewContainer}
-                            inputStyle={globalStyles.inputStyle}
-                            inputContainerStyle={globalStyles.inputContainerStyle}
-                            placeholder={'Mobile No.'}
-                            onChangeText={contactNumber => this.onChangeHandler({contactNumber})}
-                            errorMessage={errors.contactNumber ? errors.contactNumber : null}
-                        />
-
-                        <PickLocation
-                            value={this.props.forms.location.address}
-                            navigation={this.props.navigation}
-                            errorMessage={errors.address ? errors.address : null}
-                            backScreen="RegisterScreen"
-                        />
-
-                        <View style={{marginLeft: 10, flexDirection: 'row', width: '100%'}}>
+                        <View style={globalStyles.formFlexRow}>
+                        
                             <CheckBox
-                                containerStyle={{width: '30%', backgroundColor: 'transparent', borderColor: 'transparent'}}
+                                containerStyle={{backgroundColor: 'white', borderColor: 'white', padding: 0 }}
                                 title='Male'
                                 checkedIcon='dot-circle-o'
                                 checkedColor={Colors.primary}
@@ -281,9 +291,8 @@ class RegisterScreen extends Component {
                                 onPress={() => this.onChangeHandler({gender: "male"})}
                                 size={30}
                             />
-
                             <CheckBox
-                                containerStyle={{width: '30%', backgroundColor: 'transparent', borderColor: 'transparent'}}
+                                containerStyle={{backgroundColor: 'white', borderColor: 'white', padding: 0 }}
                                 title='Female'
                                 checkedIcon='dot-circle-o'
                                 checkedColor={Colors.primary}
@@ -293,17 +302,18 @@ class RegisterScreen extends Component {
                                 onPress={() => this.onChangeHandler({gender: "female"})}
                             />
                         </View>
-
-                        <Button
-                            buttonStyle={globalStyles.btnPrimary}
-                            containerStyle={globalStyles.btnPrimaryContainer}
-                            titleStyle={globalStyles.btnPrimaryTitle}
-                            activeOpacity={0.8}
-                            title="Register"
-                            onPress={this.registerHandler}
-                            loading={isLoading}
-                            disabled={isLoading}
-                        />
+                        <View style={globalStyles.formRow}>
+                            <Button
+                                buttonStyle={globalStyles.btnPrimary}
+                                containerStyle={globalStyles.btnPrimaryContainer}
+                                titleStyle={globalStyles.btnPrimaryTitle}
+                                activeOpacity={0.8}
+                                title="Register"
+                                onPress={this.registerHandler}
+                                loading={isLoading}
+                                disabled={isLoading}
+                            />
+                        </View>
                         <View style={styles.helpContainer}>
                             <Button
                                 title={'Forgot Password?'}
@@ -322,6 +332,7 @@ class RegisterScreen extends Component {
                         </View>
                     </View>
                 </KeyboardAvoidingView>
+                </View>
             </ScrollView>
         );
     }

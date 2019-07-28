@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 20,
         alignItems: "center",
+        width: '100%',
     },
 
     locationTitle: {

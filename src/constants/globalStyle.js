@@ -4,10 +4,20 @@ import Colors from "./colors";
 import appData from "./app";
 
 module.exports = StyleSheet.create({
+    keyboardAvoidingView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 100,
+        marginBottom: 100,
+    },
+
     inputContainerStyle: {
         borderColor: Colors.greyOutline,
-        borderWidth: 1,
         borderRadius: 4,
+        marginLeft: 0,
+        marginRight: 0,
+        borderWidth: 1,
     },
     inputViewContainer: {
         marginTop: 7,
@@ -15,6 +25,7 @@ module.exports = StyleSheet.create({
     inputStyle: {
         marginLeft: 10,
         color:Colors.grey1,
+      
     },
 
     btnPrimaryContainer: {
@@ -69,9 +80,9 @@ module.exports = StyleSheet.create({
 
 
     btnLink: {
-        backgroundColor:'transparent',
-        borderRadius:0,
-        marginLeft:55,
+        backgroundColor: 'transparent',
+        borderRadius: 0,
+        marginLeft: 0,
     },
     btnLinkRight: {
         marginLeft:0,
@@ -103,7 +114,26 @@ module.exports = StyleSheet.create({
     },
     
     formRow: {
-        marginBottom: 15,
+        width: '100%',
+        marginBottom: 5,
+    },
+
+    formFlexRow: {
+        width: '100%',
+        marginBottom: 5,
+        display: 'flex',
+        flexDirection: 'row',
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+
+    formFlexColumn: {
+        width: '100%',
+        marginBottom: 5,
+        display: 'flex',
+        flexDirection: 'column',
+        paddingLeft: 10,
+        paddingRight: 10,
     },
 
     textInput: {
