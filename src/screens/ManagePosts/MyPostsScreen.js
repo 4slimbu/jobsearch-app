@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View, Dimensions, ActivityIndicator, Picker} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Colors from '../../constants/colors';
 import {connect} from "react-redux";
-import {getMyPosts, resetPostsByMe, setPostsByMe} from "../../store/actions/postActions";
+import {getMyPosts, resetPostsByMe} from "../../store/actions/postActions";
 import PostList from "../../components/List/PostList";
 import ContentLoading from "../../components/ContentLoading";
-import * as _ from "lodash";
-import ListPicker from "../../components/Picker/ListPicker";
+import {uiUpdateViewHistory} from "../../store/actions/uiActions";
+import NavigationService from "../../services/NavigationService";
 
 class MyPostsScreen extends Component {
     constructor(props) {
@@ -72,15 +72,6 @@ class MyPostsScreen extends Component {
                         <Text style={styles.heading}>My Posts</Text>
                     </View>
                     <View>
-                        <View style={{ marginLeft: 20, marginRight: 20}}>
-                            <ListPicker
-                                placeholderLabel="Select Category"
-                                value={this.state.selectedCategoryId}
-                                style={{height: 50, width: '100%'}}
-                                onSelect={this.onSelectCategory}
-                                items={this.props.categories}
-                            />
-                        </View>
                         {
                             postsByMe && <PostList {...postListProps}/>
                         }
@@ -162,7 +153,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onGetMyPosts: (url = null, query = null) => dispatch(getMyPosts(url, query)),
-        resetPostsByMe: () => dispatch(resetPostsByMe())
+        resetPostsByMe: () => dispatch(resetPostsByMe()),
+        uiUpdateViewHistory: (navData) => dispatch(uiUpdateViewHistory(navData))
     };
 };
 

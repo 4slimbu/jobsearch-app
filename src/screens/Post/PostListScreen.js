@@ -1,63 +1,72 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {SearchBar,} from 'react-native-elements';
+
+import Colors from "../../constants/colors";
 import {connect} from "react-redux";
-import PropTypes from "prop-types";
-import {loadPostsByCategory} from "../../store/actions/categoryActions";
-import * as _ from "lodash";
+import {getPosts, resetPostFilter, resetPosts, updatePostFilter} from "../../store/actions/postActions";
 import PostList from "../../components/List/PostList";
 import {authUpdatePreferences} from "../../store/actions/authActions";
-import alertMessage from "../../components/Alert";
 import ContentLoading from "../../components/ContentLoading";
-import Colors from '../../constants/colors';
-import {setPostsByCategory} from "../../store/actions/postActions";
-import ListPicker from "../../components/Picker/ListPicker";
-import appData from "../../constants/app";
-import PostListMetaData from "../../components/PostListMetaData";
+import {uiUpdateViewHistory} from "../../store/actions/uiActions";
 
 class PostListScreen extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            category: {},
-            categoryPosts: [{}],
-            selectedCategoryId: null,
-            isLoading: false,
             isReady: false,
+            isLoading: false,
+            searchText: "",
+            setTimeoutId: 0
         };
 
+        this.onChange = this.onChange.bind(this);
         this.onSelectPost = this.onSelectPost.bind(this);
         this.onSavePost = this.onSavePost.bind(this);
-        this.onSelectCategory = this.onSelectCategory.bind(this);
+        this.scrollHandler = this.scrollHandler.bind(this);
     }
 
     async componentDidMount() {
-        this._isMounted = true;
+        this.props.resetPosts();
+        this.props.resetPostFilter();
 
         const { params } = this.props.navigation.state;
-        const categoryId = params ? params.categoryId : null;
-        const category = _.find(this.props.categories, {id:categoryId});
+        await this.props.updatePostFilter(params);
 
-        if (!categoryId) {
-            alertMessage({title: "Error", body: "No category selected"});
+        // Don't automatically pull posts for search
+        if (this.props.posts.filter.type === 'search') {
+            this.setState({isReady: true});
+        } else {
+            await this.props.getPosts(this.props.posts.filter) && this.setState({isReady: true});
         }
-
-        this._isMounted && await this.props.onLoadPostsByCategory(categoryId);
-
-        this.setState({
-            category: category,
-            selectedCategoryId: categoryId,
-            isReady: true
-        });
 
     }
 
-    componentWillUnmount() {
-        this._isMounted = false;
-        this.props.setPostsByCategory({
-            data: [],
-            links: {},
-            meta: {}
-        });
+    onChange(searchText) {
+        this.setState({searchText});
+        this.props.updatePostFilter({search: searchText});
+
+        if (searchText.length === 0) {
+            this.props.resetPosts();
+        }
+
+        if (searchText.length < 3) {
+            return;
+        }
+
+        clearTimeout(this.state.setTimeoutId);
+        // Initiate loading
+        this.setState({ isLoading: true });
+        // Call action only after few milli seconds
+        let setTimeoutId = setTimeout(() => {
+            this.props.getPosts(this.props.posts.filter);
+
+            // Stop Loading
+            this.setState({ isLoading: false });
+        }, 300);
+
+        this.setState({setTimeoutId: setTimeoutId});
     }
 
     onSelectPost(postId) {
@@ -79,23 +88,18 @@ class PostListScreen extends Component {
         this.props.onUpdatePreferences(preferences);
     }
 
-    async onSelectCategory(categoryId) {
-        this.setState({selectedCategoryId: categoryId});
-        this._isMounted && await this.props.onLoadPostsByCategory(categoryId);
-    }
-
     async scrollHandler(e){
-        if (this.state.searchText.length < 3) {
-            return;
-        }
+        // if (this.state.searchText.length < 3) {
+        //     return;
+        // }
 
-        let windowHeight = appData.app.SCREEN_HEIGHT,
+        let windowHeight = Dimensions.get('window').height,
             height = e.nativeEvent.contentSize.height,
             offset = e.nativeEvent.contentOffset.y;
         if( windowHeight + offset >= height ){
-            if (this.props.searchedPosts.meta.to !== this.props.searchedPosts.meta.total) {
+            if (this.props.posts.posts.meta.to !== this.props.posts.posts.meta.total) {
                 this.setState({isLoading: true});
-                await this.props.onSearch(this.state.searchText, this.props.searchedPosts.links.next).then(res => {
+                await this.props.getPosts(this.props.posts.filter, this.props.posts.posts.links.next).then(res => {
                     this.setState({isLoading: false});
                 }).catch(err => {
                     this.setState({isLoading: false});
@@ -105,37 +109,36 @@ class PostListScreen extends Component {
     }
 
     render() {
-        const {category, isReady} = this.state;
-        const {postsByCategory, preferences} = this.props;
+        const {searchText, isReady, isLoading} = this.state;
+        console.log(this.props.navigation.state.params.type);
+        const {posts, filter} = this.props.posts;
         const postListProps = {
-            posts: postsByCategory,
-            onSelectPost: this.onSelectPost,
-            onSavePost: this.onSavePost,
-            savedPosts: preferences.savedPosts,
+            type: filter.type,
+            posts: posts,
+            backScreen: filter.type === 'search' ? 'Search' : 'PostList'
         };
+
+        console.log('post search screen', postListProps.backScreen);
+
         return (
             <ScrollView style={styles.container} keyboardShouldPersistTaps="handled" onScrollEndDrag={this.scrollHandler}>
-                <View style={styles.contentView}>
-                    {/*<View style={{marginLeft: 20, marginRight: 20}}>*/}
-                        {/*<ListPicker*/}
-                            {/*placeholderLabel="Select Category"*/}
-                            {/*value={this.state.selectedCategoryId}*/}
-                            {/*style={{height: 50, width: '100%'}}*/}
-                            {/*onSelect={this.onSelectCategory}*/}
-                            {/*items={this.props.categories}*/}
-                        {/*/>*/}
-                    {/*</View>*/}
-                    <PostListMetaData meta={postsByCategory.meta}/>
-                    <PostList {...postListProps}/>
+                <SearchBar lightTheme placeholder="Search Posts"
+                           showLoading={isLoading}
+                           value={searchText}
+                           onChangeText={searchText => this.onChange(searchText)}
+                />
 
-                    <View style={{height: 100}}>
-                        {
-                            !isReady ? <ContentLoading/> :
-                                <PostListMetaData meta={postsByCategory.meta}/>
-
-                        }
+                {
+                    isReady &&
+                    <View style={{marginTop: 20}}>
+                        <PostList {...postListProps}/>
                     </View>
+                }
 
+                <View style={{height: 100}}>
+                    {
+                        (isLoading || !isReady) && <ContentLoading/>
+                    }
                 </View>
             </ScrollView>
         );
@@ -147,53 +150,72 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     headerContainer: {
-        padding: 10,
-        backgroundColor: Colors.lightGray,
-        marginBottom: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 40,
+        backgroundColor: '#acacac',
+    },
+    heading: {
+        color: 'white',
+        marginTop: 10,
+        fontSize: 22,
+        fontWeight: 'bold',
     },
     contentView: {
         flex: 1,
-    },
-    categoryContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        flexWrap: 'wrap',
-        width: '100%',
-        marginTop: 20,
-    },
-    categoryItem: {
-        padding: 10,
-        marginBottom: 20,
+        justifyContent: 'center',
         alignItems: 'center',
     },
-    heading: {
-        color: Colors.darkGray,
-        fontSize: 14,
-        fontWeight: 'normal',
+    triangleLeft: {
+        position: 'absolute',
+        left: -20,
+        bottom: 0,
+        width: 0,
+        height: 0,
+        borderRightWidth: 20,
+        borderRightColor: 'white',
+        borderBottomWidth: 25,
+        borderBottomColor: 'transparent',
+        borderTopWidth: 25,
+        borderTopColor: 'transparent',
     },
+    triangleRight: {
+        position: 'absolute',
+        right: -20,
+        top: 0,
+        width: 0,
+        height: 0,
+        borderLeftWidth: 20,
+        borderLeftColor: 'white',
+        borderBottomWidth: 25,
+        borderBottomColor: 'transparent',
+        borderTopWidth: 25,
+        borderTopColor: 'transparent',
+    },
+    inputContainerStyle: {
+        marginTop: 16,
+        width: '90%',
+    },
+    searchBar: {
+        backgroundColor: Colors.grey5
+    }
 });
-
-PostListScreen.propTypes = {
-    preferences: PropTypes.object.isRequired,
-    categories: PropTypes.object.isRequired,
-    postsByCategory: PropTypes.object.isRequired,
-    onLoadPostsByCategory: PropTypes.func.isRequired,
-    onUpdatePreferences: PropTypes.func.isRequired
-};
 
 const mapStateToProps = state => {
     return {
         preferences: state.auth.user.preferences,
-        categories: state.categories,
-        postsByCategory: state.posts.postsByCategory
+        posts: state.posts,
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoadPostsByCategory: (categoryId) => dispatch(loadPostsByCategory(categoryId)),
         onUpdatePreferences: (preferences) => dispatch(authUpdatePreferences(preferences)),
-        setPostsByCategory: (data) => dispatch(setPostsByCategory(data))
+        uiUpdateViewHistory: (navData) => dispatch(uiUpdateViewHistory(navData)),
+        updatePostFilter: (filterData) => dispatch(updatePostFilter(filterData)),
+        getPosts: (queryObject, url) => dispatch(getPosts(queryObject, url)),
+        resetPosts: () => dispatch(resetPosts()),
+        resetPostFilter: () => dispatch(resetPostFilter()),
     };
 };
 

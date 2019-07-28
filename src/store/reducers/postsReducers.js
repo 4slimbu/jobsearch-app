@@ -3,17 +3,23 @@ import {
     POSTS_BY_CATEGORY_RESET,
     POST_SET,
     POST_COMMENT_SET,
-    POSTS_BY_SEARCH_SET,
+    SET_POSTS,
     POSTS_BY_ME_SET,
     POSTS_SAVED_BY_ME_SET,
     POSTS_BY_ME_DELETE,
     DELETE_SAVED_POST,
-    UPDATE_EDITED_POST, POSTS_BY_SEARCH_UPDATE, POSTS_BY_SEARCH_RESET, POSTS_BY_ME_RESET, POSTS_SAVED_BY_ME_RESET
+    UPDATE_EDITED_POST, UPDATE_POSTS, POSTS_BY_SEARCH_RESET, POSTS_BY_ME_RESET, POSTS_SAVED_BY_ME_RESET,
+    UPDATE_POST_FILTER, RESET_POST_FILTER, RESET_POSTS
 } from "../actions/actionTypes";
 import * as _ from "lodash";
 
 const initialState = {
     post: {},
+    posts: {
+        data: [],
+        links: {},
+        meta: {}
+    },
     postsByCategory: {
         data: [],
         links: {},
@@ -34,6 +40,13 @@ const initialState = {
         links: {},
         meta: {}
     },
+    filter: {
+        type: "",
+        search: "",
+        category: [],
+        radius: 100,
+        orderBy: "nearest", // nearest, latest,
+    }
 };
 
 const postsReducers = (state = initialState, action) => {
@@ -63,24 +76,30 @@ const postsReducers = (state = initialState, action) => {
                 }
             };
 
-        case POSTS_BY_SEARCH_SET:
+        case SET_POSTS:
             return {
                 ...state,
-                searchedPosts: {
-                    data: [...action.payload.data],
+                posts: {
+                    data: action.payload.data,
                     links: action.payload.links,
                     meta: action.payload.meta
                 }
             };
 
-        case POSTS_BY_SEARCH_UPDATE:
+        case UPDATE_POSTS:
             return {
                 ...state,
-                searchedPosts: {
-                    data: state.searchedPosts.data.concat(action.payload.data),
+                posts: {
+                    data: state.posts.data.concat(action.payload.data),
                     links: action.payload.links,
                     meta: action.payload.meta
                 }
+            };
+
+        case RESET_POSTS:
+            return {
+                ...state,
+                posts: initialState.posts
             };
 
         case POSTS_BY_SEARCH_RESET:
@@ -129,30 +148,21 @@ const postsReducers = (state = initialState, action) => {
                 postsByCategory: initialState.postsByCategory
             };
 
-        case POSTS_BY_ME_DELETE:
-            const myPostsData = [...state.postsByMe.data];
-            const myPostsDelIndex = _.find(myPostsData, {id: action.id});
-
-            myPostsData.splice(myPostsDelIndex, 1);
-
+        case UPDATE_POST_FILTER:
             return {
                 ...state,
-                postsByMe: {
-                    data: myPostsData,
+                filter: {
+                    ...state.filter,
+                    ...action.payload
                 }
             };
 
-        case DELETE_SAVED_POST:
-            const savedPostData = [...state.savedPosts.data];
-            const savedPostDelIndex = _.find(savedPostData, {id: action.id});
-
-            savedPostData.splice(savedPostDelIndex, 1);
+        case RESET_POST_FILTER:
             return {
                 ...state,
-                savedPosts: {
-                    data: savedPostData,
-                }
+                filter: initialState.filter
             };
+
 
         default:
             return state;

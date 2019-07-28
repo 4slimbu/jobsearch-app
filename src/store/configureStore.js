@@ -16,7 +16,8 @@ const rootReducer = combineReducers({
     posts: postsReducers,
     pages: pagesReducers,
     comments: commentsReducers,
-    forms: formsReducers
+    forms: formsReducers,
+    ui: uiReducers
 });
 
 const configureStore = () => {

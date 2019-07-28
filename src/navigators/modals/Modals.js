@@ -1,11 +1,11 @@
 import React from 'react';
 import {createStackNavigator} from 'react-navigation';
-import ModalScreen from "../../screens/Modal/ModalScreen";
 import PickLocationModal from "../../screens/Modal/PickLocationModal";
+import FilterModal from "../../screens/Modal/FilterModal";
 
 const Modals = createStackNavigator({
     PickLocationModal: { screen: PickLocationModal },
-    Modal: { screen: ModalScreen }
+    FilterModal: { screen: FilterModal }
 },{
     mode: 'modal',
     // headerMode: 'none'

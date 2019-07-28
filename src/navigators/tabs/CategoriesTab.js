@@ -1,17 +1,18 @@
 import React from 'react';
 import {createStackNavigator} from 'react-navigation';
 import CategoriesScreen from "../../screens/Category/CategoriesScreen";
-import PostListScreen from "../../screens/Post/PostListScreen";
 import PostDetailScreen from "../../screens/Post/PostDetailScreen";
+import PostListScreen from "../../screens/Post/PostListScreen";
 
 const CategoriesTab = createStackNavigator({
     Categories: {
         screen: CategoriesScreen,
         path: '/',
     },
-    PostList: {
+    CategoryPostList: {
         screen: PostListScreen,
         path: '/post-list',
+        params: { type: 'category' }
     },
     PostDetail: {
         screen: PostDetailScreen,

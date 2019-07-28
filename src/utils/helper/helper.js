@@ -90,3 +90,26 @@ export function prettyDistance(distanceInKm) {
 export function onlyAdditionalImages(postImages) {
     return _.filter(postImages, function(o) {return !o.is_primary});
 }
+
+export function toggleItemInArray(itemsArray, item) {
+    let arr = itemsArray && itemsArray.length > 0 ? itemsArray : [];
+
+    let index = arr.indexOf(item);
+    if (index > -1) {
+        arr.splice(index, 1);
+    } else {
+        arr.push(item);
+    }
+
+    return arr;
+}
+
+export function toQueryString(queryObject) {
+    let queryString = '';
+
+    _.map(queryObject, function (item, key) {
+        queryString += '&' + key + '=' + item;
+    });
+
+    return queryString;
+}

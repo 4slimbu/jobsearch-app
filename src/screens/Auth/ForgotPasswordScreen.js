@@ -287,7 +287,6 @@ class ForgotPasswordScreen extends Component {
                             activeOpacity={0.8}
                             title={submitButtonTitle}
                             onPress={submitButtonPressHandler}
-                            titleStyle={styles.loginTextButton}
                             loading={isLoading}
                             disabled={isLoading}
                         />

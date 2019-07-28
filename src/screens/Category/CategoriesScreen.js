@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import appData from "../../constants/app";
 import {ActivityIndicator, ScrollView, StyleSheet, View} from 'react-native';
-import PropTypes from "prop-types";
 import {Feather} from '@expo/vector-icons';
 import {connect} from "react-redux";
 import {loadCategories} from "../../store/actions/categoryActions";
@@ -44,9 +43,7 @@ class CategoriesScreen extends Component {
 
         this.setState({isLoading: true});
         this._isMounted && await this.props.onLoadCategories() &&
-        this.setState({
-            categories: this.props.categories
-        });
+        this.setState({ categories: this.props.categories });
         this.setState({isLoading: false});
     }
 
@@ -55,7 +52,7 @@ class CategoriesScreen extends Component {
     }
 
     onSelectCategory(categoryId) {
-        this.props.navigation.navigate('PostList', {categoryId: categoryId});
+        this.props.navigation.navigate('CategoryPostList', {...this.props.filter, category: [categoryId], type: 'category'});
     }
 
     render() {
@@ -101,13 +98,10 @@ const styles = StyleSheet.create({
     },
 });
 
-CategoriesScreen.propTypes = {
-    categories: PropTypes.object.isRequired
-};
-
 const mapStateToProps = state => {
     return {
-        categories: state.categories
+        categories: state.categories,
+        filter: state.posts.filter
     }
 };
 

@@ -5,6 +5,8 @@ import configureStore from './src/store/configureStore';
 import {AsyncStorage, StyleSheet} from "react-native";
 import {createAppContainer} from "react-navigation";
 import MainNavigator from "./src/navigators/MainNavigator";
+import NavigationService from "./src/services/NavigationService";
+import {uiUpdateViewHistory} from "./src/store/actions/uiActions";
 
 const store = configureStore();
 
@@ -66,10 +68,18 @@ export default class App extends React.Component {
         }
     };
 
+    handleNavigationStateChange() {
+        store.dispatch(uiUpdateViewHistory(NavigationService.getCurrentRoute()));
+    }
+
     render() {
         return (
             <Provider store={store}>
-                <AppContainer />
+                <AppContainer ref={navigatorRef => {
+                    NavigationService.setTopLevelNavigator(navigatorRef);
+                }}
+                    onNavigationStateChange={() => this.handleNavigationStateChange()}
+                />
                 {/*<View style={[styles.container, styles.horizontal]}>*/}
                 {/*  <ActivityIndicator size="large" color="red" />*/}
                 {/*</View>*/}

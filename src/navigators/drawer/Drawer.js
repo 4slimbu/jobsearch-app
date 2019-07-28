@@ -1,10 +1,9 @@
-import {Dimensions, Image, Text, View} from "react-native";
+import {Image, Text, View} from "react-native";
 import appData from "../../constants/app";
 import {createDrawerNavigator} from "react-navigation";
 import React from "react";
 import LogoutScreen from "../../screens/Auth/LogoutScreen";
 import Tabs from "../tabs/Tabs";
-import Post from "../stacks/Post";
 import Modals from "../modals/Modals";
 import {ListItem} from "react-native-elements";
 import Colors from "../../constants/colors";
@@ -94,7 +93,6 @@ const CustomDrawerContentComponent = props => (
 const Drawer = createDrawerNavigator(
     {
         Tabs: {screen: Tabs},
-        Post: {screen: Post},
         Profile: {screen: Profile},
         Page: {screen: Page},
         Modal: {screen: Modals},

@@ -8,15 +8,13 @@ import Colors from '../../constants/colors';
 
 import ManagePostsScreen from '../../screens/ManagePosts/ManagePostsScreen';
 import AddPostScreen from "../../screens/ManagePosts/AddPostScreen";
-import MyPostsScreen from "../../screens/ManagePosts/MyPostsScreen";
 import MyCommentsScreen from "../../screens/ManagePosts/MyCommentsScreen";
 import EditPostScreen from "../../screens/ManagePosts/EditPostScreen";
-import SavedPostsScreen from "../../screens/ManagePosts/SavedPostsScreen";
-import PostListScreen from "../../screens/Post/PostListScreen";
 import PostDetailScreen from "../../screens/Post/PostDetailScreen";
+import PostListScreen from "../../screens/Post/PostListScreen";
 
 const ManagePostsTab = createStackNavigator({
-    Home: {
+    ManagePosts: {
         screen: ManagePostsScreen,
         path: '/',
         navigationOptions: ({navigation}) => ({
@@ -35,12 +33,12 @@ const ManagePostsTab = createStackNavigator({
             ),
         }),
     },
-    AddPost: {screen: AddPostScreen},
-    MyPosts: {screen: MyPostsScreen},
-    MyComments: {screen: MyCommentsScreen},
-    MySavedPosts: {screen: SavedPostsScreen},
-    EditPost: {screen: EditPostScreen},
-    PostList: {screen: PostListScreen},
+    AddPost: {screen: AddPostScreen, navigationOptions: ({navigation}) => ({ title: 'Add Post'})},
+    MyPosts: {screen: PostListScreen, params: {type: 'my'}, navigationOptions: ({navigation}) => ({ title: 'My Posts'})},
+    MyComments: {screen: MyCommentsScreen, navigationOptions: ({navigation}) => ({ title: 'My Comments'})},
+    MySavedPosts: {screen: PostListScreen, params: {type: 'saved'}, navigationOptions: ({navigation}) => ({ title: 'My Saved Posts'})},
+    EditPost: {screen: EditPostScreen, navigationOptions: ({navigation}) => ({ title: 'Edit Post'})},
+    ManagePostList: {screen: PostListScreen},
     PostDetail: {screen: PostDetailScreen}
 });
 

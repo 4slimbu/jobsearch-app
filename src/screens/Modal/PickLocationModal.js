@@ -5,7 +5,7 @@ import {Icon, SearchBar,} from 'react-native-elements';
 
 import Colors from "../../constants/colors";
 import {connect} from "react-redux";
-import {resetSearchedPosts, searchPosts} from "../../store/actions/postActions";
+import {resetSearchedPosts, getPosts} from "../../store/actions/postActions";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import ContentLoading from "../../components/ContentLoading";
 import LocationList from "../../components/List/LocationList";

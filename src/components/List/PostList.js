@@ -6,6 +6,7 @@ import {map} from "lodash";
 import PostItem from "../ListItem/PostItem";
 import {Divider} from "react-native-elements";
 import Colors from "../../constants/colors";
+import PostListMetaData from "../PostListMetaData";
 
 const PostList = (props) => {
     const {posts, type} = props;
@@ -23,14 +24,20 @@ const PostList = (props) => {
 };
 
 const postList = props => {
-    const {posts, type} = props;
+    const {posts, type, backScreen} = props;
     const postListProps = {
         type: type,
         posts: posts,
+        backScreen: backScreen
     };
     return (
         <View style={styles.postContainer}>
+            <PostListMetaData meta={posts.meta} backScreen={backScreen}/>
             <PostList {...postListProps}/>
+            {
+                posts.meta && posts.meta.total > 10 &&
+                <PostListMetaData meta={posts.meta}/>
+            }
         </View>
     );
 };

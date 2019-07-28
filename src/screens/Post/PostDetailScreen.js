@@ -11,6 +11,8 @@ import {prettyDistance, toReadable} from "../../utils/helper/helper";
 import ContentLoading from "../../components/ContentLoading";
 import PostComments from "./PostComments";
 import KCarousel from "../../components/Carousel/KCarousel";
+import NavigationService from "../../services/NavigationService";
+import {uiUpdateViewHistory} from "../../store/actions/uiActions";
 
 class PostDetailScreen extends Component {
     constructor(props) {
@@ -37,10 +39,9 @@ class PostDetailScreen extends Component {
         this._isMounted && await this.props.getPost(postId) && this.setState({
             ...this.state,
             post: this.props.posts.post,
-            isSaved: isSaved
+            isSaved: isSaved,
+            isReady: true
         });
-
-        this.setState({isReady: true});
     }
 
     componentWillUnmount() {
@@ -75,7 +76,7 @@ class PostDetailScreen extends Component {
 
         return (
             <ScrollView style={styles.container}>
-                {  post &&
+                {  post && isReady &&
                 <KeyboardAvoidingView style={{flex: 1, marginBottom: 50}}
                                       behavior="padding"
                 >
@@ -111,12 +112,12 @@ class PostDetailScreen extends Component {
                                             />
                                         </View>
                                         <View style={styles.postAuthorMetaData}>
-                                            <Text style={styles.postAuthorMeta}>By: {post.author && post.author.full_name}</Text>
-                                            <Text style={styles.postDateMeta}>Posted at: {toReadable(post.created_at)}</Text>
+                                            <Text style={styles.postAuthorMeta}>{post.author && post.author.full_name}</Text>
+                                            <Text style={styles.postDateMeta}>{toReadable(post.created_at)}</Text>
                                         </View>
                                     </View>
                                     <View style={styles.postContentContainer}>
-                                        <Text style={styles.postContentTitle}>Description</Text>
+                                        {/*<Text style={styles.postContentTitle}>Description</Text>*/}
                                         <Text style={styles.postContent}>{post.body}</Text>
                                     </View>
                                     <View>
@@ -258,6 +259,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onUpdatePreferences: (preferences) => dispatch(authUpdatePreferences(preferences)),
+        uiUpdateViewHistory: (navData) => dispatch(uiUpdateViewHistory(navData)),
         getPost: (postId) => dispatch(getPost(postId)),
     };
 };

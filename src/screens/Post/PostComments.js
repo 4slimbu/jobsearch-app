@@ -159,7 +159,7 @@ class PostComments extends Component {
                     </View>
                 }
                 <View style={styles.commentsListContainer}>
-                    <Text style={styles.sectionHeading}>Leave a Comment</Text>
+                    <Text style={styles.sectionHeading}>Leave a Private Comment</Text>
                     <Text style={styles.sectionSubHeading}>Leave a comment to apply. This comment section is private for each
                         user.</Text>
                     <View>

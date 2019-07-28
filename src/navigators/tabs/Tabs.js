@@ -56,6 +56,8 @@ const Tabs = createBottomTabNavigator(
         swipeEnabled: false,
         // Android's default option displays tabBars on top, but iOS is bottom
         tabBarPosition: 'bottom',
+        backBehavior: 'initialRoute',
+        resetOnBlur: true,
         tabBarOptions: {
             activeTintColor: Colors.primary,
             // Android's default showing of icons is false whereas iOS is true

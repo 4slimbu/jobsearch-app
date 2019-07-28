@@ -3,10 +3,11 @@ import {
     POST_SET,
     POSTS_BY_CATEGORY_SET, POSTS_BY_ME_DELETE, POSTS_BY_ME_RESET,
     POSTS_BY_ME_SET, POSTS_BY_SEARCH_RESET,
-    POSTS_BY_SEARCH_SET, POSTS_BY_SEARCH_UPDATE, POSTS_SAVED_BY_ME_RESET,
-    POSTS_SAVED_BY_ME_SET, UPDATE_EDITED_POST
+    SET_POSTS, UPDATE_POSTS, POSTS_SAVED_BY_ME_RESET,
+    POSTS_SAVED_BY_ME_SET, RESET_POST_FILTER, UPDATE_EDITED_POST, UPDATE_POST_FILTER, RESET_POSTS
 } from "./actionTypes";
 import appData from "../../constants/app";
+import {toQueryString} from "../../utils/helper/helper";
 
 export const getPost = (postId) => {
     return (dispatch, getState) => {
@@ -97,16 +98,19 @@ export const setPostsByCategory = (payload) => {
     }
 };
 
-export const searchPosts = (text, url=null) => {
+export const getPosts = (queryObject, url=null) => {
     let isFreshSearch = true;
 
+    let queryString = toQueryString(queryObject);
     return (dispatch, getState) => {
         if (!url) {
-            url = appData.app.API_BASE_URL + '/posts?search=' + text;
+            url = appData.app.API_BASE_URL + '/posts?' + queryString;
         } else {
-            url = url + '&search=' + text;
+            url = url + queryString;
             isFreshSearch = false;
         }
+
+        console.log(url);
 
         const token = getState().auth.token;
         return new Promise((resolve, reject) => {
@@ -125,9 +129,9 @@ export const searchPosts = (text, url=null) => {
                     }
 
                     if (isFreshSearch) {
-                        dispatch( setPostsBySearch(parsedRes) );
+                        dispatch( setPosts(parsedRes) );
                     } else {
-                        dispatch( updatePostsBySearch(parsedRes) );
+                        dispatch( updatePosts(parsedRes) );
                     }
                     resolve(parsedRes);
                 })
@@ -139,17 +143,24 @@ export const searchPosts = (text, url=null) => {
     };
 };
 
-export const setPostsBySearch = (payload) => {
+export const setPosts = (payload) => {
     return {
-        type: POSTS_BY_SEARCH_SET,
+        type: SET_POSTS,
         payload: payload
     }
 };
 
-export const updatePostsBySearch = (payload) => {
+export const updatePosts = (payload) => {
     return {
-        type: POSTS_BY_SEARCH_UPDATE,
+        type: UPDATE_POSTS,
         payload: payload
+    }
+};
+
+export const resetPosts = () => {
+    return {
+        type: RESET_POSTS,
+        payload: null
     }
 };
 
@@ -368,5 +379,19 @@ export const resetSavedPosts = (payload) => {
     return {
         type: POSTS_SAVED_BY_ME_RESET,
         payload: payload
+    }
+};
+
+export const updatePostFilter = (payload) => {
+    return {
+        type: UPDATE_POST_FILTER,
+        payload: payload
+    }
+};
+
+export const resetPostFilter = () => {
+    return {
+        type: RESET_POST_FILTER,
+        payload: {}
     }
 };
