@@ -9,6 +9,7 @@ import PostList from "../../components/List/PostList";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import ContentLoading from "../../components/ContentLoading";
 import {uiUpdateViewHistory} from "../../store/actions/uiActions";
+import * as _ from "lodash";
 
 class PostListScreen extends Component {
     constructor(props) {
@@ -25,11 +26,16 @@ class PostListScreen extends Component {
         this.onSelectPost = this.onSelectPost.bind(this);
         this.onSavePost = this.onSavePost.bind(this);
         this.scrollHandler = this.scrollHandler.bind(this);
+        this.refresh = this.refresh.bind(this);
     }
 
     async componentDidMount() {
         this.props.resetPosts();
-        this.props.resetPostFilter();
+        this.props.updatePostFilter({
+            type: "",
+            search: "",
+            category: []
+        });
 
         const { params } = this.props.navigation.state;
         await this.props.updatePostFilter(params);
@@ -41,6 +47,11 @@ class PostListScreen extends Component {
             await this.props.getPosts(this.props.posts.filter) && this.setState({isReady: true});
         }
 
+    }
+
+    refresh() {
+        this.setState({isReady: false});
+        this.props.getPosts(this.props.posts.filter) && this.setState({isReady: true});
     }
 
     onChange(searchText) {
@@ -114,7 +125,15 @@ class PostListScreen extends Component {
         const postListProps = {
             type: filter.type,
             posts: posts,
-            backScreen: this.props.viewHistory[this.props.viewHistory.length - 1]
+            backScreen: this.props.viewHistory[this.props.viewHistory.length - 1],
+            isFilterActive: ! _.isEqual(filter, {
+                type: "",
+                search: "",
+                category: [],
+                radius: 100,
+                orderBy: "nearest",
+            }),
+            onRefresh: this.refresh
         };
 
 

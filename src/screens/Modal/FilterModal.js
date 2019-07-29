@@ -18,7 +18,10 @@ class FilterModal extends Component {
                     size={30}
                     type="ionicons"
                     containerStyle={{marginLeft: 10}}
-                    onPress={() => navigation.navigate(backScreen)}
+                    onPress={() => {
+                        navigation.state.params.onRefresh();
+                        navigation.navigate(backScreen);
+                    }}
                 />
             ),
         }
@@ -44,6 +47,7 @@ class FilterModal extends Component {
 
     _onBackIconPress = () => {
         let backScreen = this.props.navigation.getParam('backScreen');
+        this.props.navigation.state.params.onRefresh();
         this.props.navigation.navigate(backScreen);
         return true;
     };
@@ -162,7 +166,7 @@ const mapStateToProps = state => {
     return {
         postsFilter: state.posts.filter,
         categories: state.categories,
-        viewHistory: state.ui.viewHistory
+        viewHistory: state.ui.viewHistory,
     }
 };
 

@@ -24,19 +24,14 @@ const PostList = (props) => {
 };
 
 const postList = props => {
-    const {posts, type, backScreen} = props;
-    const postListProps = {
-        type: type,
-        posts: posts,
-        backScreen: backScreen
-    };
+    const {posts, backScreen, isFilterActive, onRefresh} = props;
     return (
         <View style={styles.postContainer}>
-            <PostListMetaData meta={posts.meta} backScreen={backScreen}/>
-            <PostList {...postListProps}/>
+            <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} onRefresh={onRefresh}/>
+            <PostList {...props}/>
             {
                 posts.meta && posts.meta.total > 10 &&
-                <PostListMetaData meta={posts.meta}/>
+                <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} onRefresh={onRefresh}/>
             }
         </View>
     );

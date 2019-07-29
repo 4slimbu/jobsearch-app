@@ -1,9 +1,14 @@
-import {UI_START_LOADING, UI_STOP_LOADING, UI_UPDATE_VIEW_HISTORY} from "../actions/actionTypes";
+import {
+    UI_START_LOADING, UI_STOP_LOADING, UI_UPDATE_SCREEN_UPDATE_LIST,
+    UI_UPDATE_VIEW_HISTORY
+} from "../actions/actionTypes";
 import * as _ from "lodash";
+import {toggleItemInArray} from "../../utils/helper/helper";
 
 const initialState = {
     isLoading: false,
-    viewHistory: []
+    viewHistory: [],
+    refreshList: []
 };
 
 const uiReducers = (state = initialState, action) => {
@@ -33,6 +38,14 @@ const uiReducers = (state = initialState, action) => {
             return {
                 ...state,
                 viewHistory: viewHistory,
+            };
+        case UI_UPDATE_SCREEN_UPDATE_LIST:
+            let refreshList = [...state.refreshList];
+            refreshList = toggleItemInArray(refreshList, action.payload);
+
+            return {
+                ...state,
+                refreshList: refreshList
             };
         default:
             return state;
