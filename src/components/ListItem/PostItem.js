@@ -169,15 +169,15 @@ const styles = StyleSheet.create({
     },
     postFeaturedImageWrapper: {
         overflow: 'hidden',
-        width: 120,
+        width: '100%',
         height: 120,
-        borderBottomLeftRadius: 5,
+        borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
         borderTopLeftRadius: 5,
-        borderTopRightRadius: 0,
+        borderTopRightRadius: 5,
     },
     postFeaturedImage: {
-        width: 120,
+        width: '100%',
         height: 120,
     },
     postContentWrapper: {
@@ -186,18 +186,18 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         textAlign: 'center',
         maxWidth: 200,
-        height: 120,
+        height: 100,
         flexWrap: 'wrap',
     },
     postContent: {
-        paddingLeft: 20,
-        paddingRight: 20,
+        paddingLeft: 10,
+        paddingRight: 10,
         display: 'flex',
         flexWrap: 'wrap',
     },
     postMainWrapper: {
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
         backgroundColor: '#ffffff',
         padding: 0,
         alignItems: 'flex-start',
@@ -209,8 +209,8 @@ const styles = StyleSheet.create({
         elevation: 2.0,
         marginTop: 20,
         marginBottom: 20,
-        marginLeft: 30,
-        marginRight: 30,
+        marginLeft: 20,
+        marginRight: 20,
     },
 
     postMetaWrapper: {

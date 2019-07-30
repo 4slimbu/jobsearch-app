@@ -12,7 +12,7 @@ const PostList = (props) => {
     const {posts, type} = props;
     return map(posts.data, (post, key) => {
         return (
-            <View key={key}>
+            <View style={{ width: '50%'}} key={key}>
                 {key !== 0 && <Divider style={styles.divider}/>}
                 <PostItem
                     post={post}
@@ -26,9 +26,11 @@ const PostList = (props) => {
 const postList = props => {
     const {posts, backScreen, isFilterActive, onRefresh} = props;
     return (
-        <View style={styles.postContainer}>
+        <View>
             <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} onRefresh={onRefresh}/>
-            <PostList {...props}/>
+            <View style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
+                <PostList {...props}/>
+            </View>
             {
                 posts.meta && posts.meta.total > 10 &&
                 <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} onRefresh={onRefresh}/>

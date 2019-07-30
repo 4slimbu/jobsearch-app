@@ -139,10 +139,14 @@ class PostListScreen extends Component {
 
         return (
             <ScrollView style={styles.container} keyboardShouldPersistTaps="handled" onScrollEndDrag={this.scrollHandler}>
-                <SearchBar lightTheme placeholder="Search Posts"
-                           showLoading={isLoading}
-                           value={searchText}
-                           onChangeText={searchText => this.onChange(searchText)}
+                <SearchBar
+                    lightTheme
+                    containerStyle={{backgroundColor: Colors.white, borderWidth: 0}}
+                    inputContainerStyle={{backgroundColor: Colors.white, borderWidth: 0, marginTop: 0}}
+                    placeholder="Type here to search.."
+                    showLoading={isLoading}
+                    value={searchText}
+                    onChangeText={searchText => this.onChange(searchText)}
                 />
 
                 {
