@@ -34,7 +34,7 @@ export function toReadable(mysql_date) {
 export function getFeaturedImageSrc(postImages) {
     const primaryImage = _.find(postImages, {"is_primary": true});
 
-    return  primaryImage && primaryImage.url ? {uri: primaryImage.url} : require('../../../assets/images/placeholder.png');
+    return  primaryImage && primaryImage.url ? {uri: primaryImage.url} : false;
 }
 
 export function findFeaturedImage(postImages) {
@@ -84,7 +84,7 @@ export function prettyDistance(distanceInKm) {
         distanceInKm = 0;
     }
 
-    return Number((distanceInKm * 1).toFixed(1)) + ' km';
+    return Number((distanceInKm * 1).toFixed(0)) + ' km';
 }
 
 export function onlyAdditionalImages(postImages) {

@@ -169,14 +169,14 @@ class VerificationScreen extends Component {
                             <View>
                                 <Button
                                     title={'Re-Send Verification Code'}
-                                    titleStyle={{color: Colors.grey1}}
+                                    titleStyle={{color: Colors.darkGray}}
                                     buttonStyle={{backgroundColor: 'transparent', marginTop: 20}}
                                     underlayColor="transparent"
                                     onPress={this.reSendVerificationCodeHandler}
                                 />
                                 <Button
                                     title={'Try Another Account'}
-                                    titleStyle={{color: Colors.grey1}}
+                                    titleStyle={{color: Colors.darkGray}}
                                     buttonStyle={{backgroundColor: 'transparent', marginTop: 20}}
                                     underlayColor="transparent"
                                     onPress={this.tryAnotherAccountHandler}
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
         opacity: 1,
     },
     titleText: {
-        color: Colors.grey1,
+        color: Colors.darkGray,
         fontSize: 30,
     },
     helpContainer: {

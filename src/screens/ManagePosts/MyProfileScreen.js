@@ -679,24 +679,24 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     postTitle: {
-        color: Colors.grey1,
+        color: Colors.darkGray,
         marginBottom: 5,
         fontSize: 20,
         fontWeight: 'bold',
     },
     postAuthorMeta: {
-        color: Colors.grey1,
+        color: Colors.darkGray,
         marginBottom: 3,
         fontSize: 14,
     },
     postDateMeta: {
-        color: Colors.grey1,
+        color: Colors.darkGray,
         marginBottom: 5,
         fontSize: 14,
         fontStyle: 'italic'
     },
     postContent: {
-        color: Colors.grey1,
+        color: Colors.darkGray,
         fontSize: 16,
         lineHeight: 20
     },

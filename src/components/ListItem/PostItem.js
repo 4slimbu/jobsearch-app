@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import PropTypes from "prop-types";
 import Colors from "../../constants/colors";
-import { Button, Image } from "react-native-elements";
+import { Image, Icon } from "react-native-elements";
 import {getFeaturedImageSrc, prettyDistance, toReadable} from "../../utils/helper/helper";
 import { connect } from "react-redux";
 import { authUpdatePreferences } from "../../store/actions/authActions";
@@ -85,10 +85,20 @@ class PostItem extends Component {
             <View style={styles.postMainWrapper}>
                 <View style={styles.postFeaturedImageWrapper}>
                     <TouchableOpacity onPress={() => this.selectPostHandler(post)}>
-                        <Image source={featuredImage} resizeMode={'cover'}
-                            style={styles.postFeaturedImage}
-                            PlaceholderContent={<ActivityIndicator />}
-                        />
+                        { featuredImage && 
+                            <Image source={featuredImage} resizeMode={'cover'}
+                                style={styles.postFeaturedImage}
+                                PlaceholderContent={<ActivityIndicator />}
+                            />
+                        }
+                        { !featuredImage && 
+                            <Icon
+                                name="photo"
+                                type="font-awesome"
+                                color={Colors.primary}
+                                size={45}
+                            />
+                        }
                     </TouchableOpacity>
                 </View>
                 <View style={styles.postContentWrapper}>
@@ -96,22 +106,38 @@ class PostItem extends Component {
                         <TouchableOpacity onPress={() => this.selectPostHandler(post)}>
                             <Text style={styles.postTitle}>{post.title}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.selectPostHandler(post)} style={styles.postMetaWrapper}>
-                            <Text style={styles.postLocation}>{ prettyDistance(post.distance) }</Text>
-                        </TouchableOpacity>
+                        {(type !== 'my') &&
+                            <View style={{display: 'flex', flexDirection: 'row',}}>
+                                <Icon
+                                    name="map-marker"
+                                    size={18}
+                                    type="font-awesome"
+                                    color={Colors.primary}
+                                    containerStyle={{marginRight: 5}}
+                                />
+                                <Text style={styles.postLocation}>{ prettyDistance(post.distance) }</Text>
+                            </View>
+                        }
+
                         <View style={styles.postButtonWrap}>
                             {(type === 'my') &&
-                                <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-
-                                    <Button title="Edit" buttonStyle={[{
-                                        marginBottom: 5, marginRight: 10, paddingTop: 5, paddingLeft: 15,
-                                        paddingRight: 15, paddingBottom: 5, backgroundColor: '#525252'
-                                    }]} buttonSize={5} onPress={() => this.editPostHandler(post.id)} />
-
-                                    <Button title="Delete" buttonStyle={[{
-                                        marginBottom: 5, paddingTop: 5,
-                                        paddingBottom: 5, backgroundColor: Colors.danger
-                                    }]} buttonSize={5} onPress={() => this.deletePostHandler(post)} />
+                                <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4, }}>
+                                    <Icon
+                                        name="edit"
+                                        size={22}
+                                        type="font-awesome"
+                                        color={Colors.primary}
+                                        containerStyle={{marginRight: 14}}
+                                        onPress={() => this.editPostHandler(post.id)}
+                                    />
+                                    <Icon
+                                        name="trash"
+                                        size={22}
+                                        type="font-awesome"
+                                        color={Colors.primary}
+                                        containerStyle={{marginRight: 14}}
+                                        onPress={() => this.deletePostHandler(post)}
+                                    />
                                 </View>
                             }
                             {/* {!(type === 'my') &&
@@ -138,7 +164,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     postText: {
-        color: Colors.grey1,
+        color: Colors.darkGray,
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',
@@ -151,10 +177,11 @@ const styles = StyleSheet.create({
         textTransform: 'capitalize',
     },
     postLocation: {
-        color: Colors.primary,
+        color: Colors.darkGray,
         marginBottom: 3,
         fontSize: 13,
         marginRight: 5,
+        lineHeight: 18,
     },
     postDateMeta: {
         color: Colors.darkGray,
@@ -175,6 +202,9 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 0,
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
+        display: 'flex',
+        justifyContent: "center",
+        backgroundColor: Colors.lightGray,
     },
     postFeaturedImage: {
         width: '100%',
@@ -207,10 +237,10 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 6,
         elevation: 2.0,
-        marginTop: 20,
-        marginBottom: 20,
-        marginLeft: 20,
-        marginRight: 20,
+        marginTop: 5,
+        marginBottom: 5,
+        marginLeft: 5,
+        marginRight: 5,
     },
 
     postMetaWrapper: {

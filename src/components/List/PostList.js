@@ -28,7 +28,7 @@ const postList = props => {
     return (
         <View>
             <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} onRefresh={onRefresh}/>
-            <View style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
+            <View style={styles.postListWrapper}>
                 <PostList {...props}/>
             </View>
             {
@@ -44,6 +44,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         // marginTop: 20,
         // marginBottom: 20
+    },
+
+    postListWrapper: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
     },
 });
 

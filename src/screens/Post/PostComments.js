@@ -78,8 +78,9 @@ class PostComments extends Component {
                                     <Image source={commentProfileImageSrc} style={styles.commentUserAvatar} />
                                 </View>
                                 <View style={styles.commentUserContent}>
+                                    <Text style={styles.commentUserContentText}>{comment.body}</Text>
                                     <TouchableOpacity onPress={() => this.selectCommentHandler(comment.id)}>
-                                        <Text style={styles.commentUserContentText}>{comment.body}</Text>
+                                        <Text style={styles.commentUserContentTextLink}>Reply</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -111,20 +112,24 @@ class PostComments extends Component {
                             {
                                 activeCommentId === comment.id &&
                                 <View style={{marginBottom: 15}}>
-                                    <TextInput style={globalStyles.textArea}
-                                               multiline={true}
-                                               numberOfLines={2}
-                                               value={this.state.comment}
-                                               onChangeText={comment => this.setState({comment})}
-                                    />
-
-                                    <Button title="Reply" buttonStyle={globalStyles.btnPrimary}
+                                    <View style={globalStyles.formRow}>
+                                        <TextInput
+                                            style={globalStyles.textArea}
+                                            multiline={true}
+                                            numberOfLines={2}
+                                            value={this.state.comment}
+                                            onChangeText={comment => this.setState({comment})}
+                                        />
+                                    </View>
+                                    <View style={globalStyles.formRow}>
+                                        <Button
+                                            title="Reply" buttonStyle={globalStyles.btnPrimary}
                                             buttonSize={5}
                                             onPress={() => this.commentHandler(post.id, comment.id)}
                                             loading={isLoading}
                                             disabled={isLoading}
-                                    />
-
+                                        />
+                                    </View>
                                 </View>
                             }
                         </View>
@@ -291,9 +296,15 @@ const styles = StyleSheet.create({
         borderColor: Colors.lightGray,
     },
     commentUserContentText: {
-        color: Colors.grey1,
+        color: Colors.darkGray,
         lineHeight: 24,
         fontSize: 13,
+    },
+    commentUserContentTextLink: {
+        color: Colors.darkGray,
+        lineHeight: 24,
+        fontSize: 13,
+        textDecorationLine: 'underline',
     },
 });
 

@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         width: '100%',
         marginTop: 20,
+        padding: 20,
     },
 });
 

@@ -55,7 +55,7 @@ class FilterModal extends Component {
     changeHandler(type, value) {
         let filterData = {isOn: true};
         if (type === 'category') { filterData.category = toggleItemInArray(this.props.postsFilter.category, value) }
-        if (type === 'radius') { filterData.radius = _.ceil(value * 1000) }
+        if (type === 'radius') { filterData.radius = _.ceil(value * 100) }
         if (type === 'orderBy') { filterData.orderBy = value }
 
         clearTimeout(this.state.setTimeoutId);
@@ -91,11 +91,11 @@ class FilterModal extends Component {
                     <Text style={styles.heading}>Radius</Text>
                     <View style={{flex: 1, alignItems: 'stretch', justifyContent: 'center'}}>
                         <Slider
-                            value={postsFilter.radius / 1000}
+                            value={postsFilter.radius / 100}
                             onValueChange={value => this.changeHandler("radius", value)}
                             thumbTintColor={Colors.primary}
-                            minimumTrackTintColor={Colors.grey2}
-                            maximumTrackTintColor={Colors.grey4}
+                            minimumTrackTintColor={Colors.darkGray}
+                            maximumTrackTintColor={Colors.mediumGray}
                         />
                         <Text>Value: {prettyDistance(postsFilter.radius)}</Text>
                     </View>

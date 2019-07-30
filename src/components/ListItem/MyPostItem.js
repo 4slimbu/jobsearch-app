@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     postText: {
-        color: Colors.grey1,
+        color: Colors.darkGray,
         marginTop: 10,
         fontSize: 16,
         fontWeight: 'bold',

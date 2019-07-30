@@ -151,7 +151,7 @@ class PostListScreen extends Component {
 
                 {
                     isReady &&
-                    <View style={{marginTop: 20}}>
+                    <View>
                         <PostList {...postListProps}/>
                     </View>
                 }

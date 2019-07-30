@@ -16,9 +16,9 @@ const categoryItem = props => {
 
 const styles = StyleSheet.create({
     categoryItem: {
+        marginRight: 5,
         marginBottom: 20,
         width: '44%',
-        margin:10,
         paddingTop: 20,
         paddingBottom: 20,
         display:'flex',
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         fontSize:40,
     },
     categoryText: {
-        color: Colors.grey1,
+        color: Colors.darkGray,
         fontSize: 13,
         fontWeight: 'bold',
         marginTop: 5,

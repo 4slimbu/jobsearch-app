@@ -24,7 +24,7 @@ module.exports = StyleSheet.create({
     },
     inputStyle: {
         marginLeft: 10,
-        color:Colors.grey1,
+        color:Colors.darkGray,
       
     },
 
@@ -88,7 +88,7 @@ module.exports = StyleSheet.create({
         marginLeft:0,
     },
     btnLinkTitle: {
-        color: Colors.grey1,
+        color: Colors.darkGray,
         fontSize: 14,
     },
 
@@ -102,15 +102,15 @@ module.exports = StyleSheet.create({
         paddingRight: 30,
         fontSize: 17,
         textAlign: 'center',
-        color: Colors.grey1,
+        color: Colors.darkGray,
     },
 
     formTitle: {
         color: Colors.darkGray,
-        marginTop: 5,
-        marginBottom: 10,
+        marginTop: 0,
+        marginBottom: 5,
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: 'normal',
     },
     
     formRow: {

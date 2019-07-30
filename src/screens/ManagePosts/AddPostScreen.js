@@ -21,7 +21,7 @@ const PostImages = (props) => {
     return _.map(images, (image, key) => {
         return (
             <View key={key}>
-                <Icon color={Colors.grey1} name="close" size={30} onPress={() => removeImageHandler(type, key)}/>
+                <Icon color={Colors.darkGray} name="close" size={30} onPress={() => removeImageHandler(type, key)}/>
                 <Image source={{uri: image.uri}} style={{width: 100, height: 100, marginTop: 10, marginBottom: 10}}/>
             </View>
         )
@@ -183,17 +183,17 @@ class AddPostScreen extends Component {
                         <Text style={globalStyles.heading}>Add Post</Text>
                     </View>
                     <View style={{marginLeft: 20, marginRight: 20}}>
-                        <View>
+                        <View style={styles.formRow}>
                             <Text style={globalStyles.formTitle}>Post Title</Text>
-                            <View>
-                                <TextInput
-                                    style={globalStyles.textInput}
-                                    onChangeText={postTitle => this.setState({postTitle})}
-                                />
-                                <Text style={globalStyles.error}>{errors.postTitle ? errors.postTitle: ''}</Text>
-                            </View>
+                            <TextInput
+                                style={globalStyles.textInput}
+                                onChangeText={postTitle => this.setState({postTitle})}
+                            />
+                            { errors.postTitle &&
+                            <Text style={globalStyles.error}>{errors.postTitle}</Text>
+                            }
                         </View>
-                        <View>
+                        <View style={styles.formRow}>
                             <Text style={globalStyles.formTitle}>Post Content</Text>
                             <View>
                                 <TextInput
@@ -202,10 +202,12 @@ class AddPostScreen extends Component {
                                            numberOfLines={15}
                                            onChangeText={postContent => this.setState({postContent})}
                                 />
-                                <Text style={globalStyles.error}>{errors.postContent ? errors.postContent: ''}</Text>
+                                { errors.postContent &&
+                                <Text style={globalStyles.error}>{errors.postContent}</Text>
+                                }
                             </View>
                         </View>
-                        <View style={styles.formRow}>
+                        <View style={styles.formFlexColumn}>
                             <Text style={globalStyles.formTitle}>Featured Image</Text>
                             {
                                 featuredImage &&

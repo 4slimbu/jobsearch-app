@@ -20,12 +20,12 @@ const LocationItem = props => {
 
 const styles = StyleSheet.create({
     divider: {
-        backgroundColor: Colors.grey3,
+        backgroundColor: Colors.darkGray,
         marginTop: 20,
         marginBottom: 20
     },
     content: {
-        color: Colors.grey1,
+        color: Colors.darkGray,
         fontSize: 16,
         lineHeight: 20
     },

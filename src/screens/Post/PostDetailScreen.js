@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     postTitle: {
-        color: Colors.grey1,
+        color: Colors.darkGray,
         marginBottom: 5,
         fontSize: 20,
         fontWeight: 'bold',
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
         flex: 3,
     },
     postAuthorMeta: {
-        color: Colors.grey1,
+        color: Colors.darkGray,
         fontSize: 16,
     },
     postDateMeta: {
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
         fontWeight: '100',
     },
     postContent: {
-        color: Colors.grey1,
+        color: Colors.darkGray,
         fontSize: 16,
         lineHeight: 24,
         marginBottom: 15,

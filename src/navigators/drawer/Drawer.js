@@ -66,7 +66,7 @@ const CustomDrawerContentComponent = props => (
                 style={{width: appData.app.SCREEN_WIDTH * 0.20, height: 50}}
                 resizeMode="contain"
             />
-            <Text style={{fontSize: 18, fontWeight: 'bold', color: Colors.grey1}}>MENU</Text>
+            <Text style={{fontSize: 18, fontWeight: 'bold', color: Colors.darkGray}}>MENU</Text>
         </View>
         <View>
             {managePostList.map((l, i) => (
