@@ -302,7 +302,7 @@ class RegisterScreen extends Component {
                                 onPress={() => this.onChangeHandler({gender: "female"})}
                             />
                         </View>
-                        <View style={globalStyles.formRow}>
+                        <View style={[globalStyles.formFlexRow, { marginBottom: 20 }]}>
                             <Button
                                 buttonStyle={globalStyles.btnPrimary}
                                 containerStyle={globalStyles.btnPrimaryContainer}
@@ -314,7 +314,7 @@ class RegisterScreen extends Component {
                                 disabled={isLoading}
                             />
                         </View>
-                        <View style={styles.helpContainer}>
+                        <View style={[globalStyles.formFlexRow, { justifyContent: "space-between", marginBottom: 10,}]}>
                             <Button
                                 title={'Forgot Password?'}
                                 titleStyle={globalStyles.btnLinkTitle}
@@ -339,56 +339,12 @@ class RegisterScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor:'white',
-        marginTop: Platform.OS === 'ios' ? 0 : Constants.statusBarHeight
-    },
-    rowSelector: {
-        height: 20,
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    selectorContainer: {
-        flex: 1,
-        alignItems: 'center',
-    },
-    selected: {
-        position: 'absolute',
-        borderRadius: 50,
-        height: 0,
-        width: 0,
-        top: -5,
-        borderRightWidth: 70,
-        borderBottomWidth: 70,
-        borderColor: 'white',
-        backgroundColor: 'white',
-    },
-    loginContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    loginTextButton: {
-        fontSize: 16,
-        color: 'white',
-        fontWeight: 'bold',
-    },
-    loginButton: {
-        backgroundColor: Colors.primary,
-        borderRadius: 25,
-        height: 50,
-        width:  appData.app.SCREEN_WIDTH - 65,
-    },
-    facebookLoginButton: {
-        backgroundColor: socialColor.facebook,
-        borderRadius: 10,
-        height: 50,
-        width: 200
-    },
+    
     titleContainer: {
         backgroundColor: 'transparent',
         justifyContent: 'center',
     },
+
     formContainer: {
         width: appData.app.SCREEN_WIDTH - 50,
         borderRadius: 10,
@@ -396,52 +352,7 @@ const styles = StyleSheet.create({
         paddingBottom: 32,
         alignItems: 'center',
     },
-    loginText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: 'white',
-    },
-    bgImage: {
-        flex: 1,
-        top: 0,
-        left: 0,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    categoryText: {
-        textAlign: 'center',
-        color: 'white',
-        fontSize: 24,
-        fontFamily: 'light',
-        backgroundColor: 'transparent',
-        opacity: 0.54,
-    },
-    selectedCategoryText: {
-        opacity: 1,
-    },
-    helpContainer: {
-        height: 'auto',
-        alignItems: 'flex-start',
-        display:'flex',
-        flexDirection:'row-reverse',
-        marginBottom:30,
-        marginTop:20,
-        width: appData.app.SCREEN_WIDTH - 65,
-        justifyContent: 'space-between',
-    },
-    facebookContainer: {
-        height: 64,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    overlay: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-        opacity: 0.90,
-    },
+
 });
 
 const mapStateToProps = state => {

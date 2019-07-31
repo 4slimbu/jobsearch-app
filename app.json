@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "loksewa-app",
-    "slug": "loksewa-app",
-    "description": "Loksewa app ",
+    "name": "kchahiyo myapp",
+    "slug": "kchahiyo-myapp",
+    "description": "kchahiyo app ",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
