@@ -12,20 +12,24 @@ module.exports = StyleSheet.create({
         marginBottom: 100,
     },
 
+    inputOuterContainerStyle: {
+        paddingLeft: 0,
+    },
+
     inputContainerStyle: {
+        width: '100%',
         borderColor: Colors.greyOutline,
         borderRadius: 4,
-        marginLeft: 0,
-        marginRight: 0,
         borderWidth: 1,
     },
+
+    inputStyle: {
+        paddingLeft: 10,
+        color:Colors.darkGray,
+    },
+
     inputViewContainer: {
         marginTop: 7,
-    },
-    inputStyle: {
-        marginLeft: 10,
-        color:Colors.darkGray,
-      
     },
 
     btnPrimaryContainer: {
@@ -116,6 +120,10 @@ module.exports = StyleSheet.create({
     formRow: {
         width: '100%',
         marginBottom: 5,
+    },
+
+    formRowMarginBottom: {
+        marginBottom: 20,
     },
 
     formFlexRow: {

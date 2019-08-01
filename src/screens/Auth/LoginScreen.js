@@ -147,6 +147,7 @@ class LoginScreen extends Component {
                                         placeholder={'Email'}
                                         inputStyle={globalStyles.inputStyle}
                                         inputContainerStyle={globalStyles.inputContainerStyle}
+                                        containerStyle={globalStyles.inputOuterContainerStyle}
                                         onChangeText={email => this.setState({email})}
                                         errorMessage={errors.email ? errors.email : null}
                                         autoCapitalize='none'
@@ -172,7 +173,8 @@ class LoginScreen extends Component {
                                         errorMessage={errors.password ? errors.password : null}
                                     />
                                 </View>
-                                <View style={globalStyles.formRow}>
+
+                                <View style={[globalStyles.formFlexRow, globalStyles.formRowMarginBottom]}>
                                     <Button
                                         buttonStyle={globalStyles.btnPrimary}
                                         containerStyle={globalStyles.btnPrimaryContainer}
@@ -184,32 +186,33 @@ class LoginScreen extends Component {
                                         disabled={isLoading}
                                     />
                                 </View>
+                                <View style={[globalStyles.formFlexRow, { justifyContent: "space-between", marginBottom: 50,}]}>
+                                    <Button
+                                        title={'Forgot Password?'}
+                                        titleStyle={globalStyles.btnLinkTitle}
+                                        buttonStyle={[globalStyles.btnLink]}
+                                        underlayColor="transparent"
+                                        onPress={() => this.props.navigation.navigate('ForgotPasswordScreen')}
+                                    />
+                                    <Button
+                                        title={'Register'}
+                                        titleStyle={globalStyles.btnLinkTitle}
+                                        buttonStyle={[globalStyles.btnLink, globalStyles.btnLinkRight]}
+                                        underlayColor="transparent"
+                                        onPress={() => this.props.navigation.navigate('RegisterScreen')}
+                                    />
+                                </View>
+                                <View style={[globalStyles.formFlexColumn]}>
+                                    <Button
+                                        title={'Login with Facebook'}
+                                        titleStyle={{color: 'white'}}
+                                        buttonStyle={styles.facebookLoginButton}
+                                        underlayColor="transparent"
+                                        onPress={this.facebookLoginHandler}
+                                    />
+                                </View>
                             </View>
-                            <View style={styles.helpContainer}>
-                                <Button
-                                    title={'Forgot Password?'}
-                                    titleStyle={globalStyles.btnLinkTitle}
-                                    buttonStyle={[globalStyles.btnLink]}
-                                    underlayColor="transparent"
-                                    onPress={() => this.props.navigation.navigate('ForgotPasswordScreen')}
-                                />
-                                <Button
-                                    title={'Register'}
-                                    titleStyle={globalStyles.btnLinkTitle}
-                                    buttonStyle={[globalStyles.btnLink, globalStyles.btnLinkRight]}
-                                    underlayColor="transparent"
-                                    onPress={() => this.props.navigation.navigate('RegisterScreen')}
-                                />
-                            </View>
-                            <View style={styles.facebookContainer}>
-                                <Button
-                                    title={'Login with Facebook'}
-                                    titleStyle={{color: 'white'}}
-                                    buttonStyle={styles.facebookLoginButton}
-                                    underlayColor="transparent"
-                                    onPress={this.facebookLoginHandler}
-                                />
-                            </View>
+                            
                         </KeyboardAvoidingView>
                     </View>
                 </ScrollView>
@@ -228,45 +231,15 @@ const styles = StyleSheet.create({
         marginBottom: 100,
     },
 
-    rowSelector: {
-        height: 20,
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-
-    selectorContainer: {
-        flex: 1,
-        alignItems: 'center',
-    },
-
-    selected: {
-        position: 'absolute',
-        borderRadius: 50,
-        height: 0,
-        width: 0,
-        top: -5,
-        borderRightWidth: 70,
-        borderBottomWidth: 70,
-        borderColor: 'transparent',
-        backgroundColor: 'transparent',
-    },
-    loginContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    loginTextButton: {
-        fontSize: 16,
-        color: 'white',
-        fontWeight: 'bold',
-    },
-    
     facebookLoginButton: {
         backgroundColor: socialColor.facebook,
         borderRadius: 25,
         height: 40,
-        width:  appData.app.SCREEN_WIDTH - 65,
+        width: '100%',
+        flex: 1,
+        flexWrap: "wrap",
     },
+
     titleContainer: {
         backgroundColor: 'transparent',
         justifyContent: 'center',
@@ -280,56 +253,6 @@ const styles = StyleSheet.create({
         paddingBottom: 0,
         paddingLeft: 0,
         paddingLeft: 0,
-    },
-
-    loginText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: 'white',
-    },
-    bgImage: {
-        flex: 1,
-        width: '100%',
-        height:'100%',
-    },
-    categoryText: {
-        textAlign: 'center',
-        color: 'white',
-        fontSize: 24,
-        fontFamily: 'light',
-        backgroundColor: 'transparent',
-        opacity: 0.54,
-    },
-    selectedCategoryText: {
-        opacity: 1,
-    },
-    titleText: {
-        color: Colors.black,
-        fontSize: 30,
-        fontWeight: 'bold'
-    },
-    helpContainer: {
-        height: 'auto',
-        alignItems: 'flex-start',
-        display:'flex',
-        flexDirection:'row-reverse',
-        marginBottom:30,
-        marginTop:20,
-        width: appData.app.SCREEN_WIDTH - 65,
-        justifyContent: 'space-between',
-    },
-    facebookContainer: {
-        height: 45,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    overlay: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-        opacity: 0.90,
     },
 });
 

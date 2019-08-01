@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View, WebView} from 'react-native';
 import Colors from '../../constants/colors';
 import {connect} from "react-redux";
 import {getPage} from "../../store/actions/pageActions";
@@ -65,16 +65,10 @@ class PageDetailScreen extends Component {
         const {pages} = this.props.pages;
         const page = _.find(pages, {slug: params && params.navTarget});
         return (
-            <ScrollView style={styles.container}>
-                <View style={styles.contentView}>
-                    <View style={{paddingLeft: 20, paddingRight: 20, marginTop: 30, marginBottom: 20}}>
-                        <Text style={styles.postContent}>
-                            {page && page.content}
-                        </Text>
-                    </View>
-
-                </View>
-            </ScrollView>
+            <WebView
+                source={{uri: 'https://github.com/facebook/react-native'}}
+                style={{marginTop: 20}}
+            />
         );
     }
 }

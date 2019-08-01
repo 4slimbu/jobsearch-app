@@ -284,7 +284,7 @@ class ForgotPasswordScreen extends Component {
                             />
                         </View>
                     }
-                        <View style={globalStyles.formRow}>
+                        <View style={globalStyles.formFlexColumn}>
                             <Button
                                 buttonStyle={globalStyles.btnPrimary}
                                 titleStyle={globalStyles.btnPrimaryTitle}
@@ -301,7 +301,7 @@ class ForgotPasswordScreen extends Component {
                                     buttonStyle={globalStyles.btnLink}
                                     titleStyle={globalStyles.btnLinkTitle}
                                     activeOpacity={0.8}
-                                    title="Have Password Reset Code? Reset Password"
+                                    title="Have Password Reset Code?"
                                     onPress={this.havePasswordResetCodeHandler}
                                     loading={isLoading}
                                     disabled={isLoading}
