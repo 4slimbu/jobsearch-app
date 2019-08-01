@@ -44,7 +44,7 @@ const initialState = {
         type: "",
         search: "",
         category: [],
-        radius: "",
+        radius: 100,
         orderBy: "nearest", // nearest, latest,
     }
 };

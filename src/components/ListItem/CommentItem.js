@@ -1,18 +1,18 @@
 import React from "react";
-import {StyleSheet, Text, View} from "react-native";
-import globalStyles from "../../constants/globalStyle";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from "prop-types";
 import Colors from "../../constants/colors";
 import {Divider} from "react-native-elements";
 import {toReadable} from "../../utils/helper/helper";
+import NavigationService from "../../services/NavigationService";
 
 const CommentItem = props => {
     const {comment, isFirst} = props;
     return (
         <View>
             { !isFirst &&  <Divider style={styles.divider}/> }
-            <View style={styles.activityListContainer}>
+            <TouchableOpacity onPress={() => NavigationService.navigate('PostDetail', { postId: comment.post_id })} style={styles.activityListContainer}>
                 <View style={styles.activityListHeaderContainer}>
                     <View style={styles.activityIcon}>
                         <Icon
@@ -30,7 +30,7 @@ const CommentItem = props => {
                 <View style={styles.activityBodyContainer}>
                     <Text style={styles.activityBody}>{comment.body}</Text>
                 </View>
-            </View>
+            </TouchableOpacity>
 
         </View>
     )
