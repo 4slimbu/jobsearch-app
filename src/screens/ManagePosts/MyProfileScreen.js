@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
-import {ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, View, TouchableOpacity} from 'react-native';
+import {ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Colors from '../../constants/colors';
 import globalStyles from "../../constants/globalStyle";
-import {Button, CheckBox, Divider, Image, Input, Avatar} from "react-native-elements/src/index";
+import {Avatar, Button, CheckBox, Divider} from "react-native-elements/src/index";
 import {connect} from "react-redux";
-import {ImagePicker} from "expo";
+import {ImagePicker, Permissions} from "expo";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {updateMyProfile, updatePassword} from "../../store/actions/authActions";
 import alertMessage from "../../components/Alert";
 import * as _ from "lodash";
-import * as Permissions from 'expo-permissions';
 import {setLocation} from "../../store/actions/formActions";
 import PickLocation from "../../components/Picker/LocationPicker";
 
@@ -91,20 +90,22 @@ class MyProfileScreen extends Component {
     }
 
     pickProfilePictureHandler = async () => {
-        const { status } = await Permissions.getAsync(Permissions.CAMERA);
-        console.log(status);
+        let { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
         if (status !== 'granted') {
-            let result = await ImagePicker.launchImageLibraryAsync({
-                allowsEditing: true,
-                aspect: [1, 1],
+            return;
+        }
+
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [1, 1],
+        });
+
+        if (!result.cancelled) {
+            this.setState({
+                newProfilePicture: result,
+                isSaveProfilePicture: true,
             });
-    
-            if (!result.cancelled) {
-                this.setState({
-                    newProfilePicture: result,
-                    isSaveProfilePicture: true,
-                });
-            }
         }
     };
 

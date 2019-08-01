@@ -4,7 +4,7 @@ import {ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'r
 import PropTypes from "prop-types";
 import Colors from '../../constants/colors';
 import {Button, Image} from "react-native-elements";
-import {ImagePicker} from "expo";
+import {ImagePicker, Permissions} from "expo";
 import * as _ from "lodash";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {loadCategories} from "../../store/actions/categoryActions";
@@ -136,6 +136,12 @@ class EditPostScreen extends Component {
     }
 
     pickFeaturedImageHandler = async () => {
+        let { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+        if (status !== 'granted') {
+            return;
+        }
+
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
             aspect: [5, 3],
@@ -147,6 +153,12 @@ class EditPostScreen extends Component {
     };
 
     pickAdditionalImagesHandler = async () => {
+        let { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+        if (status !== 'granted') {
+            return;
+        }
+
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
             aspect: [5, 3],
