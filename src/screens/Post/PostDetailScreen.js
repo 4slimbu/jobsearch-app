@@ -71,8 +71,8 @@ class PostDetailScreen extends Component {
         const {isReady} = this.state;
         const {post} = this.props.posts;
         const primaryImage = _.find(post.postImages, {"is_primary": true});
-        const featuredImage = primaryImage ? {uri: primaryImage.url} : appData.app.PLACE_HOLDER_IMAGE_URL;
-        const authorImage = post.author && post.author.profile_pic ? {uri: post.author.profile_pic} : appData.app.PLACE_HOLDER_AVATAR_URL;
+        const featuredImage = primaryImage ? {uri: primaryImage.url} : require("../../../assets/images/placeholder.png");
+        const authorImage = post.author && post.author.profile_pic ? {uri: post.author.profile_pic} : require("../../../assets/images/user-hp.png");
 
         return (
             <ScrollView style={styles.container}>
