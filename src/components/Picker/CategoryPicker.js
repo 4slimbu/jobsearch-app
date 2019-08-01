@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from "../../constants/colors";
 import appData from "../../constants/app";
 
-class PickLocation extends Component {
+class CategoryPicker extends Component {
     constructor(props) {
         super(props);
     }
@@ -19,18 +19,12 @@ class PickLocation extends Component {
     }
 
     render() {
-        const {value, navigation, backScreen} = this.props;
+        const {category, navigation, backScreen} = this.props;
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('PickLocationModal',
+            <TouchableOpacity onPress={() => navigation.navigate('CategoryPickModal',
             {backScreen: backScreen})}>
-                <View style={styles.locationPicker}>
-                    <Icon
-                        name="map-marker"
-                        type="font-awesome"
-                        color={Colors.primary}
-                        size={45}
-                    />
-                    <Text style={value ? styles.locationTitleActive : styles.locationTitle}>{ value ? value: 'Select Location' }</Text>
+                <View style={styles.categoryPicker}>
+                    <Text style={category ? styles.categoryTitleActive : styles.categoryTitle}>{ category.name ? category.name: 'Select Category' }</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -39,7 +33,7 @@ class PickLocation extends Component {
 
 const styles = StyleSheet.create({
    
-    locationPicker: {
+    categoryPicker: {
         flex: 1,
         borderColor: Colors.greyOutline,
         borderRadius: 5,
@@ -49,14 +43,14 @@ const styles = StyleSheet.create({
         width: '100%',
     },
 
-    locationTitle: {
+    categoryTitle: {
         color: Colors.mediumGray,
         fontSize: 14,
         fontWeight: 'bold',
         textAlign: "center",
     },
 
-    locationTitleActive: {
+    categoryTitleActive: {
         color: Colors.darkGray,
         fontSize: 14,
         fontWeight: 'bold',
@@ -64,4 +58,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PickLocation;
+export default CategoryPicker;

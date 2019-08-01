@@ -1,4 +1,8 @@
-import {RESET_LOCATION, RESET_REGISTER_FORM, SET_LOCATION, UPDATE_REGISTER_FORM} from "../actions/actionTypes";
+import {
+    RESET_CATEGORY,
+    RESET_LOCATION, RESET_REGISTER_FORM, SET_CATEGORY, SET_LOCATION,
+    UPDATE_REGISTER_FORM
+} from "../actions/actionTypes";
 
 const initialState = {
     register: {
@@ -15,7 +19,8 @@ const initialState = {
         address: "",
         latitude: "",
         longitude: ""
-    }
+    },
+    category: {}
 };
 
 const formsReducers = (state = initialState, action) => {
@@ -43,7 +48,16 @@ const formsReducers = (state = initialState, action) => {
                 ...state,
                 location: initialState.location
             };
-
+        case SET_CATEGORY:
+            return {
+                ...state,
+                category: action.category
+            };
+        case RESET_CATEGORY:
+            return {
+                ...state,
+                category: initialState.category
+            };
         default:
             return state;
     }

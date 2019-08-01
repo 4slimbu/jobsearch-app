@@ -1,4 +1,7 @@
-import {RESET_LOCATION, RESET_REGISTER_FORM, SET_LOCATION, UPDATE_REGISTER_FORM} from "./actionTypes";
+import {
+    RESET_CATEGORY, RESET_LOCATION, RESET_REGISTER_FORM, SET_CATEGORY, SET_LOCATION,
+    UPDATE_REGISTER_FORM
+} from "./actionTypes";
 
 export const updateRegisterForm = (data) => {
     return {
@@ -25,5 +28,18 @@ export const resetLocation = () => {
     return {
         type: RESET_LOCATION,
         payload: {}
+    }
+};
+
+export const setCategory = (category) => {
+    return {
+        type: SET_CATEGORY,
+        category: category
+    }
+};
+
+export const resetCategory = () => {
+    return {
+        type: RESET_CATEGORY
     }
 };

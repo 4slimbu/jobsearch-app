@@ -34,7 +34,9 @@ class PostListScreen extends Component {
         this.props.updatePostFilter({
             type: "",
             search: "",
-            category: []
+            category: [],
+            radius: "",
+            orderBy: "latest"
         });
 
         const { params } = this.props.navigation.state;
