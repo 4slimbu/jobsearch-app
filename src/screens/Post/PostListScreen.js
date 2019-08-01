@@ -31,14 +31,17 @@ class PostListScreen extends Component {
 
     async componentDidMount() {
         this.props.resetPosts();
-        this.props.updatePostFilter({
-            type: "",
-            search: "",
-            category: []
-        });
 
         const { params } = this.props.navigation.state;
-        await this.props.updatePostFilter(params);
+        let baseFilter = {
+            type: "",
+            search: "",
+            category: [],
+        };
+        if (params.type === 'my' || params.type === 'saved'){ baseFilter.radius = "" }
+        if (params.type === 'my' || params.type === 'saved'){ baseFilter.orderBy = "latest" }
+
+        await this.props.updatePostFilter({...baseFilter, ...params});
 
         // Don't automatically pull posts for search
         if (this.props.posts.filter.type === 'search') {

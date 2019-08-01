@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import globalStyles from "../../constants/globalStyle";
-import {Picker, ScrollView, StyleSheet, Text, TextInput, View, TouchableOpacity} from 'react-native';
+import {ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import PropTypes from "prop-types";
 import Colors from '../../constants/colors';
 import {Button, Image} from "react-native-elements";
@@ -9,13 +9,12 @@ import * as _ from "lodash";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {loadCategories} from "../../store/actions/categoryActions";
 import {connect} from "react-redux";
-import DatePicker from 'react-native-datepicker';
 import {getPost, updatePost} from "../../store/actions/postActions";
 import {findAdditionalImages, findFeaturedImage} from "../../utils/helper/helper";
 import alertMessage from "../../components/Alert";
 import PickLocation from "../../components/Picker/LocationPicker";
-import {setLocation} from "../../store/actions/formActions";
-import ListPicker from "../../components/Picker/ListPicker";
+import {resetCategory, resetLocation, setCategory, setLocation} from "../../store/actions/formActions";
+import CategoryPicker from "../../components/Picker/CategoryPicker";
 
 const PostImages = (props) => {
     const {type, images, removeImageHandler} = props;
@@ -50,7 +49,6 @@ class EditPostScreen extends Component {
             featuredImage: null,
             additionalImages: [],
             categories: [],
-            selectedCategoryId: null,
             date: null,
             imagesToRemove: [],
             errors: {},
@@ -91,7 +89,6 @@ class EditPostScreen extends Component {
                 postContent: post.body,
                 featuredImage: findFeaturedImage(post.postImages),
                 additionalImages: findAdditionalImages(post.postImages),
-                selectedCategoryId: post.category && post.category.id,
                 date: post.expire_at
             });
 
@@ -99,7 +96,9 @@ class EditPostScreen extends Component {
                 address: post.address,
                 latitude: post.latitude,
                 longitude: post.longitude
-            })
+            });
+
+            this.props.setCategory(post.category);
         }).catch(err => {
         });
 
@@ -165,14 +164,14 @@ class EditPostScreen extends Component {
     };
 
     isFormValid() {
-        const {postTitle, postContent, selectedCategoryId, date} = this.state;
+        const {postTitle, postContent} = this.state;
         const {address} = this.props.forms.location;
+        const {category} = this.props.forms;
         let errors = {};
 
         if (!postTitle) { errors.postTitle = 'Post Title is required!'; }
         if (!postContent) { errors.postContent = 'Post Content is required!'; }
-        if (!selectedCategoryId) { errors.selectedCategoryId = 'Category is required!'; }
-        if (!date) { errors.date = 'Deadline is required!'; }
+        if (_.isEmpty(category)) { errors.category = 'Category is required!'; }
         if (_.isEmpty(address)) { errors.address = "Location is required"; }
 
         this.setState({errors});
@@ -182,6 +181,7 @@ class EditPostScreen extends Component {
     submitHandler() {
         const {postId, postTitle, postContent, featuredImage,additionalImages, selectedCategoryId, imagesToRemove, date} = this.state;
         const {address, latitude, longitude} = this.props.forms.location;
+        const {category} = this.props.forms;
 
         if (!this.isFormValid()) {
             alertMessage({title: "Error", body: "Validation failed"});
@@ -196,8 +196,7 @@ class EditPostScreen extends Component {
         formData.append('address', address);
         formData.append('latitude', latitude);
         formData.append('longitude', longitude);
-        formData.append('category_id', selectedCategoryId);
-        formData.append('expire_at', date);
+        formData.append('category_id', category.id);
         formData.append('selected_image', 0);
 
         if (imagesToRemove) {
@@ -231,7 +230,7 @@ class EditPostScreen extends Component {
     }
 
     render() {
-        const {postTitle, postContent, featuredImage, additionalImages, categories, selectedCategoryId, date, errors, isLoading} = this.state;
+        const {postTitle, postContent, featuredImage, additionalImages, errors, isLoading} = this.state;
 
         return (
             <ScrollView style={globalStyles.scrollViewContainer}>
@@ -323,29 +322,24 @@ class EditPostScreen extends Component {
                                 }
                             </View>
                         </View>
-                        {/* <View>
-                            <Text style={styles.postTitle}>Category</Text>
+                        <View>
+                            <Text style={globalStyles.formTitle}>Category</Text>
 
-                            <ListPicker
-                                placeholderLabel="Select Category"
-                                value={this.state.selectedCategoryId}
-                                style={{height: 50, width: '100%'}}
-                                onSelect={(itemValue, itemIndex) =>
-                                    this.setState({selectedCategoryId: itemValue})
-                                }
-                                items={categories}
+                            <CategoryPicker
+                                category={this.props.forms.category}
+                                navigation={this.props.navigation}
+                                backScreen="AddPost"
                             />
-
-                            <Text style={{color: Colors.danger, marginTop: 5}}>{errors.selectedCategoryId ? errors.selectedCategoryId: ''}</Text>
-                        </View> */}
+                            <Text style={{color: Colors.danger, marginTop: 5}}>{errors.category ? errors.category: ''}</Text>
+                        </View>
                         <View>
                             <Text style={globalStyles.formTitle}>Post Location</Text>
                             <PickLocation
                                 value={this.props.forms.location.address}
                                 navigation={this.props.navigation}
-                                errorMessage={errors.address ? errors.address : null}
                                 backScreen="EditPost"
                             />
+                            <Text style={{color: Colors.danger, marginTop: 5}}>{errors.address ? errors.address: ''}</Text>
                         </View>
 
                         <Button
@@ -428,6 +422,9 @@ const mapDispatchToProps = (dispatch) => {
         updatePost: (postId, formData) => dispatch(updatePost(postId, formData)),
         getPost: (postId) => dispatch(getPost(postId)),
         setLocation: (location) => dispatch(setLocation(location)),
+        resetLocation: () => dispatch(resetLocation()),
+        setCategory: (category) => dispatch(setCategory(category)),
+        resetCategory: () => dispatch(resetCategory()),
     };
 };
 
