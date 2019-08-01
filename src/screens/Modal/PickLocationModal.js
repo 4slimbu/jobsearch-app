@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
 import globalStyles from "../../constants/globalStyle";
-import {Constants, Location, Permissions} from "expo";
-import {ScrollView, StyleSheet, View, BackHandler} from 'react-native';
+import {Location, Permissions} from "expo";
+import {BackHandler, ScrollView, StyleSheet, View} from 'react-native';
 import {Icon, SearchBar,} from 'react-native-elements';
 
 import Colors from "../../constants/colors";
 import {connect} from "react-redux";
-import {resetSearchedPosts, getPosts} from "../../store/actions/postActions";
-import {authUpdatePreferences} from "../../store/actions/authActions";
 import ContentLoading from "../../components/ContentLoading";
 import LocationList from "../../components/List/LocationList";
 import {resetLocation, setLocation} from "../../store/actions/formActions";
@@ -157,7 +155,7 @@ class PickLocationModal extends Component {
         let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
 
         // Get address
-        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + location.coords.latitude + ',' + location.coords.longitude + '&key=AIzaSyBsLWTX7nI81gitMCcVrBZuRRNd49zQqj8')
+        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + location.coords.latitude + ',' + location.coords.longitude + '&key=' + appData.app.GOOGLE_API_KEY)
             .then(res => res.json())
             .then(parsedRes => {
                 if (!parsedRes.results) {

@@ -66,8 +66,7 @@ class PostComments extends Component {
 
         return _.map(comments, (comment, key) => {
             const commentProfileImageUrl = comment && comment.profile_pic;
-            const commentProfileImageSrc = commentProfileImageUrl && commentProfileImageUrl.length > 0 ? {uri: commentProfileImageUrl} : appData.app.PLACE_HOLDER_IMAGE_URL;
-
+            const commentProfileImageSrc = commentProfileImageUrl && commentProfileImageUrl.length > 0 ? {uri: commentProfileImageUrl} : require('../../../assets/images/user-hp.png');
             return (
                 <View key={key}>
                     {
@@ -88,7 +87,7 @@ class PostComments extends Component {
                                 comment.replies && (
                                     _.map(comment.replies, (reply, key) => {
                                         const replyProfileImageUrl = reply && reply.profile_pic;
-                                        const replyProfileImageSrc = replyProfileImageUrl && replyProfileImageUrl.length > 0 ? {uri: replyProfileImageUrl} : appData.app.PLACE_HOLDER_IMAGE_URL;
+                                        const replyProfileImageSrc = replyProfileImageUrl && replyProfileImageUrl.length > 0 ? {uri: replyProfileImageUrl} : require('../../../assets/images/user-hp.png');
 
                                         return (
                                             <View key={key} style={styles.commentsListWrapperInner}>
