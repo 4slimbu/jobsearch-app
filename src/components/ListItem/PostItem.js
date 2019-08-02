@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import PropTypes from "prop-types";
 import Colors from "../../constants/colors";
-import { Image, Icon } from "react-native-elements";
+import {Image, Icon, Button} from "react-native-elements";
 import {getFeaturedImageSrc, prettyDistance, toReadable} from "../../utils/helper/helper";
 import { connect } from "react-redux";
 import { authUpdatePreferences } from "../../store/actions/authActions";
@@ -119,34 +119,36 @@ class PostItem extends Component {
                             </View>
                         }
 
-                        <View style={styles.postButtonWrap}>
-                            {(type === 'my') &&
-                                <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4, }}>
-                                    <Icon
-                                        name="edit"
-                                        size={22}
-                                        type="font-awesome"
-                                        color={Colors.primary}
-                                        containerStyle={{marginRight: 14}}
-                                        onPress={() => this.editPostHandler(post.id)}
-                                    />
-                                    <Icon
-                                        name="trash"
-                                        size={22}
-                                        type="font-awesome"
-                                        color={Colors.primary}
-                                        containerStyle={{marginRight: 14}}
-                                        onPress={() => this.deletePostHandler(post)}
-                                    />
-                                </View>
-                            }
-                            {/* {!(type === 'my') &&
-                                <Button title={isSaved ? 'Saved' : 'Save'} buttonStyle={[{
-                                    marginBottom: 5, paddingTop: 5,
-                                    paddingBottom: 5, backgroundColor:'#525252',
-                                }, isSaved && {backgroundColor: '#00d600'}]}
-                                        buttonSize={5} onPress={() => this.savePostHandler(post)}/>
-                            } */}
+                        {(type === 'my') &&
+                            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4, }}>
+                                <Icon
+                                    name="edit"
+                                    size={22}
+                                    type="font-awesome"
+                                    color={Colors.primary}
+                                    containerStyle={{marginRight: 14}}
+                                    onPress={() => this.editPostHandler(post.id)}
+                                />
+                                <Icon
+                                    name="trash"
+                                    size={22}
+                                    type="font-awesome"
+                                    color={Colors.primary}
+                                    containerStyle={{marginRight: 14}}
+                                    onPress={() => this.deletePostHandler(post)}
+                                />
+                            </View>
+                        }
+
+                        <View>
+                            <Icon
+                                name="star"
+                                size={22}
+                                type="font-awesome"
+                                color={isSaved ? Colors.primary : Colors.greyOutline}
+                                containerStyle={{marginRight: 14}}
+                                onPress={() => this.savePostHandler(post)}
+                            />
                         </View>
                     </View>
                 </View>

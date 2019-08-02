@@ -33,7 +33,7 @@ const postList = props => {
             </View>
             {
                 posts.meta && posts.meta.total > 10 &&
-                <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} onRefresh={onRefresh}/>
+                <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} filter={filter} onRefresh={onRefresh}/>
             }
         </View>
     );

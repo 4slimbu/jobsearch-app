@@ -68,7 +68,7 @@ class PostDetailScreen extends Component {
     }
 
     render() {
-        const {isReady} = this.state;
+        const {isReady, isSaved} = this.state;
         const {post} = this.props.posts;
         const primaryImage = _.find(post.postImages, {"is_primary": true});
         const featuredImage = primaryImage ? {uri: primaryImage.url} : require("../../../assets/images/placeholder.png");
@@ -96,6 +96,16 @@ class PostDetailScreen extends Component {
                                     containerStyle={{marginRight: 10}}
                                 />
                                 <Text style={styles.location}>{ post.address}</Text>
+                            </View>
+                            <View>
+                                <Icon
+                                    name="star"
+                                    size={22}
+                                    type="font-awesome"
+                                    color={isSaved ? Colors.primary : Colors.greyOutline}
+                                    containerStyle={{marginRight: 14}}
+                                    onPress={() => this.savePostHandler(post.id)}
+                                />
                             </View>
                         </View>
 
