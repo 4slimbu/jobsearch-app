@@ -169,7 +169,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     postAuthorProfilePicContainer: {
-        flex: 1,
         marginRight: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 0 },

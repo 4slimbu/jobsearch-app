@@ -265,13 +265,13 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         marginBottom: 15,
-        marginLeft: 20,
+        marginLeft: 30,
     },
 
     commentUserAvatarContainer: {
-        flex: 1,
         paddingLeft: 0,
-        paddingTop: 20,
+        marginTop: 20,
+        marginRight: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.2,
