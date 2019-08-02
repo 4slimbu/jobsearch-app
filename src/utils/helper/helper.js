@@ -113,3 +113,31 @@ export function toQueryString(queryObject) {
 
     return queryString;
 }
+
+export function humanReadableFilterInfo(meta, filter) {
+    const {search, category, radius, orderBy} = filter;
+    const {to, total} = meta;
+    let displayInfoText = 'No Posts';
+
+    if (total > 0) {
+        displayInfoText = 'Showing 1 - ' + to + ' of ' + total;
+    }
+
+    if (search !== "") {
+        displayInfoText += ' containing text "' + search + '"';
+    }
+
+    if (category.length > 0) {
+        displayInfoText += ' with category filter on';
+    }
+
+    if (radius !== "") {
+        displayInfoText += ' within ' + prettyDistance(radius);
+    }
+
+    if (orderBy) {
+        displayInfoText += ' order by ' + orderBy;
+    }
+
+    return displayInfoText;
+};

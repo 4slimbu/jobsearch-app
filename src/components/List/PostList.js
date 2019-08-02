@@ -24,10 +24,10 @@ const PostList = (props) => {
 };
 
 const postList = props => {
-    const {posts, backScreen, isFilterActive, onRefresh} = props;
+    const {posts, backScreen, isFilterActive, onRefresh, filter} = props;
     return (
         <View>
-            <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} onRefresh={onRefresh}/>
+            <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} filter={filter} onRefresh={onRefresh}/>
             <View style={styles.postListWrapper}>
                 <PostList {...props}/>
             </View>
