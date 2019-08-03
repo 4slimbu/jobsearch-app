@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import globalStyles from "../../constants/globalStyle";
-import {Location, Permissions} from "expo";
+import * as Location from "expo-location";
+import * as Permissions from "expo-permissions";
 import {BackHandler, ScrollView, StyleSheet, View} from 'react-native';
 import {Icon, SearchBar,} from 'react-native-elements';
 

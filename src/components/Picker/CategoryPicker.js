@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
-import {Image, Text, TouchableOpacity, View, StyleSheet} from 'react-native';
-import {Button, Input} from "react-native-elements";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Colors from "../../constants/colors";
-import appData from "../../constants/app";
 
 class CategoryPicker extends Component {
     constructor(props) {

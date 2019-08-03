@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
-import {Image, Text, TouchableOpacity, View, StyleSheet} from 'react-native';
-import {Button, Input} from "react-native-elements";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FontAwesome} from '@expo/vector-icons';
 import Colors from "../../constants/colors";
-import appData from "../../constants/app";
 
 class PickLocation extends Component {
     constructor(props) {
@@ -24,9 +22,8 @@ class PickLocation extends Component {
             <TouchableOpacity onPress={() => navigation.navigate('PickLocationModal',
             {backScreen: backScreen})}>
                 <View style={styles.locationPicker}>
-                    <Icon
+                    <FontAwesome
                         name="map-marker"
-                        type="font-awesome"
                         color={Colors.primary}
                         size={45}
                     />

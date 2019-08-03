@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
-import appData from "../../constants/app";
 import globalStyles from "../../constants/globalStyle";
 import {ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import Colors from '../../constants/colors';
-import {Button, Image, Icon} from "react-native-elements";
+import {Button, Image} from "react-native-elements";
 import * as _ from "lodash";
 import {connect} from "react-redux";
 import {saveComment} from "../../store/actions/commentActions";
+import {FontAwesome} from "@expo/vector-icons";
+
 
 class PostComments extends Component {
     constructor(props) {
@@ -148,10 +149,9 @@ class PostComments extends Component {
                     post.postComments && post.postComments.length > 0 &&
                     <View>
                         <View style={styles.commentsListHeaderContainer}>
-                            <Icon
+                            <FontAwesome
                                 name="wechat"
                                 size={18}
-                                type="font-awesome"
                                 color={Colors.primary}
                                 containerStyle={styles.iconHeader}
                             />

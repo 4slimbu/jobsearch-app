@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from 'react-navigation';
-import {Icon} from 'react-native-elements/src/index';
+import {FontAwesome, Entypo} from "@expo/vector-icons";
 
 import CategoriesTab from './CategoriesTab';
 import ManagePostsTab from './ManagePostsTab';
@@ -15,10 +15,9 @@ const Tabs = createBottomTabNavigator(
             navigationOptions: {
                 tabBarLabel: 'Categories',
                 tabBarIcon: ({tintColor, focused}) => (
-                    <Icon
+                    <FontAwesome
                         name="code-fork"
                         size={30}
-                        type="font-awesome"
                         color={tintColor}
                     />
                 ),
@@ -30,7 +29,7 @@ const Tabs = createBottomTabNavigator(
             navigationOptions: {
                 tabBarLabel: 'Manage Posts',
                 tabBarIcon: ({tintColor, focused}) => (
-                    <Icon name="list" size={30} type="entypo" color={tintColor}/>
+                    <Entypo name="list" size={30} color={tintColor}/>
                 ),
             },
         },
@@ -40,10 +39,9 @@ const Tabs = createBottomTabNavigator(
             navigationOptions: {
                 tabBarLabel: 'Search',
                 tabBarIcon: ({tintColor, focused}) => (
-                    <Icon
+                    <FontAwesome
                         name="search"
                         size={30}
-                        type="font-awesome"
                         color={tintColor}
                     />
                 ),

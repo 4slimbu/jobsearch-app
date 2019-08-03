@@ -4,9 +4,10 @@ import {ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'r
 import PropTypes from "prop-types";
 import Colors from '../../constants/colors';
 import {Button, Image} from "react-native-elements";
-import {ImagePicker, Permissions} from "expo";
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
 import * as _ from "lodash";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {FontAwesome} from '@expo/vector-icons';
 import {loadCategories} from "../../store/actions/categoryActions";
 import {connect} from "react-redux";
 import {addPost} from "../../store/actions/postActions";
@@ -20,7 +21,8 @@ const PostImages = (props) => {
     return _.map(images, (image, key) => {
         return (
             <View key={key}>
-                <Icon color={Colors.darkGray} name="close" size={30} onPress={() => removeImageHandler(type, key)}/>
+                <FontAwesome color={Colors.darkGray} name="close" size={30}
+                             onPress={() => removeImageHandler(type, key)}/>
                 <Image source={{uri: image.uri}} style={{width: 100, height: 100, marginTop: 10, marginBottom: 10}}/>
             </View>
         )
@@ -90,7 +92,7 @@ class AddPostScreen extends Component {
     }
 
     pickFeaturedImageHandler = async () => {
-        let { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        let {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
         if (status !== 'granted') {
             return;
@@ -107,7 +109,7 @@ class AddPostScreen extends Component {
     };
 
     pickAdditionalImagesHandler = async () => {
-        let { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        let {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
         if (status !== 'granted') {
             return;
@@ -135,17 +137,25 @@ class AddPostScreen extends Component {
         const {category} = this.props.forms;
         let errors = {};
 
-        if (!postTitle) { errors.postTitle = 'Post Title is required!'; }
-        if (!postContent) { errors.postContent = 'Post Content is required!'; }
-        if (_.isEmpty(category)) { errors.category = 'Category is required!'; }
-        if (_.isEmpty(address)) { errors.address = "Location is required"; }
+        if (!postTitle) {
+            errors.postTitle = 'Post Title is required!';
+        }
+        if (!postContent) {
+            errors.postContent = 'Post Content is required!';
+        }
+        if (_.isEmpty(category)) {
+            errors.category = 'Category is required!';
+        }
+        if (_.isEmpty(address)) {
+            errors.address = "Location is required";
+        }
 
         this.setState({errors});
         return _.isEmpty(errors);
     }
 
     submitHandler() {
-        const {postTitle, postContent, featuredImage,additionalImages, date} = this.state;
+        const {postTitle, postContent, featuredImage, additionalImages, date} = this.state;
         const {address, latitude, longitude} = this.props.forms.location;
         const {category} = this.props.forms;
 
@@ -172,7 +182,11 @@ class AddPostScreen extends Component {
 
         if (additionalImages && additionalImages.length > 0) {
             _.forEach(additionalImages, (additionalImage, key) => {
-                formData.append('post_images[' + (key + 1) + ']', {uri: additionalImage.uri, name: key +'image.jpg', type: 'image/jpg'});
+                formData.append('post_images[' + (key + 1) + ']', {
+                    uri: additionalImage.uri,
+                    name: key + 'image.jpg',
+                    type: 'image/jpg'
+                });
             });
         }
 
@@ -201,7 +215,7 @@ class AddPostScreen extends Component {
                                 style={globalStyles.textInput}
                                 onChangeText={postTitle => this.setState({postTitle})}
                             />
-                            { errors.postTitle &&
+                            {errors.postTitle &&
                             <Text style={globalStyles.error}>{errors.postTitle}</Text>
                             }
                         </View>
@@ -210,11 +224,11 @@ class AddPostScreen extends Component {
                             <View>
                                 <TextInput
                                     style={globalStyles.textAreaLight}
-                                           multiline={true}
-                                           numberOfLines={15}
-                                           onChangeText={postContent => this.setState({postContent})}
+                                    multiline={true}
+                                    numberOfLines={15}
+                                    onChangeText={postContent => this.setState({postContent})}
                                 />
-                                { errors.postContent &&
+                                {errors.postContent &&
                                 <Text style={globalStyles.error}>{errors.postContent}</Text>
                                 }
                             </View>
@@ -230,9 +244,8 @@ class AddPostScreen extends Component {
                                 !featuredImage &&
                                 <TouchableOpacity onPress={this.pickFeaturedImageHandler}>
                                     <View style={styles.imagePicker}>
-                                        <Icon
+                                        <FontAwesome
                                             name="photo"
-                                            type="font-awesome"
                                             color={Colors.primary}
                                             size={45}
                                         />
@@ -260,9 +273,8 @@ class AddPostScreen extends Component {
                                     additionalImages.length < 6 &&
                                     <TouchableOpacity onPress={this.pickAdditionalImagesHandler}>
                                         <View style={styles.imagePicker}>
-                                            <Icon
+                                            <FontAwesome
                                                 name="photo"
-                                                type="font-awesome"
                                                 color={Colors.primary}
                                                 size={45}
                                             />
@@ -280,7 +292,10 @@ class AddPostScreen extends Component {
                                 navigation={this.props.navigation}
                                 backScreen="AddPost"
                             />
-                            <Text style={{color: Colors.danger, marginTop: 5}}>{errors.category ? errors.category: ''}</Text>
+                            <Text style={{
+                                color: Colors.danger,
+                                marginTop: 5
+                            }}>{errors.category ? errors.category : ''}</Text>
                         </View>
                         <View style={globalStyles.formRow}>
                             <Text style={globalStyles.formTitle}>Post Location</Text>
@@ -289,9 +304,12 @@ class AddPostScreen extends Component {
                                 navigation={this.props.navigation}
                                 backScreen="AddPost"
                             />
-                            <Text style={{color: Colors.danger, marginTop: 5}}>{errors.address ? errors.address: ''}</Text>
+                            <Text style={{
+                                color: Colors.danger,
+                                marginTop: 5
+                            }}>{errors.address ? errors.address : ''}</Text>
                         </View>
-                       
+
                         <View>
                             <Button
                                 title="Save"
@@ -303,7 +321,7 @@ class AddPostScreen extends Component {
                                 disabled={isLoading}
                             />
                         </View>
-                    
+
                     </View>
 
                 </View>
@@ -313,7 +331,7 @@ class AddPostScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-   
+
     categoryContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',

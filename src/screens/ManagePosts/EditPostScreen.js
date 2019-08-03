@@ -4,9 +4,10 @@ import {ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'r
 import PropTypes from "prop-types";
 import Colors from '../../constants/colors';
 import {Button, Image} from "react-native-elements";
-import {ImagePicker, Permissions} from "expo";
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
 import * as _ from "lodash";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {FontAwesome} from '@expo/vector-icons';
 import {loadCategories} from "../../store/actions/categoryActions";
 import {connect} from "react-redux";
 import {getPost, updatePost} from "../../store/actions/postActions";
@@ -21,11 +22,10 @@ const PostImages = (props) => {
     return _.map(images, (image, key) => {
         return (
             <View style={{}} key={key}>
-                <Icon
+                <FontAwesome
                     color={Colors.primary}
                     style={styles.postThumbnailRemover}
                     name="trash"
-                    type="font-awesome"
                     size={22}
                     onPress={() => removeImageHandler(type, key, image)}
                 />
@@ -289,9 +289,8 @@ class EditPostScreen extends Component {
                                 !featuredImage &&
                                 <TouchableOpacity onPress={this.pickFeaturedImageHandler}>
                                     <View style={styles.imagePicker}>
-                                        <Icon
+                                        <FontAwesome
                                             name="photo"
-                                            type="font-awesome"
                                             color={Colors.primary}
                                             size={45}
                                         />
@@ -322,9 +321,8 @@ class EditPostScreen extends Component {
                                     additionalImages.length < 6 &&
                                     <TouchableOpacity onPress={this.pickAdditionalImagesHandler}>
                                         <View style={styles.imagePicker}>
-                                            <Icon
+                                            <FontAwesome
                                                 name="photo"
-                                                type="font-awesome"
                                                 color={Colors.primary}
                                                 size={45}
                                             />
@@ -340,7 +338,7 @@ class EditPostScreen extends Component {
                             <CategoryPicker
                                 category={this.props.forms.category}
                                 navigation={this.props.navigation}
-                                backScreen="AddPost"
+                                backScreen="EditPost"
                             />
                             <Text style={{color: Colors.danger, marginTop: 5}}>{errors.category ? errors.category: ''}</Text>
                         </View>

@@ -1,5 +1,6 @@
 import React from 'react';
-import {registerRootComponent, Permissions, Notifications} from 'expo';
+import {registerRootComponent, Notifications} from 'expo';
+import * as Permissions from "expo-permissions";
 import {Provider} from 'react-redux';
 import configureStore from './src/store/configureStore';
 import {AsyncStorage, StyleSheet} from "react-native";
@@ -10,7 +11,7 @@ import {uiUpdateViewHistory} from "./src/store/actions/uiActions";
 
 const store = configureStore();
 
-const registerForPushNotificationsAsync = async() => {
+const registerForPushNotificationsAsync = async () => {
     let deviceId = await AsyncStorage.getItem('loksewa:auth:deviceId');
 
     if (deviceId) {
@@ -78,7 +79,7 @@ export default class App extends React.Component {
                 <AppContainer ref={navigatorRef => {
                     NavigationService.setTopLevelNavigator(navigatorRef);
                 }}
-                    onNavigationStateChange={() => this.handleNavigationStateChange()}
+                              onNavigationStateChange={() => this.handleNavigationStateChange()}
                 />
                 {/*<View style={[styles.container, styles.horizontal]}>*/}
                 {/*  <ActivityIndicator size="large" color="red" />*/}

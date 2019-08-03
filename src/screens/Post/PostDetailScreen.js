@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import appData from "../../constants/app";
 import {ActivityIndicator, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Colors from '../../constants/colors';
-import {Icon, Image} from "react-native-elements";
+import {Image} from "react-native-elements";
 import * as _ from "lodash";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import {connect} from "react-redux";
@@ -11,8 +11,8 @@ import {prettyDistance, toReadable} from "../../utils/helper/helper";
 import ContentLoading from "../../components/ContentLoading";
 import PostComments from "./PostComments";
 import KCarousel from "../../components/Carousel/KCarousel";
-import NavigationService from "../../services/NavigationService";
 import {uiUpdateViewHistory} from "../../store/actions/uiActions";
+import {FontAwesome} from "@expo/vector-icons";
 
 class PostDetailScreen extends Component {
     constructor(props) {
@@ -76,7 +76,7 @@ class PostDetailScreen extends Component {
 
         return (
             <ScrollView style={styles.container}>
-                {  post && isReady &&
+                {post && isReady &&
                 <KeyboardAvoidingView style={{flex: 1, marginBottom: 50}}
                                       behavior="padding"
                 >
@@ -86,22 +86,20 @@ class PostDetailScreen extends Component {
                         </View>
                         <View style={styles.headerContainer}>
                             <Text style={styles.heading}>{post.title}</Text>
-                            <Text style={styles.price}>{ prettyDistance(post.distance) }</Text>
+                            <Text style={styles.price}>{prettyDistance(post.distance)}</Text>
                             <View style={styles.locationContainer}>
-                                <Icon
+                                <FontAwesome
                                     name="map-marker"
                                     size={22}
-                                    type="font-awesome"
                                     color={Colors.primary}
                                     containerStyle={{marginRight: 10}}
                                 />
-                                <Text style={styles.location}>{ post.address}</Text>
+                                <Text style={styles.location}>{post.address}</Text>
                             </View>
                             <View>
-                                <Icon
+                                <FontAwesome
                                     name="star"
                                     size={22}
-                                    type="font-awesome"
                                     color={isSaved ? Colors.primary : Colors.greyOutline}
                                     containerStyle={{marginRight: 14}}
                                     onPress={() => this.savePostHandler(post.id)}
@@ -110,7 +108,7 @@ class PostDetailScreen extends Component {
                         </View>
 
                         {
-                            ! isReady ?
+                            !isReady ?
                                 <ContentLoading/>
                                 :
                                 <View style={[{paddingLeft: 20, paddingRight: 20, marginBottom: 20}]}>
@@ -122,7 +120,8 @@ class PostDetailScreen extends Component {
                                             />
                                         </View>
                                         <View style={styles.postAuthorMetaData}>
-                                            <Text style={styles.postAuthorMeta}>{post.author && post.author.full_name}</Text>
+                                            <Text
+                                                style={styles.postAuthorMeta}>{post.author && post.author.full_name}</Text>
                                             <Text style={styles.postDateMeta}>{toReadable(post.created_at)}</Text>
                                         </View>
                                     </View>
@@ -181,18 +180,18 @@ const styles = StyleSheet.create({
     postAuthorProfilePicContainer: {
         marginRight: 10,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 0 },
+        shadowOffset: {width: 0, height: 0},
         shadowOpacity: 0.2,
         shadowRadius: 6,
         elevation: 2.0,
         width: 60,
         height: 60,
-        borderRadius: 60/2,
+        borderRadius: 60 / 2,
     },
     postAuthorProfilePic: {
         width: 60,
         height: 60,
-        borderRadius: 60/2,
+        borderRadius: 60 / 2,
     },
     postAuthorMetaData: {
         flex: 3,
@@ -207,7 +206,7 @@ const styles = StyleSheet.create({
         fontWeight: 'normal',
     },
     postContentContainer: {
-        marginTop:15,
+        marginTop: 15,
         padding: 20,
         backgroundColor: Colors.lightGray,
         borderRadius: 5,
@@ -245,9 +244,9 @@ const styles = StyleSheet.create({
         fontWeight: 'normal',
     },
     additionalImg: {
-        display:'flex',
-        flexDirection:'row',
-        paddingBottom:20,
+        display: 'flex',
+        flexDirection: 'row',
+        paddingBottom: 20,
     },
     postAdditionalImg: {
         backgroundColor: 'red',

@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import appData from "../../constants/app";
 import * as Platform from 'react-native';
 import {KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, UIManager, View} from 'react-native';
-import {Constants} from 'expo';
+import Constants from 'expo-constants';
 import {connect} from 'react-redux';
 import {Button, CheckBox, Image, Input} from 'react-native-elements';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {FontAwesome} from '@expo/vector-icons';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import socialColor from "../../constants/socialColors";
 import {tryAuth} from '../../store/actions/authActions';
@@ -154,7 +154,7 @@ class RegisterScreen extends Component {
                         <View style={globalStyles.formRow}>
                             <Input
                                 leftIcon={
-                                    <Icon
+                                    <FontAwesome
                                         name="envelope-o"
                                         color={Colors.primary}
                                         size={25}

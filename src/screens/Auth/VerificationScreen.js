@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {Button, Image, Input} from 'react-native-elements';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {FontAwesome} from '@expo/vector-icons';
 import socialColor from "../../constants/socialColors";
 import Colors from "../../constants/colors";
 import {reSendVerificationCode, verifyEmail} from "../../store/actions/authActions";
@@ -111,7 +111,7 @@ class VerificationScreen extends Component {
                         verificationStatus === 'successful' &&
                         <View style={{flex: 1, height: 150, alignItems: 'center', justifyContent: 'center'}}>
                             <View style={{alignItems: 'center'}}>
-                                <Icon color='green' name="check" size={62}/>
+                                <FontAwesome color='green' name="check" size={62}/>
                                 <Text>Verification Successful</Text>
                             </View>
                         </View>
@@ -120,7 +120,7 @@ class VerificationScreen extends Component {
                         verificationStatus === 'unsuccessful' &&
                         <View style={{flex: 1, height: 150, alignItems: 'center', justifyContent: 'center'}}>
                             <View style={{alignItems: 'center'}}>
-                                <Icon color='red' name="close" size={62}/>
+                                <FontAwesome color='red' name="close" size={62}/>
                                 <Text>Verification Failed</Text>
                             </View>
                         </View>
@@ -130,7 +130,7 @@ class VerificationScreen extends Component {
                         <View style={[styles.formContainer, {height: 150}]}>
                             <Input
                                 leftIcon={
-                                    <Icon
+                                    <FontAwesome
                                         name="envelope-o"
                                         color="rgba(0, 0, 0, 0.38)"
                                         size={25}

@@ -1,14 +1,14 @@
 import React from "react";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Colors from "../../constants/colors";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {FontAwesome} from '@expo/vector-icons';
 
 const categoryItem = props => {
     const {category, onSelectCategory} = props;
     return (
         <TouchableOpacity style={styles.categoryItem}
                         onPress={onSelectCategory}>
-            <Icon style={styles.catIcon} name={category.icon}/>
+            <FontAwesome style={styles.catIcon} name={category.icon}/>
             <Text style={styles.categoryText}>{category.name}</Text>
         </TouchableOpacity>
     )

@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {FontAwesome} from '@expo/vector-icons';
 import Colors from "../constants/colors";
 import NavigationService from "../services/NavigationService";
 import {humanReadableFilterInfo} from "../utils/helper/helper";
@@ -17,12 +17,12 @@ const PostListMetaData = props => {
                         </View>
                         <View style={{flex: 1}}>
                             <TouchableOpacity onPress={() => NavigationService.navigate('FilterModal', {backScreen: backScreen, onRefresh: onRefresh})}>
-                                <Icon style={[styles.filter, isFilterActive && styles.active]} name="sliders"/>
+                                <FontAwesome style={[styles.filter, isFilterActive && styles.active]} name="sliders"/>
                             </TouchableOpacity>
                         </View>
                         {/* <View style={{flex: 1}}>
                 <TouchableOpacity onPress={onRefresh}>
-                    <Icon style={styles.refresh} name="refresh"/>
+                    <FontAwesome style={styles.refresh} name="refresh"/>
                 </TouchableOpacity>
             </View> */}
                     </View>
