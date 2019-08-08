@@ -20,7 +20,7 @@ import {connect} from "react-redux";
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-const LogoUrl = require('../../../assets/icons/icon.png');
+const LogoUrl = require('../../../assets/images/logo-icon.png');
 
 // Enable LayoutAnimation on Android
 UIManager.setLayoutAnimationEnabledExperimental &&

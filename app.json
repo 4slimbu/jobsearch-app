@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "loksewa-app",
-    "slug": "loksewa-app",
-    "description": "Loksewa app ",
+    "name": "kchahiyo-app",
+    "slug": "kchahiyo-app",
+    "description": "Kchahiyo is an app to help global nepalese community find jobs",
     "privacy": "public",
     "sdkVersion": "34.0.0",
     "platforms": [
@@ -11,10 +11,11 @@
     ],
     "version": "0.3.0",
     "orientation": "portrait",
-    "primaryColor": "#cccccc",
-    "icon": "./assets/icons/icon.png",
+    "primaryColor": "#f04c40",
+    "icon": "./assets/images/logo-icon.png",
     "splash": {
-      "image": "./assets/icons/loading.png"
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,11 +24,11 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.responsivepixel.loksewa",
+      "bundleIdentifier": "com.responsivepixel.kchahiyo",
       "supportsTablet": true
     },
     "android": {
-      "package": "com.responsivepixel.loksewa",
+      "package": "com.responsivepixel.kchahiyo",
       "googleServicesFile": "./google-services.json"
     }
   }

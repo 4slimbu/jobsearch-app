@@ -8,10 +8,16 @@ import {createAppContainer} from "react-navigation";
 import MainNavigator from "./src/navigators/MainNavigator";
 import NavigationService from "./src/services/NavigationService";
 import {uiUpdateViewHistory} from "./src/store/actions/uiActions";
+import Constants from 'expo-constants';
 
 const store = configureStore();
 
 const registerForPushNotificationsAsync = async () => {
+    // don't proceed if simulator
+    if (! Constants.isDevice) {
+        return;
+    }
+
     let deviceId = await AsyncStorage.getItem('loksewa:auth:deviceId');
 
     if (deviceId) {
@@ -50,8 +56,15 @@ export default class App extends React.Component {
         notification: {},
     };
 
+    constructor(props) {
+        super(props);
+
+        App.handleNavigationStateChange = App.handleNavigationStateChange.bind(this);
+    }
+
     componentDidMount() {
-        registerForPushNotificationsAsync();
+        registerForPushNotificationsAsync().then((res) => {
+        }).catch((err) => {});
 
         // Handle notifications that are received or selected while the app
         // is open. If the app was closed and then opened by tapping the
@@ -69,7 +82,7 @@ export default class App extends React.Component {
         }
     };
 
-    handleNavigationStateChange() {
+    static handleNavigationStateChange() {
         store.dispatch(uiUpdateViewHistory(NavigationService.getCurrentRoute()));
     }
 
@@ -77,9 +90,9 @@ export default class App extends React.Component {
         return (
             <Provider store={store}>
                 <AppContainer ref={navigatorRef => {
-                    NavigationService.setTopLevelNavigator(navigatorRef);
-                }}
-                              onNavigationStateChange={() => this.handleNavigationStateChange()}
+                        NavigationService.setTopLevelNavigator(navigatorRef);
+                    }}
+                    onNavigationStateChange={App.handleNavigationStateChange}
                 />
                 {/*<View style={[styles.container, styles.horizontal]}>*/}
                 {/*  <ActivityIndicator size="large" color="red" />*/}

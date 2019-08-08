@@ -1,6 +1,8 @@
 export default {
-    primary: '#f04c40',
-    danger: '#c74248',
+    primary: '#ff687d',
+    // primary: '#f04c40',
+    danger: '#ff314e',
+    // danger: '#c74248',
     success: '#00B233',
     lighterGray:'#fafafa',
     lightGray:'#f7f7f7',
