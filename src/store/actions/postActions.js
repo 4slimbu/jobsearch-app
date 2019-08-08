@@ -395,3 +395,27 @@ export const resetPostFilter = () => {
         payload: {}
     }
 };
+
+export const flagPost = (postId) => {
+    let url = appData.app.API_BASE_URL + '/posts/flag/' + postId;
+    return (dispatch, getState) => {
+        const token = getState().auth.token;
+        return new Promise((resolve, reject) => {
+            fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Accept": "application/json",
+                    "Authorization": "Bearer " + token
+                }
+            })
+                .then(res => res.json())
+                .then(parsedRes => {
+                    resolve(parsedRes);
+                })
+                .catch(function() {
+                    reject();
+                });
+        });
+    };
+};

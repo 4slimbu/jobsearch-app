@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import appData from "../../constants/app";
-import {ActivityIndicator, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Colors from '../../constants/colors';
 import {Image} from "react-native-elements";
 import * as _ from "lodash";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import {connect} from "react-redux";
-import {getPost} from "../../store/actions/postActions";
+import {flagPost, getPost} from "../../store/actions/postActions";
 import {prettyDistance, toReadable} from "../../utils/helper/helper";
 import ContentLoading from "../../components/ContentLoading";
 import PostComments from "./PostComments";
@@ -20,12 +20,14 @@ class PostDetailScreen extends Component {
         this.state = {
             post: {},
             isSaved: false,
+            isFlagged: false,
             comment: "",
             isReady: false,
             isLoading: false,
         };
 
         this.savePostHandler = this.savePostHandler.bind(this);
+        this.flagPostHandler = this.flagPostHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -33,13 +35,15 @@ class PostDetailScreen extends Component {
 
         const {params} = this.props.navigation.state;
         const postId = params ? params.postId : null;
-        const {savedPosts} = this.props.preferences;
+        const {savedPosts, flaggedPosts} = this.props.preferences;
         const isSaved = savedPosts && savedPosts.indexOf(postId) > -1;
+        const isFlagged = flaggedPosts && flaggedPosts.indexOf(postId) > -1;
 
         this._isMounted && await this.props.getPost(postId) && this.setState({
             ...this.state,
             post: this.props.posts.post,
             isSaved: isSaved,
+            isFlagged: isFlagged,
             isReady: true
         });
     }
@@ -53,7 +57,7 @@ class PostDetailScreen extends Component {
             isSaved: !this.state.isSaved
         });
 
-        let savedPosts = [...this.props.preferences.savedPosts];
+        let savedPosts = this.props.preferences.savedPosts ? [...this.props.preferences.savedPosts] : [];
         let index = savedPosts.indexOf(postId);
         if (index > -1) {
             savedPosts.splice(index, 1);
@@ -67,11 +71,60 @@ class PostDetailScreen extends Component {
         this.props.onUpdatePreferences(preferences);
     }
 
+    flagPostHandler(postId) {
+        if (this.state.isFlagged) {
+            Alert.alert(
+                'You have already flagged this post.',
+                "",
+                [
+                    {
+                        text: 'Cancel',
+                        style: 'cancel',
+                    },
+                ],
+            );
+
+            return;
+        }
+
+        Alert.alert(
+            'Are you sure you want to report this post?',
+            "",
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                { text: 'OK', onPress: () => this.flagPost(postId) },
+            ],
+            { cancelable: false },
+        );
+    }
+
+    flagPost(postId) {
+        this.setState({
+            isFlagged: !this.state.isFlagged
+        });
+
+        let flaggedPosts = this.props.preferences.flaggedPosts ? [...this.props.preferences.flaggedPosts] : [];
+        let index = flaggedPosts.indexOf(postId);
+        if (index > -1) {
+            flaggedPosts.splice(index, 1);
+        } else {
+            flaggedPosts.push(postId);
+        }
+        let preferences = {
+            ...this.props.preferences,
+            flaggedPosts: flaggedPosts
+        };
+        this.props.onUpdatePreferences(preferences);
+
+        this.props.flagPost(postId);
+    }
+
     render() {
-        const {isReady, isSaved} = this.state;
+        const {isReady, isSaved, isFlagged} = this.state;
         const {post} = this.props.posts;
-        const primaryImage = _.find(post.postImages, {"is_primary": true});
-        const featuredImage = primaryImage ? {uri: primaryImage.url} : require("../../../assets/images/placeholder.png");
         const authorImage = post.author && post.author.profile_pic ? {uri: post.author.profile_pic} : require("../../../assets/images/user-hp.png");
 
         return (
@@ -103,6 +156,15 @@ class PostDetailScreen extends Component {
                                     color={isSaved ? Colors.primary : Colors.greyOutline}
                                     containerStyle={{marginRight: 14}}
                                     onPress={() => this.savePostHandler(post.id)}
+                                />
+                            </View>
+                            <View>
+                                <FontAwesome
+                                    name="flag"
+                                    size={22}
+                                    color={isFlagged ? Colors.primary : Colors.greyOutline}
+                                    containerStyle={{marginRight: 14}}
+                                    onPress={() => this.flagPostHandler(post.id)}
                                 />
                             </View>
                         </View>
@@ -269,6 +331,7 @@ const mapDispatchToProps = (dispatch) => {
         onUpdatePreferences: (preferences) => dispatch(authUpdatePreferences(preferences)),
         uiUpdateViewHistory: (navData) => dispatch(uiUpdateViewHistory(navData)),
         getPost: (postId) => dispatch(getPost(postId)),
+        flagPost: (postId) => dispatch(flagPost(postId)),
     };
 };
 

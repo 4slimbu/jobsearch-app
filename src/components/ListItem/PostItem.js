@@ -51,7 +51,7 @@ class PostItem extends Component {
 
     savePostHandler(post) {
         let isDeleted = false;
-        let savedPosts = [...this.props.preferences.savedPosts];
+        let savedPosts = this.props.preferences.savedPosts ? [...this.props.preferences.savedPosts] : [];
         let index = savedPosts.indexOf(post.id);
         if (index > -1) {
             isDeleted = true;
