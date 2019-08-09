@@ -3,12 +3,10 @@ import appData from "../../constants/app";
 import {ActivityIndicator, Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Colors from '../../constants/colors';
 import {Image} from "react-native-elements";
-import * as _ from "lodash";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import {connect} from "react-redux";
 import {flagPost, getPost} from "../../store/actions/postActions";
 import {prettyDistance, toReadable} from "../../utils/helper/helper";
-import ContentLoading from "../../components/ContentLoading";
 import PostComments from "./PostComments";
 import KCarousel from "../../components/Carousel/KCarousel";
 import {uiUpdateViewHistory} from "../../store/actions/uiActions";
@@ -170,31 +168,29 @@ class PostDetailScreen extends Component {
                         </View>
 
                         {
-                            !isReady ?
-                                <ContentLoading/>
-                                :
-                                <View style={[{paddingLeft: 20, paddingRight: 20, marginBottom: 20}]}>
-                                    <View style={{flex: 1, flexDirection: 'row', alignItems: "center",}}>
-                                        <View style={styles.postAuthorProfilePicContainer}>
-                                            <Image source={authorImage} resizeMode={'cover'}
-                                                   style={styles.postAuthorProfilePic}
-                                                   PlaceholderContent={<ActivityIndicator/>}
-                                            />
-                                        </View>
-                                        <View style={styles.postAuthorMetaData}>
-                                            <Text
-                                                style={styles.postAuthorMeta}>{post.author && post.author.full_name}</Text>
-                                            <Text style={styles.postDateMeta}>{toReadable(post.created_at)}</Text>
-                                        </View>
+                            isReady &&
+                            <View style={[{paddingLeft: 20, paddingRight: 20, marginBottom: 20}]}>
+                                <View style={{flex: 1, flexDirection: 'row', alignItems: "center",}}>
+                                    <View style={styles.postAuthorProfilePicContainer}>
+                                        <Image source={authorImage} resizeMode={'cover'}
+                                               style={styles.postAuthorProfilePic}
+                                               PlaceholderContent={<ActivityIndicator/>}
+                                        />
                                     </View>
-                                    <View style={styles.postContentContainer}>
-                                        {/*<Text style={styles.postContentTitle}>Description</Text>*/}
-                                        <Text style={styles.postContent}>{post.body}</Text>
-                                    </View>
-                                    <View>
-                                        <PostComments/>
+                                    <View style={styles.postAuthorMetaData}>
+                                        <Text
+                                            style={styles.postAuthorMeta}>{post.author && post.author.full_name}</Text>
+                                        <Text style={styles.postDateMeta}>{toReadable(post.created_at)}</Text>
                                     </View>
                                 </View>
+                                <View style={styles.postContentContainer}>
+                                    {/*<Text style={styles.postContentTitle}>Description</Text>*/}
+                                    <Text style={styles.postContent}>{post.body}</Text>
+                                </View>
+                                <View>
+                                    <PostComments/>
+                                </View>
+                            </View>
                         }
                     </View>
                 </KeyboardAvoidingView>

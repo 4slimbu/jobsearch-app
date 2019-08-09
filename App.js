@@ -2,14 +2,12 @@ import React from 'react';
 import {Notifications, registerRootComponent} from 'expo';
 import * as Permissions from "expo-permissions";
 import {Provider} from 'react-redux';
-import configureStore from './src/store/configureStore';
+import store from './src/store/configureStore';
 import {AsyncStorage, StyleSheet} from "react-native";
 import NavigationService from "./src/services/NavigationService";
 import {uiUpdateViewHistory} from "./src/store/actions/uiActions";
 import Constants from 'expo-constants';
 import AppWrapper from "./src/AppWrapper";
-
-const store = configureStore();
 
 const registerForPushNotificationsAsync = async () => {
     // don't proceed if simulator

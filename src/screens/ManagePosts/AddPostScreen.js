@@ -323,7 +323,6 @@ class AddPostScreen extends Component {
                         </View>
 
                     </View>
-
                 </View>
             </ScrollView>
         );

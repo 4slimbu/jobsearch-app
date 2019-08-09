@@ -7,7 +7,7 @@ import * as _ from "lodash";
 import {Icon} from "react-native-elements";
 import {DrawerActions} from "react-navigation";
 import {Feather} from '@expo/vector-icons';
-import ContentLoading from "../../components/ContentLoading";
+import AppLoading from "../../components/AppLoading";
 
 class PageDetailScreen extends Component {
     static navigationOptions = ({navigation}) => {
@@ -71,7 +71,7 @@ class PageDetailScreen extends Component {
                     source={{ uri: page && page.url }}
                     style={{ marginTop: 20 }}
                     startInLoadingState={true}
-                    renderLoading={() => <ContentLoading/>}
+                    renderLoading={() => <AppLoading/>}
                 />
             </Fragment>
 

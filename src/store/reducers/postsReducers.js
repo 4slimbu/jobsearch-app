@@ -1,41 +1,16 @@
 import {
-    POSTS_BY_CATEGORY_SET,
-    POSTS_BY_CATEGORY_RESET,
-    POST_SET,
     POST_COMMENT_SET,
+    POST_SET,
+    RESET_POST_FILTER,
+    RESET_POSTS,
     SET_POSTS,
-    POSTS_BY_ME_SET,
-    POSTS_SAVED_BY_ME_SET,
-    POSTS_BY_ME_DELETE,
-    DELETE_SAVED_POST,
-    UPDATE_EDITED_POST, UPDATE_POSTS, POSTS_BY_SEARCH_RESET, POSTS_BY_ME_RESET, POSTS_SAVED_BY_ME_RESET,
-    UPDATE_POST_FILTER, RESET_POST_FILTER, RESET_POSTS
+    UPDATE_POST_FILTER,
+    UPDATE_POSTS
 } from "../actions/actionTypes";
-import * as _ from "lodash";
 
 const initialState = {
     post: {},
     posts: {
-        data: [],
-        links: {},
-        meta: {}
-    },
-    postsByCategory: {
-        data: [],
-        links: {},
-        meta: {}
-    },
-    postsByMe: {
-        data: [],
-        links: {},
-        meta: {}
-    },
-    searchedPosts: {
-        data: [],
-        links: {},
-        meta: {}
-    },
-    savedPosts: {
         data: [],
         links: {},
         meta: {}
@@ -66,16 +41,6 @@ const postsReducers = (state = initialState, action) => {
                 }
             };
 
-        case POSTS_BY_CATEGORY_SET:
-            return {
-                ...state,
-                postsByCategory: {
-                    data: action.payload.data,
-                    links: action.payload.links,
-                    meta: action.payload.meta
-                }
-            };
-
         case SET_POSTS:
             return {
                 ...state,
@@ -100,52 +65,6 @@ const postsReducers = (state = initialState, action) => {
             return {
                 ...state,
                 posts: initialState.posts
-            };
-
-        case POSTS_BY_SEARCH_RESET:
-            return {
-                ...state,
-                searchedPosts: initialState.searchedPosts
-            };
-
-        case POSTS_BY_ME_RESET:
-            return {
-                ...state,
-                postsByMe: initialState.postsByMe
-            };
-
-        case POSTS_SAVED_BY_ME_RESET:
-            return {
-                ...state,
-                savedPosts: initialState.savedPosts
-            };
-
-        case POSTS_BY_ME_SET:
-            return {
-                ...state,
-                postsByMe: {
-                    data: state.postsByMe.data.concat(action.payload.data),
-                    links: action.payload.links,
-                    meta: action.payload.meta
-                }
-            };
-
-        case POSTS_SAVED_BY_ME_SET:
-            return {
-                ...state,
-                savedPosts: {
-                    data: [
-                        ...action.payload.data
-                    ],
-                    links: action.payload.links,
-                    meta: action.payload.meta
-                }
-            };
-
-        case POSTS_BY_CATEGORY_RESET:
-            return {
-                ...state,
-                postsByCategory: initialState.postsByCategory
             };
 
         case UPDATE_POST_FILTER:

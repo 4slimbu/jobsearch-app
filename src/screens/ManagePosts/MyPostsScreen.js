@@ -4,7 +4,6 @@ import Colors from '../../constants/colors';
 import globalStyles from "../../constants/globalStyle";
 import {connect} from "react-redux";
 import {getMyPosts, resetPostsByMe} from "../../store/actions/postActions";
-import ContentLoading from "../../components/ContentLoading";
 import {uiUpdateViewHistory} from "../../store/actions/uiActions";
 import MyPostList from "../../components/List/MyPostList";
 
@@ -70,11 +69,6 @@ class MyPostsScreen extends Component {
                     <View>
                         {
                             postsByMe && <MyPostList {...postListProps}/>
-                        }
-                    </View>
-                    <View style={{height: 100}}>
-                        {
-                            isLoading && <ContentLoading/>
                         }
                     </View>
                 </View>

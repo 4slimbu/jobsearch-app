@@ -2,6 +2,8 @@ import {AsyncStorage} from "react-native";
 import {AUTH_DATA_RESET, AUTH_SET_LOGGED_IN_STATUS, AUTH_SET_TOKEN, AUTH_SET_USER} from "./actionTypes";
 import appData from "../../constants/app";
 import alertMessage from "../../components/Alert";
+import {fetchData} from "../../utils/helper/helper";
+import ApiService from "../../services/ApiService";
 
 export const authSetUser = (user) => {
     return {
@@ -32,7 +34,7 @@ export const authDataReset = () => {
 };
 
 export const tryAuth = (authData, authMode = 'login') => {
-    let url = appData.app.API_BASE_URL + '/login';
+    let tryAuth = ApiService.Auth.login;
     let body = {};
 
     if (authMode === "login") {
@@ -43,7 +45,7 @@ export const tryAuth = (authData, authMode = 'login') => {
     }
 
     if (authMode === "register") {
-        url = appData.app.API_BASE_URL + '/register';
+        tryAuth = ApiService.Auth.register;
 
         body = {
             email: authData.email,
@@ -60,7 +62,7 @@ export const tryAuth = (authData, authMode = 'login') => {
     }
 
     if (authMode === "fbLogin") {
-        url = appData.app.API_BASE_URL + '/login';
+        tryAuth = ApiService.Auth.login;
         body = {
             fb_token: authData.fbToken,
             device_id: authData.deviceId
@@ -69,26 +71,16 @@ export const tryAuth = (authData, authMode = 'login') => {
 
     return dispatch => {
         return new Promise((resolve, reject) => {
-            fetch(url, {
-                method: "POST",
-                body: JSON.stringify(body),
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                }
-            })
-                .then(res => {
-                    return res.json();
-                })
+            return tryAuth(body)
                 .then(parsedRes => {
                     if (!parsedRes.access_token) {
                         if (parsedRes.error === 'UserExistsException' && parsedRes.message) {
-                            alertMessage({ title: "Error", body: parsedRes.message });
+                            alertMessage({title: "Error", body: parsedRes.message});
                         } else {
-                            alertMessage({ title: "Error", body: "Authentication failed, please try again!" });
+                            alertMessage({title: "Error", body: "Authentication failed, please try again!"});
                         }
                     } else {
-                        dispatch( storeAuthInfo(parsedRes) );
+                        dispatch(storeAuthInfo(parsedRes));
                     }
                     resolve(parsedRes);
                 })
@@ -203,7 +195,7 @@ export const facebookLogin = () => async dispatch => {
     let fbToken = await AsyncStorage.getItem('loksewa:auth:fbToken');
     let deviceId = await AsyncStorage.getItem('loksewa:auth:deviceId');
 
-    if (! fbToken) {
+    if (!fbToken) {
         fbToken = await doFacebookLogin(dispatch);
     }
 
@@ -212,52 +204,27 @@ export const facebookLogin = () => async dispatch => {
 
 export const authUpdatePreferences = (preferences) => {
     return (dispatch, getState) => {
-        let url = appData.app.API_BASE_URL + '/me';
-
-        const token = getState().auth.token;
         return new Promise((resolve, reject) => {
-            fetch(url, {
-                method: "POST",
-                body: JSON.stringify({preferences: preferences}),
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "Authorization": "Bearer " + token
-                }
-            })
-                .then(res => res.json())
+            return ApiService.Me.update({preferences: preferences})
                 .then(parsedRes => {
                     if (!parsedRes.data) {
                         alert("Unable to get preferences!");
                     } else {
-                        dispatch(
-                            authSetUser(parsedRes.data)
-                        );
+                        dispatch(authSetUser(parsedRes.data));
                     }
                     resolve(parsedRes);
                 })
                 .catch(function () {
                     reject();
                 });
-        })
+        });
     };
 };
 
 export const verifyEmail = (verificationCode) => {
-    let url = appData.app.API_BASE_URL + '/verify-email/' + verificationCode;
     return dispatch => {
-
         return new Promise((resolve, reject) => {
-            fetch(url, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                }
-            })
-                .catch(err => {
-                })
-                .then(res => res.json())
+            return ApiService.Auth.verifyEmail({verificationCode: verificationCode})
                 .then(parsedRes => {
                     if (!parsedRes.data) {
                     } else {
@@ -275,97 +242,39 @@ export const verifyEmail = (verificationCode) => {
 };
 
 export const sendForgotPasswordEmail = (email) => {
-    let url = appData.app.API_BASE_URL + '/forgot-password';
     return dispatch => {
         return new Promise((resolve, reject) => {
-            fetch(url, {
-                method: "POST",
-                body: JSON.stringify({email: email}),
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                }
-            })
-                .then(res => res.json())
-                .then(parsedRes => {
-                    resolve(parsedRes);
-                })
-                .catch(function () {
-                    reject();
-                });
+            return ApiService.Auth.forgotPassword({email: email});
         });
     };
 };
 
 export const resetPassword = (data) => {
-    let url = appData.app.API_BASE_URL + '/reset-password';
+    let body = {
+        email: data.email,
+        password: data.password,
+        token: data.token
+    };
+
     return dispatch => {
         return new Promise((resolve, reject) => {
-            fetch(url, {
-                method: "PUT",
-                body: JSON.stringify({
-                    email: data.email,
-                    password: data.password,
-                    token: data.token
-                }),
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                }
-            })
-                .then(res => res.json())
-                .then((parsedRes) => {
-                    if (parsedRes.error) {
-                        reject();
-                    }
-                    resolve();
-                })
-                .catch(err => {
-                    reject();
-                });
+            return ApiService.Auth.resetPassword(body);
         });
     };
 };
 
 export const reSendVerificationCode = () => {
-    let url = appData.app.API_BASE_URL + '/resend-verification-code';
     return (dispatch, getState) => {
-        const token = getState().auth.token;
         return new Promise((resolve, reject) => {
-            fetch(url, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "Authorization": "Bearer " + token
-                }
-            })
-                // .then(res => res.json())
-                .then(parsedRes => {
-                    resolve(parsedRes);
-                })
-                .catch(function () {
-                    reject();
-                });
+            return ApiService.Auth.reSendVerificationCode({});
         });
     };
 };
 
 export const updateMyProfile = (formData) => {
-    let url = appData.app.API_BASE_URL + '/me';
     return (dispatch, getState) => {
-        const token = getState().auth.token;
         return new Promise((resolve, reject) => {
-            fetch(url, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    "Accept": "application/json",
-                    "Authorization": "Bearer " + token
-                }
-            })
-                .then(res => res.json())
+            return ApiService.Me.update(formData)
                 .then(parsedRes => {
                     if (!parsedRes.data) {
                     } else {
@@ -378,7 +287,7 @@ export const updateMyProfile = (formData) => {
                     }
                     resolve(parsedRes);
                 })
-                .catch(function() {
+                .catch(function () {
                     reject();
                 });
         });
@@ -386,38 +295,21 @@ export const updateMyProfile = (formData) => {
 };
 
 export const updatePassword = (formData) => {
-    let url = appData.app.API_BASE_URL + '/me/reset-password';
     return (dispatch, getState) => {
-        const token = getState().auth.token;
         return new Promise((resolve, reject) => {
-            fetch(url, {
-                method: "PUT",
-                body: JSON.stringify(formData),
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "Authorization": "Bearer " + token
-                }
-            })
-                // .then(res => res.json())
-                .then(parsedRes => {
-                    resolve(parsedRes);
-                })
-                .catch(function() {
-                    reject();
-                });
+            return ApiService.Me.resetPassword(formData);
         });
     };
 };
 
-const doFacebookLogin = async() => {
+const doFacebookLogin = async () => {
     const {type, token} = await Expo.Facebook.logInWithReadPermissionsAsync(
         appData.app.FB_APP_KEY,
         {permissions: ['public_profile', 'email', 'user_gender', 'user_location']}
     );
 
     if (type === 'cancel') {
-        alertMessage({ title: "Cancelled", body: 'Facebook Login Failed!' });
+        alertMessage({title: "Cancelled", body: 'Facebook Login Failed!'});
     }
 
     await AsyncStorage.setItem('loksewa:auth:fbToken', token);

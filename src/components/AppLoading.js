@@ -3,7 +3,7 @@ import {ActivityIndicator, Modal} from 'react-native';
 import Colors from "../constants/colors";
 import {connect} from "react-redux";
 
-const ContentLoading = props => {
+const AppLoading = props => {
     const {isLoading} = props;
     return (
         <Modal
@@ -17,14 +17,4 @@ const ContentLoading = props => {
     )
 };
 
-const mapStateToProps = state => {
-    return {
-        ui: state.ui
-    }
-};
-
-const mapDispatchToProps = (dispatch) => {
-    return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContentLoading);
+export default AppLoading;

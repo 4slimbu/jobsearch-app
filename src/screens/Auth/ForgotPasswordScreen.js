@@ -303,8 +303,6 @@ class ForgotPasswordScreen extends Component {
                                     activeOpacity={0.8}
                                     title="Have Password Reset Code? Reset Password"
                                     onPress={this.havePasswordResetCodeHandler}
-                                    loading={isLoading}
-                                    disabled={isLoading}
                                 />
                             }
                         </View>

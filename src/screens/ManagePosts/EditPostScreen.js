@@ -364,7 +364,6 @@ class EditPostScreen extends Component {
                         />
 
                     </View>
-
                 </View>
             </ScrollView>
         );

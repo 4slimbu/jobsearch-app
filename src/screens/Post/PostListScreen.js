@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
 import {SearchBar,} from 'react-native-elements';
 
 import Colors from "../../constants/colors";
@@ -7,7 +7,6 @@ import {connect} from "react-redux";
 import {getPosts, resetPostFilter, resetPosts, updatePostFilter} from "../../store/actions/postActions";
 import PostList from "../../components/List/PostList";
 import {authUpdatePreferences} from "../../store/actions/authActions";
-import ContentLoading from "../../components/ContentLoading";
 import {uiUpdateViewHistory} from "../../store/actions/uiActions";
 import * as _ from "lodash";
 
@@ -160,12 +159,6 @@ class PostListScreen extends Component {
                         <PostList {...postListProps}/>
                     </View>
                 }
-
-                <View style={{height: 100}}>
-                    {
-                        (isLoading || !isReady) && <ContentLoading/>
-                    }
-                </View>
             </ScrollView>
         );
     }
