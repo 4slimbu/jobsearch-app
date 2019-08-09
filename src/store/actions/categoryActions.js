@@ -1,12 +1,13 @@
 import {CATEGORIES_SET, POSTS_BY_CATEGORY_SET} from "./actionTypes";
 import appData from "../../constants/app";
+import {uiStartLoading} from "./uiActions";
 
 export const loadCategories = () => {
     return (dispatch, getState) => {
         let url = appData.app.API_BASE_URL + '/categories';
 
         const token = getState().auth.token;
-
+        dispatch(uiStartLoading());
         return new Promise((resolve, reject) => {
             fetch(url, {
                 method: "GET",
@@ -23,10 +24,12 @@ export const loadCategories = () => {
                     }
 
                     dispatch(setCategories(parsedRes.data));
+                    dispatch(uiStartLoading());
                     resolve(parsedRes.data);
                 })
                 .catch(function() {
                     reject();
+                    dispatch(uiStartLoading());
                 });
         });
 

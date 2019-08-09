@@ -8,6 +8,7 @@ import {
 } from "./actionTypes";
 import appData from "../../constants/app";
 import {toQueryString} from "../../utils/helper/helper";
+import {uiStartLoading, uiStopLoading} from "./uiActions";
 
 export const getPost = (postId) => {
     return (dispatch, getState) => {
@@ -15,6 +16,7 @@ export const getPost = (postId) => {
 
         const token = getState().auth.token;
 
+        dispatch(uiStartLoading());
         return new Promise((resolve, reject) => {
             fetch(url, {
                 method: "GET",
@@ -25,7 +27,7 @@ export const getPost = (postId) => {
                 }
             })
                 .catch(err => {
-                    // dispatch(uiStopLoading());
+                    dispatch(uiStopLoading());
                 })
                 .then(res => res.json())
                 .then(parsedRes => {
@@ -35,6 +37,7 @@ export const getPost = (postId) => {
                             setPost(parsedRes.data)
                         );
                     }
+                    dispatch(uiStopLoading());
                     resolve(parsedRes);
                 })
                 .catch(function() {
@@ -110,7 +113,7 @@ export const getPosts = (queryObject, url=null) => {
             isFreshSearch = false;
         }
 
-        console.log(url);
+        dispatch(uiStartLoading());
 
         const token = getState().auth.token;
         return new Promise((resolve, reject) => {
@@ -122,6 +125,10 @@ export const getPosts = (queryObject, url=null) => {
                     "Authorization": "Bearer " + token
                 }
             })
+                .catch(err => {
+                    dispatch(uiStartLoading());
+                    reject();
+                })
                 .then(res => res.json())
                 .then(parsedRes => {
                     if (!parsedRes.data) {
@@ -133,9 +140,11 @@ export const getPosts = (queryObject, url=null) => {
                     } else {
                         dispatch( updatePosts(parsedRes) );
                     }
+                    dispatch(uiStartLoading());
                     resolve(parsedRes);
                 })
                 .catch(err => {
+                    dispatch(uiStartLoading());
                     reject();
                 });
         });
@@ -267,6 +276,7 @@ export const addPost = (formData) => {
     console.log(formData, url);
     return (dispatch, getState) => {
         const token = getState().auth.token;
+        dispatch(uiStartLoading());
         return new Promise((resolve, reject) => {
             fetch(url, {
                 method: "POST",
@@ -279,9 +289,11 @@ export const addPost = (formData) => {
             })
                 .then((res) => {
                     console.log(res);
+                    dispatch(uiStopLoading());
                     resolve();
                 })
                 .catch(function () {
+                    dispatch(uiStopLoading());
                     reject();
                     console.log("error");
                 });
@@ -334,6 +346,7 @@ export const updatePost = (postId, formData) => {
     let url = appData.app.API_BASE_URL + '/posts/' + postId;
     return (dispatch, getState) => {
         const token = getState().auth.token;
+        dispatch(uiStartLoading());
         return new Promise((resolve, reject) => {
             fetch(url, {
                 method: "POST",
@@ -352,9 +365,11 @@ export const updatePost = (postId, formData) => {
                             getMyPosts()
                         );
                     }
+                    dispatch(uiStopLoading());
                     resolve(parsedRes);
                 })
                 .catch(function() {
+                    dispatch(uiStopLoading());
                     reject();
                 });
         });

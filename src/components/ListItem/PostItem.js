@@ -71,7 +71,8 @@ class PostItem extends Component {
     }
 
     editPostHandler(postId) {
-        this.props.navigation.navigate('EditPost', { postId: postId });
+        const {onRefresh} = this.props;
+        this.props.navigation.navigate('EditPost', { postId: postId, onRefresh: onRefresh });
     }
 
     deletePost(id) {

@@ -233,6 +233,7 @@ class EditPostScreen extends Component {
 
         this.props.updatePost(postId, formData).then(res => {
             alertMessage({title: "Success", body: "Post updated successfully"});
+            this.props.navigation.state.params.onRefresh();
             this.props.navigation.goBack();
         }).catch(err => {
             alertMessage({title: "Error", body: "Unable to update post"});

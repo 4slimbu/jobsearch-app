@@ -100,6 +100,7 @@ class PostListScreen extends Component {
             savedPosts: savedPosts
         };
         this.props.onUpdatePreferences(preferences);
+        this.refresh();
     }
 
     async scrollHandler(e){
