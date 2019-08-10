@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View, WebView} from 'react-native';
+import React, {Component, Fragment} from 'react';
+import {WebView} from 'react-native';
 import Colors from '../../constants/colors';
 import {connect} from "react-redux";
 import {getPage} from "../../store/actions/pageActions";
@@ -7,6 +7,7 @@ import * as _ from "lodash";
 import {Icon} from "react-native-elements";
 import {DrawerActions} from "react-navigation";
 import {Feather} from '@expo/vector-icons';
+import ContentLoading from "../../components/ContentLoading";
 
 class PageDetailScreen extends Component {
     static navigationOptions = ({navigation}) => {
@@ -65,71 +66,17 @@ class PageDetailScreen extends Component {
         const {pages} = this.props.pages;
         const page = _.find(pages, {slug: params && params.navTarget});
         return (
-            <WebView
-                source={{uri: 'https://github.com/facebook/react-native'}}
-                style={{marginTop: 20}}
-            />
+            <Fragment>
+                <WebView
+                    source={{ uri: page && page.url }}
+                    style={{ marginTop: 20 }}
+                    startInLoadingState={true}
+                    renderLoading={() => <ContentLoading/>}
+                />
+            </Fragment>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'white',
-    },
-    headerContainer: {
-        padding: 40,
-        paddingLeft: 20,
-        paddingRight: 20,
-        backgroundColor: '#acacac',
-        marginBottom: 20,
-    },
-    contentView: {
-        flex: 1,
-    },
-    categoryContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        flexWrap: 'wrap',
-        width: '100%',
-        marginTop: 20,
-    },
-    categoryItem: {
-        padding: 10,
-        marginBottom: 20,
-        alignItems: 'center',
-    },
-    postTitle: {
-        color: Colors.darkGray,
-        marginBottom: 5,
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    postAuthorMeta: {
-        color: Colors.darkGray,
-        marginBottom: 3,
-        fontSize: 14,
-    },
-    postDateMeta: {
-        color: Colors.darkGray,
-        marginBottom: 15,
-        fontSize: 14,
-        fontStyle: 'italic'
-    },
-    postContent: {
-        color: Colors.darkGray,
-        fontSize: 16,
-        lineHeight: 20,
-        marginBottom: 15
-    },
-    heading: {
-        color: 'white',
-        marginTop: 10,
-        fontSize: 22,
-        fontWeight: 'bold',
-    },
-});
-
 
 const mapStateToProps = state => {
     return {

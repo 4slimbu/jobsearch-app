@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import PropTypes from "prop-types";
 import Colors from "../../constants/colors";
-import { Image, Icon } from "react-native-elements";
+import {Image, Icon, Button} from "react-native-elements";
 import {getFeaturedImageSrc, prettyDistance, toReadable} from "../../utils/helper/helper";
 import { connect } from "react-redux";
 import { authUpdatePreferences } from "../../store/actions/authActions";
@@ -107,47 +107,46 @@ class PostItem extends Component {
                             <Text style={styles.postTitle}>{post.title}</Text>
                         </TouchableOpacity>
                         {(type !== 'my') &&
-                            <View style={{display: 'flex', flexDirection: 'row',}}>
+                            <View style={styles.postMeta}>
                                 <Icon
                                     name="map-marker"
                                     size={18}
                                     type="font-awesome"
                                     color={Colors.primary}
-                                    containerStyle={{marginRight: 5}}
+                                    containerStyle={styles.postLocationIcon}
                                 />
                                 <Text style={styles.postLocation}>{ prettyDistance(post.distance) }</Text>
+                                <Icon
+                                    name="star"
+                                    size={18}
+                                    type="font-awesome"
+                                    color={isSaved ? Colors.yellow : Colors.greyOutline}
+                                    containerStyle={styles.postActions}
+                                    onPress={() => this.savePostHandler(post)}
+                                />
                             </View>
                         }
 
-                        <View style={styles.postButtonWrap}>
-                            {(type === 'my') &&
-                                <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4, }}>
-                                    <Icon
-                                        name="edit"
-                                        size={22}
-                                        type="font-awesome"
-                                        color={Colors.primary}
-                                        containerStyle={{marginRight: 14}}
-                                        onPress={() => this.editPostHandler(post.id)}
-                                    />
-                                    <Icon
-                                        name="trash"
-                                        size={22}
-                                        type="font-awesome"
-                                        color={Colors.primary}
-                                        containerStyle={{marginRight: 14}}
-                                        onPress={() => this.deletePostHandler(post)}
-                                    />
-                                </View>
-                            }
-                            {/* {!(type === 'my') &&
-                                <Button title={isSaved ? 'Saved' : 'Save'} buttonStyle={[{
-                                    marginBottom: 5, paddingTop: 5,
-                                    paddingBottom: 5, backgroundColor:'#525252',
-                                }, isSaved && {backgroundColor: '#00d600'}]}
-                                        buttonSize={5} onPress={() => this.savePostHandler(post)}/>
-                            } */}
-                        </View>
+                        {(type === 'my') &&
+                            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4, }}>
+                                <Icon
+                                    name="edit"
+                                    size={22}
+                                    type="font-awesome"
+                                    color={Colors.primary}
+                                    containerStyle={{marginRight: 14}}
+                                    onPress={() => this.editPostHandler(post.id)}
+                                />
+                                <Icon
+                                    name="trash"
+                                    size={22}
+                                    type="font-awesome"
+                                    color={Colors.primary}
+                                    containerStyle={{marginRight: 14}}
+                                    onPress={() => this.deletePostHandler(post)}
+                                />
+                            </View>
+                        }
                     </View>
                 </View>
             </View>
@@ -163,12 +162,7 @@ const styles = StyleSheet.create({
         width: '33%',
         alignItems: 'center',
     },
-    postText: {
-        color: Colors.darkGray,
-        marginTop: 10,
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
+    
     postTitle: {
         color: Colors.darkGray,
         marginBottom: 5,
@@ -176,24 +170,32 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         textTransform: 'capitalize',
     },
-    postLocation: {
-        color: Colors.darkGray,
-        marginBottom: 3,
-        fontSize: 13,
+   
+    postMeta: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        alignItems: "center",
+        marginTop: 5,
+    },
+
+    postLocationIcon: {
         marginRight: 5,
         lineHeight: 18,
     },
-    postDateMeta: {
+
+    postLocation: {
         color: Colors.darkGray,
-        marginBottom: 5,
-        fontSize: 12,
-        marginRight: 5,
+        fontSize: 13,
+        lineHeight: 18,
     },
-    postCatMeta: {
-        color: Colors.mediumGray,
-        marginBottom: 5,
-        fontSize: 12,
+
+    postActions: {
+        marginLeft: 'auto',
+        lineHeight: 18,
     },
+
+    
     postFeaturedImageWrapper: {
         overflow: 'hidden',
         width: '100%',

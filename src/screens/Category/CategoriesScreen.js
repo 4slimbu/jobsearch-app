@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import appData from "../../constants/app";
+import globalStyles from "../../constants/globalStyle";
+import {TouchableOpacity} from "react-native";
 import {ActivityIndicator, ScrollView, StyleSheet, View} from 'react-native';
 import {Feather} from '@expo/vector-icons';
 import {connect} from "react-redux";
@@ -14,7 +16,12 @@ class CategoriesScreen extends Component {
         return {
             title: 'Browse Categories',
             headerLeft: (
-                <Image style={{marginLeft: 10, width: 40, height: 40}} source={appData.app.LOGO_INNER_URL}/>
+                <TouchableOpacity onPress={() => navigation.navigate('Categories')}>
+                    <Image 
+                        style={globalStyles.innerLogo}
+                        source={appData.app.LOGO_INNER_URL}
+                    />
+                </TouchableOpacity>
             ),
             headerRight: (
                 <Feather

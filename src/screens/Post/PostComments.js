@@ -155,7 +155,7 @@ class PostComments extends Component {
                                 color={Colors.primary}
                                 containerStyle={styles.iconHeader}
                             />
-                            <Text style={styles.sectionHeadingWithIcon}>Comments</Text>
+                            <Text style={styles.sectionHeadingWithIcon}>Messages</Text>
                         </View>
                         <View style={styles.commentsListContainer}>
                             {this.comments()}
@@ -163,8 +163,8 @@ class PostComments extends Component {
                     </View>
                 }
                 <View style={styles.commentsListContainer}>
-                    <Text style={styles.sectionHeading}>Leave a Private Comment</Text>
-                    <Text style={styles.sectionSubHeading}>Leave a comment to apply. This comment section is private for each
+                    <Text style={styles.sectionHeading}>Leave a Private Message</Text>
+                    <Text style={styles.sectionSubHeading}>Leave a message if you are interested. This message section is private for each
                         user.</Text>
                     <View style={globalStyles.formRow}>
                         <TextInput
@@ -177,7 +177,7 @@ class PostComments extends Component {
                     </View>
                     <View>
                         <Button
-                            title="Comment" buttonStyle={globalStyles.btnPrimary}
+                            title="Post Message" buttonStyle={globalStyles.btnPrimary}
                             onPress={() => this.commentHandler(post.id)}
                             buttonSize={5}
                             loading={isLoading}
@@ -265,13 +265,13 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         marginBottom: 15,
-        marginLeft: 20,
+        marginLeft: 30,
     },
 
     commentUserAvatarContainer: {
-        flex: 1,
         paddingLeft: 0,
-        paddingTop: 20,
+        marginTop: 20,
+        marginRight: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.2,

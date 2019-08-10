@@ -1,8 +1,8 @@
 import React from 'react';
-
+import {TouchableOpacity} from "react-native";
+import globalStyles from "../../constants/globalStyle";
 import {createStackNavigator, DrawerActions} from 'react-navigation';
 import {Image} from 'react-native-elements';
-
 import PostDetailScreen from "../../screens/Post/PostDetailScreen";
 import {Feather} from "@expo/vector-icons";
 import appData from "../../constants/app";
@@ -17,7 +17,12 @@ const SearchTab = createStackNavigator({
         navigationOptions: ({navigation}) => ({
             title: 'Search',
             headerLeft: (
-                <Image style={{marginLeft: 10, width: 40, height: 40}} source={appData.app.LOGO_INNER_URL}/>
+                <TouchableOpacity onPress={() => navigation.navigate('Categories')}>
+                    <Image 
+                        style={globalStyles.innerLogo}
+                        source={appData.app.LOGO_INNER_URL}
+                    />
+                </TouchableOpacity>
             ),
             headerRight: (
                 <Feather

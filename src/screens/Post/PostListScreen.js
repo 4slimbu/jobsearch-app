@@ -136,6 +136,7 @@ class PostListScreen extends Component {
                 radius: 100,
                 orderBy: "nearest",
             }),
+            filter: filter,
             onRefresh: this.refresh
         };
 

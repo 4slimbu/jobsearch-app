@@ -68,7 +68,7 @@ class PostDetailScreen extends Component {
     }
 
     render() {
-        const {isReady} = this.state;
+        const {isReady, isSaved} = this.state;
         const {post} = this.props.posts;
         const primaryImage = _.find(post.postImages, {"is_primary": true});
         const featuredImage = primaryImage ? {uri: primaryImage.url} : require("../../../assets/images/placeholder.png");
@@ -85,7 +85,7 @@ class PostDetailScreen extends Component {
                             {post.postImages && <KCarousel data={post.postImages}/>}
                         </View>
                         <View style={styles.headerContainer}>
-                            <Text style={styles.heading}>{post.title}</Text>
+                            <Text selectable="true" style={styles.heading}>{post.title}</Text>
                             <Text style={styles.price}>{ prettyDistance(post.distance) }</Text>
                             <View style={styles.locationContainer}>
                                 <Icon
@@ -93,9 +93,17 @@ class PostDetailScreen extends Component {
                                     size={22}
                                     type="font-awesome"
                                     color={Colors.primary}
-                                    containerStyle={{marginRight: 10}}
+                                    containerStyle={styles.locationIcon}
                                 />
-                                <Text style={styles.location}>{ post.address}</Text>
+                                <Text selectable="true" style={styles.location}>{ post.address}</Text>
+                                <Icon
+                                    name="star"
+                                    size={22}
+                                    type="font-awesome"
+                                    color={isSaved ? Colors.yellow : Colors.greyOutline}
+                                    containerStyle={styles.postActions}
+                                    onPress={() => this.savePostHandler(post.id)}
+                                />
                             </View>
                         </View>
 
@@ -118,7 +126,7 @@ class PostDetailScreen extends Component {
                                     </View>
                                     <View style={styles.postContentContainer}>
                                         {/*<Text style={styles.postContentTitle}>Description</Text>*/}
-                                        <Text style={styles.postContent}>{post.body}</Text>
+                                        <Text selectable="true" style={styles.postContent}>{post.body}</Text>
                                     </View>
                                     <View>
                                         <PostComments/>
@@ -169,7 +177,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     postAuthorProfilePicContainer: {
-        flex: 1,
         marginRight: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 0 },
@@ -229,11 +236,19 @@ const styles = StyleSheet.create({
     locationContainer: {
         display: 'flex',
         flexDirection: 'row',
+        width: '100%',
+        alignItems: 'center',
+    },
+    locationIcon: {
+        marginRight: 10,
     },
     location: {
         color: Colors.darkGray,
-        fontSize: 12,
+        fontSize: 13,
         fontWeight: 'normal',
+    },
+    postActions: {
+        marginLeft: 'auto',
     },
     additionalImg: {
         display:'flex',

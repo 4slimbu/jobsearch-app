@@ -171,6 +171,7 @@ class LoginScreen extends Component {
                                         placeholder={'Password'}
                                         onChangeText={password => this.setState({password})}
                                         errorMessage={errors.password ? errors.password : null}
+                                        autoCapitalize='none'
                                     />
                                 </View>
 

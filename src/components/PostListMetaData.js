@@ -1,34 +1,33 @@
-import React from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import React, {Fragment} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from "../constants/colors";
 import NavigationService from "../services/NavigationService";
+import {humanReadableFilterInfo} from "../utils/helper/helper";
 
 const PostListMetaData = props => {
-    const {meta, backScreen, isFilterActive, onRefresh} = props;
+    const {meta, backScreen, isFilterActive, filter, onRefresh} = props;
     return (
-        meta && meta.current_page ?
-        <View style={styles.postsListHeader}>
-            <View style={{flex: 4}}>
-                {
-                    meta.total > 0 ?
-                        <Text>Showing 1 - {meta.to} of {meta.total}</Text>
-                        :
-                        <Text>No Posts</Text>
-                }
-            </View>
-            <View style={{flex: 1}}>
-                <TouchableOpacity onPress={() => NavigationService.navigate('FilterModal', {backScreen: backScreen, onRefresh: onRefresh})}>
-                    <Icon style={[styles.filter, isFilterActive && styles.active]} name="sliders"/>
-                </TouchableOpacity>
-            </View>
-            {/* <View style={{flex: 1}}>
+        <Fragment>
+            {
+                meta && meta.current_page &&
+                    <View style={styles.postsListHeader}>
+                        <View style={{flex: 4}}>
+                            <Text>{ meta && filter && humanReadableFilterInfo(meta, filter) }</Text>
+                        </View>
+                        <View style={{flex: 1}}>
+                            <TouchableOpacity onPress={() => NavigationService.navigate('FilterModal', {backScreen: backScreen, onRefresh: onRefresh})}>
+                                <Icon style={[styles.filter, isFilterActive && styles.active]} name="sliders"/>
+                            </TouchableOpacity>
+                        </View>
+                        {/* <View style={{flex: 1}}>
                 <TouchableOpacity onPress={onRefresh}>
                     <Icon style={styles.refresh} name="refresh"/>
                 </TouchableOpacity>
             </View> */}
-        </View> :
-        <View></View>
+                    </View>
+            }
+        </Fragment>
     )
 };
 

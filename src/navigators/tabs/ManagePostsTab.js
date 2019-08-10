@@ -1,6 +1,7 @@
 import React from 'react';
 import appData from "../../constants/app";
-
+import globalStyles from "../../constants/globalStyle";
+import {TouchableOpacity} from "react-native";
 import {createStackNavigator, DrawerActions} from 'react-navigation';
 import {Image} from 'react-native-elements';
 import {Feather} from '@expo/vector-icons';
@@ -20,7 +21,12 @@ const ManagePostsTab = createStackNavigator({
         navigationOptions: ({navigation}) => ({
             title: 'Manage Posts',
             headerLeft: (
-                <Image style={{marginLeft: 10, width: 40, height: 40}} source={appData.app.LOGO_INNER_URL}/>
+                <TouchableOpacity onPress={() => navigation.navigate('Categories')}>
+                    <Image 
+                        style={globalStyles.innerLogo}
+                        source={appData.app.LOGO_INNER_URL}
+                    />
+                </TouchableOpacity>
             ),
             headerRight: (
                 <Feather

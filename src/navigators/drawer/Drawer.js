@@ -1,4 +1,4 @@
-import {Image, Text, View} from "react-native";
+import {Image, Text, View, TouchableOpacity} from "react-native";
 import appData from "../../constants/app";
 import {createDrawerNavigator} from "react-navigation";
 import React from "react";
@@ -61,11 +61,13 @@ const CustomDrawerContentComponent = props => (
             }}
             onPress={() => props.navigation.navigate('CategoriesScreen')}
         >
-            <Image
-                source={appData.app.LOGO_INNER_URL}
-                style={{width: appData.app.SCREEN_WIDTH * 0.20, height: 50}}
-                resizeMode="contain"
-            />
+            <TouchableOpacity onPress={() => props.navigation.navigate('Categories')}>
+                <Image
+                    source={appData.app.LOGO_INNER_URL}
+                    style={{width: appData.app.SCREEN_WIDTH * 0.20, height: 50}}
+                    resizeMode="contain"
+                />
+            </TouchableOpacity>
             <Text style={{fontSize: 18, fontWeight: 'bold', color: Colors.darkGray}}>MENU</Text>
         </View>
         <View>

@@ -10,4 +10,5 @@ export default {
     greyOutline: '#cbd2d9',
     white: '#ffffff',
     black: '#000000',
+    yellow: '#ed9f23',
 };

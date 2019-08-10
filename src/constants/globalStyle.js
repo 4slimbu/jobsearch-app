@@ -4,6 +4,12 @@ import Colors from "./colors";
 import appData from "./app";
 
 module.exports = StyleSheet.create({
+    innerLogo: {
+        marginLeft: 10,
+        width: 40,
+        height: 40,
+    },
+
     keyboardAvoidingView: {
         flex: 1,
         justifyContent: 'center',

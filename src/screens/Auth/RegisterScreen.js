@@ -189,6 +189,7 @@ class RegisterScreen extends Component {
                                 placeholder={'Password'}
                                 onChangeText={password => this.onChangeHandler({password})}
                                 errorMessage={errors.password ? errors.password : null}
+                                autoCapitalize='none'
                             />
                         </View>
                         <View style={globalStyles.formRow}>
