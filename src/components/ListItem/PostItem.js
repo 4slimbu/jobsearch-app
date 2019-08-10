@@ -110,54 +110,50 @@ class PostItem extends Component {
                         <TouchableOpacity onPress={() => this.selectPostHandler(post)}>
                             <Text style={styles.postTitle}>{post.title}</Text>
                         </TouchableOpacity>
+                    </View>
                         {(type !== 'my') &&
                             <View style={styles.postMeta}>
-                                <FontAwesome
-                                    name="map-marker"
-                                    size={18}
-                                    color={Colors.primary}
-                                    containerStyle={styles.postLocationIcon}
-                                />
+                                <View style={styles.postLocationIcon}>
+                                    <FontAwesome
+                                        name="map-marker"
+                                        size={18}
+                                        color={Colors.primary}
+                                    />
+                                </View>
                                 <Text style={styles.postLocation}>{ prettyDistance(post.distance) }</Text>
-                                <FontAwesome
-                                    name="star"
-                                    size={18}
-                                    color={isSaved ? Colors.yellow : Colors.greyOutline}
-                                    containerStyle={styles.postActions}
-                                    onPress={() => this.savePostHandler(post)}
-                                />
+                                <View style={styles.postActions}>
+                                    <FontAwesome
+                                        name="star"
+                                        size={18}
+                                        color={isSaved ? Colors.yellow : Colors.greyOutline}
+                                        onPress={() => this.savePostHandler(post)}
+                                    />
+                                </View>
                             </View>
                         }
 
                         {(type === 'my') &&
-                            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4, }}>
-                                <FontAwesome
-                                    name="edit"
-                                    size={22}
-                                    color={Colors.primary}
-                                    containerStyle={{marginRight: 14}}
-                                    onPress={() => this.editPostHandler(post.id)}
-                                />
-                                <FontAwesome
-                                    name="trash"
-                                    size={22}
-                                    color={Colors.primary}
-                                    containerStyle={{marginRight: 14}}
-                                    onPress={() => this.deletePostHandler(post)}
-                                />
+                            <View style={styles.postMeta}>
+                                <View style={styles.postLocationIcon}>
+                                    <FontAwesome
+                                        name="edit"
+                                        size={22}
+                                        color={Colors.primary}
+                                        containerStyle={{marginRight: 14}}
+                                        onPress={() => this.editPostHandler(post.id)}
+                                    />
+                                </View>
+                                <View style={styles.postLocationIcon}>
+                                    <FontAwesome
+                                        name="trash"
+                                        size={22}
+                                        color={Colors.primary}
+                                        containerStyle={{marginRight: 14}}
+                                        onPress={() => this.deletePostHandler(post)}
+                                    />
+                                </View>
                             </View>
                         }
-
-                        <View>
-                            <FontAwesome
-                                name="star"
-                                size={22}
-                                color={isSaved ? Colors.primary : Colors.greyOutline}
-                                containerStyle={{marginRight: 14}}
-                                onPress={() => this.savePostHandler(post)}
-                            />
-                        </View>
-                    </View>
                 </View>
             </View>
         )
@@ -185,8 +181,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         width: '100%',
-        alignItems: "center",
         marginTop: 5,
+        padding: 10,
     },
 
     postLocationIcon: {
@@ -230,12 +226,14 @@ const styles = StyleSheet.create({
         maxWidth: 200,
         height: 100,
         flexWrap: 'wrap',
+        alignSelf: 'stretch',
     },
     postContent: {
         paddingLeft: 10,
         paddingRight: 10,
         display: 'flex',
         flexWrap: 'wrap',
+        flexDirection: 'row',
     },
     postMainWrapper: {
         display: 'flex',
