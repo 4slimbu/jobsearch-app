@@ -2,8 +2,8 @@ import {AsyncStorage} from "react-native";
 import {AUTH_DATA_RESET, AUTH_SET_LOGGED_IN_STATUS, AUTH_SET_TOKEN, AUTH_SET_USER} from "./actionTypes";
 import appData from "../../constants/app";
 import alertMessage from "../../components/Alert";
-import {fetchData} from "../../utils/helper/helper";
 import ApiService from "../../services/ApiService";
+import * as Facebook from 'expo-facebook';
 
 export const authSetUser = (user) => {
     return {
@@ -68,7 +68,6 @@ export const tryAuth = (authData, authMode = 'login') => {
             device_id: authData.deviceId
         }
     }
-
     return dispatch => {
         return new Promise((resolve, reject) => {
             return tryAuth(body)
@@ -194,11 +193,9 @@ export const authLogout = () => {
 export const facebookLogin = () => async dispatch => {
     let fbToken = await AsyncStorage.getItem('loksewa:auth:fbToken');
     let deviceId = await AsyncStorage.getItem('loksewa:auth:deviceId');
-
     if (!fbToken) {
         fbToken = await doFacebookLogin(dispatch);
     }
-
     return dispatch(tryAuth({fbToken: fbToken, deviceId: deviceId}, 'fbLogin'));
 };
 
@@ -303,7 +300,7 @@ export const updatePassword = (formData) => {
 };
 
 const doFacebookLogin = async () => {
-    const {type, token} = await Expo.Facebook.logInWithReadPermissionsAsync(
+    const {type, token} = await Facebook.logInWithReadPermissionsAsync(
         appData.app.FB_APP_KEY,
         {permissions: ['public_profile', 'email', 'user_gender', 'user_location']}
     );

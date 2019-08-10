@@ -9,28 +9,36 @@ const API_BASE_URL = appData.app.API_BASE_URL;
  * This handles all the api request.
  *
  */
-export function callApi(method = 'GET', url, data = {}) {
-    let headers = {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-    };
-
-    if (store.getState().auth.token) {
-        headers.Authorization = "Bearer " + store.getState().auth.token;
-    }
-
+export function callApi(method = 'GET', url, data = {}, headers = null) {
     let fetchArgs = {
         method: method,
-        headers: headers
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        }
     };
+
+    // Set authorization header if present
+    if (store.getState().auth.token) {
+        fetchArgs.headers["Authorization"] = "Bearer " + store.getState().auth.token;
+    }
 
     // Send body only if it is present. Also, don't sent body on get as it throws an error
     if (!_.isEmpty(data) && method !== 'GET') {
         // Auto detect form data
         if (data instanceof FormData) {
-            fetchArgs.body = data;
+            fetchArgs.headers["Content-Type"] = "multipart/form-data";
+            fetchArgs["body"] = data;
         } else {
-            fetchArgs.body = JSON.stringify(data);
+            fetchArgs["body"] = JSON.stringify(data);
+        }
+    }
+
+    // If headers is present, merge with default headers
+    if (!_.isEmpty(headers)) {
+        fetchArgs.headers = {
+            ...fetchArgs.headers,
+            ...headers
         }
     }
 
@@ -38,14 +46,13 @@ export function callApi(method = 'GET', url, data = {}) {
     return new Promise((resolve, reject) => {
         return fetch(url, fetchArgs)
             .then(res => {
+                store.dispatch(uiStopLoading());
                 return res.json();
             })
             .then(parsedRes => {
-                store.dispatch(uiStopLoading());
                 resolve(parsedRes);
             })
             .catch(function (error) {
-                console.log(url, fetchArgs, error);
                 store.dispatch(uiStopLoading());
                 reject();
             });

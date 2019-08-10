@@ -7,7 +7,9 @@ import {AsyncStorage, StyleSheet} from "react-native";
 import NavigationService from "./src/services/NavigationService";
 import {uiUpdateViewHistory} from "./src/store/actions/uiActions";
 import Constants from 'expo-constants';
-import AppWrapper from "./src/AppWrapper";
+import {createAppContainer} from "react-navigation";
+import MainNavigator from "./src/navigators/MainNavigator";
+import AppLoading from "./src/components/AppLoading";
 
 const registerForPushNotificationsAsync = async () => {
     // don't proceed if simulator
@@ -45,6 +47,8 @@ const registerForPushNotificationsAsync = async () => {
 
     AsyncStorage.setItem("loksewa:auth:deviceId", deviceId);
 };
+
+const AppContainerWithNavigator = createAppContainer(MainNavigator);
 
 export default class App extends React.Component {
     state = {
@@ -84,11 +88,12 @@ export default class App extends React.Component {
     render() {
         return (
             <Provider store={store}>
-                <AppWrapper ref={navigatorRef => {
+                <AppContainerWithNavigator ref={navigatorRef => {
                         NavigationService.setTopLevelNavigator(navigatorRef);
                     }}
                     onNavigationStateChange={App.handleNavigationStateChange}
                 />
+                <AppLoading/>
             </Provider>
         )
     }

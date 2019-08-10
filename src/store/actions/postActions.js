@@ -91,7 +91,11 @@ export const resetPosts = () => {
 export const addPost = (formData) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
-            ApiService.Posts.add(formData);
+            ApiService.Posts.add(formData)
+                .then(parsedRes => {
+                    resolve(parsedRes);
+                })
+                .catch(err => reject(err));
         });
     };
 };
@@ -101,9 +105,6 @@ export const deletePost = (id = 0) => {
         return new Promise((resolve, reject) => {
             ApiService.Posts.delete(id)
                 .then(parsedRes => {
-                    if (!parsedRes.error) {
-                        dispatch(deleteMyPost(id));
-                    }
                     resolve(parsedRes);
                 })
                 .catch(err => reject(err));
@@ -116,12 +117,6 @@ export const updatePost = (postId, formData) => {
         return new Promise((resolve, reject) => {
             ApiService.Posts.update(postId, formData)
                 .then(parsedRes => {
-                    if (!parsedRes.data) {
-                    } else {
-                        dispatch(
-                            getMyPosts()
-                        );
-                    }
                     resolve(parsedRes);
                 })
                 .catch(function() {
