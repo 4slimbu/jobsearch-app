@@ -117,9 +117,7 @@ class RegisterScreen extends Component {
     }
 
     onChangeHandler(data) {
-        const test = data;
-        console.log(data);
-        this.props.updateRegisterForm(test);
+        this.props.updateRegisterForm(data);
     }
 
     render() {

@@ -77,6 +77,7 @@ class PostItem extends Component {
 
     deletePost(id) {
         this.props.deletePost(id);
+        this.props.onRefresh();
     }
 
     render() {
