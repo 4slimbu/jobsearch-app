@@ -6,7 +6,7 @@ import {Image} from "react-native-elements";
 import {getFeaturedImageSrc, prettyDistance} from "../../utils/helper/helper";
 import {connect} from "react-redux";
 import {authUpdatePreferences} from "../../store/actions/authActions";
-import {deletePost, deleteSavedPost} from "../../store/actions/postActions";
+import {deletePost} from "../../store/actions/postActions";
 import {withNavigation} from "react-navigation";
 import {FontAwesome} from "@expo/vector-icons";
 
@@ -112,17 +112,16 @@ class PostItem extends Component {
                         </TouchableOpacity>
                         {(type !== 'my') &&
                             <View style={styles.postMeta}>
-                                <Icon
+                                <FontAwesome
                                     name="map-marker"
                                     size={18}
                                     color={Colors.primary}
                                     containerStyle={styles.postLocationIcon}
                                 />
                                 <Text style={styles.postLocation}>{ prettyDistance(post.distance) }</Text>
-                                <Icon
+                                <FontAwesome
                                     name="star"
                                     size={18}
-                                    type="font-awesome"
                                     color={isSaved ? Colors.yellow : Colors.greyOutline}
                                     containerStyle={styles.postActions}
                                     onPress={() => this.savePostHandler(post)}

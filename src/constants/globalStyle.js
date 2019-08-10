@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
 import Colors from "./colors";
-import appData from "./app";
 
 module.exports = StyleSheet.create({
     innerLogo: {

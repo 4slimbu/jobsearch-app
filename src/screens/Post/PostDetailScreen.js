@@ -136,7 +136,7 @@ class PostDetailScreen extends Component {
                             {post.postImages && <KCarousel data={post.postImages}/>}
                         </View>
                         <View style={styles.headerContainer}>
-                            <Text selectable="true" style={styles.heading}>{post.title}</Text>
+                            <Text selectable={true} style={styles.heading}>{post.title}</Text>
                             <Text style={styles.price}>{ prettyDistance(post.distance) }</Text>
                             <View style={styles.locationContainer}>
                                 <FontAwesome
@@ -145,11 +145,10 @@ class PostDetailScreen extends Component {
                                     color={Colors.primary}
                                     containerStyle={styles.locationIcon}
                                 />
-                                <Text selectable="true" style={styles.location}>{ post.address}</Text>
-                                <Icon
+                                <Text selectable={true} style={styles.location}>{ post.address}</Text>
+                                <FontAwesome
                                     name="star"
                                     size={22}
-                                    type="font-awesome"
                                     color={isSaved ? Colors.yellow : Colors.greyOutline}
                                     containerStyle={styles.postActions}
                                     onPress={() => this.savePostHandler(post.id)}
@@ -186,7 +185,7 @@ class PostDetailScreen extends Component {
                                     </View>
                                     <View style={styles.postContentContainer}>
                                         {/*<Text style={styles.postContentTitle}>Description</Text>*/}
-                                        <Text selectable="true" style={styles.postContent}>{post.body}</Text>
+                                        <Text selectable={true} style={styles.postContent}>{post.body}</Text>
                                     </View>
                                     <View style={styles.postAuthorMetaData}>
                                         <Text

@@ -1,6 +1,7 @@
 import appData from "../constants/app";
 import {uiStartLoading, uiStopLoading} from "../store/actions/uiActions";
 import store from "../store/configureStore";
+import * as _ from "lodash";
 
 const API_BASE_URL = appData.app.API_BASE_URL;
 
@@ -23,8 +24,14 @@ export function callApi(method = 'GET', url, data = {}) {
         headers: headers
     };
 
-    if (data.length > 0 && method !== 'GET') {
-        fetchArgs.body = JSON.stringify(data);
+    // Send body only if it is present. Also, don't sent body on get as it throws an error
+    if (!_.isEmpty(data) && method !== 'GET') {
+        // Auto detect form data
+        if (data instanceof FormData) {
+            fetchArgs.body = data;
+        } else {
+            fetchArgs.body = JSON.stringify(data);
+        }
     }
 
     store.dispatch(uiStartLoading());
