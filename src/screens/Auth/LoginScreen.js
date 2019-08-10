@@ -147,7 +147,7 @@ class LoginScreen extends Component {
                                         placeholder={'Email'}
                                         inputStyle={globalStyles.inputStyle}
                                         inputContainerStyle={globalStyles.inputContainerStyle}
-                                        containerStyle={globalStyles.inputOuterContainerStyle}
+                                        containerStyle={globalStyles.inputViewContainer}
                                         onChangeText={email => this.setState({email})}
                                         errorMessage={errors.email ? errors.email : null}
                                         autoCapitalize='none'
@@ -165,9 +165,9 @@ class LoginScreen extends Component {
                                         }
                                         value={password}
                                         secureTextEntry={true}
-                                        containerStyle={globalStyles.inputViewContainer}
-                                        inputContainerStyle={globalStyles.inputContainerStyle}
                                         inputStyle={globalStyles.inputStyle}
+                                        inputContainerStyle={globalStyles.inputContainerStyle}
+                                        containerStyle={globalStyles.inputViewContainer}
                                         placeholder={'Password'}
                                         onChangeText={password => this.setState({password})}
                                         errorMessage={errors.password ? errors.password : null}

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import globalStyles from "../../constants/globalStyle";
 import appData from "../../constants/app";
 import {ActivityIndicator, Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Colors from '../../constants/colors';
@@ -139,29 +140,29 @@ class PostDetailScreen extends Component {
                             <Text selectable={true} style={styles.heading}>{post.title}</Text>
                             <Text style={styles.price}>{ prettyDistance(post.distance) }</Text>
                             <View style={styles.locationContainer}>
-                                <FontAwesome
-                                    name="map-marker"
-                                    size={22}
-                                    color={Colors.primary}
-                                    containerStyle={styles.locationIcon}
-                                />
+                                <View style={styles.locationIcon}>
+                                    <FontAwesome
+                                        name="map-marker"
+                                        size={22}
+                                        color={Colors.primary}
+                                    />
+                                </View>
                                 <Text selectable={true} style={styles.location}>{ post.address}</Text>
-                                <FontAwesome
-                                    name="star"
-                                    size={22}
-                                    color={isSaved ? Colors.yellow : Colors.greyOutline}
-                                    containerStyle={styles.postActions}
-                                    onPress={() => this.savePostHandler(post.id)}
-                                />
-                            </View>
-                            <View>
-                                <FontAwesome
-                                    name="flag"
-                                    size={22}
-                                    color={isFlagged ? Colors.primary : Colors.greyOutline}
-                                    containerStyle={{marginRight: 14}}
-                                    onPress={() => this.flagPostHandler(post.id)}
-                                />
+                                <View style={styles.postActions}></View>
+                                    <FontAwesome
+                                        name="star"
+                                        size={22}
+                                        color={isSaved ? Colors.yellow : Colors.greyOutline}
+                                        onPress={() => this.savePostHandler(post.id)}
+                                    />
+                                    <FontAwesome
+                                        name="flag"
+                                        size={22}
+                                        color={isFlagged ? Colors.primary : Colors.greyOutline}
+                                        containerStyle={{marginLeft: 14}}
+                                        onPress={() => this.flagPostHandler(post.id)}
+                                    />
+                                </View>
                             </View>
                         </View>
 
@@ -170,8 +171,8 @@ class PostDetailScreen extends Component {
                             <ContentLoading/>
                             :
                             <View>
-                                <View style={[{paddingLeft: 20, paddingRight: 20, marginBottom: 20}]}>
-                                    <View style={{flex: 1, flexDirection: 'row', alignItems: "center",}}>
+                                <View style={globalStyles.formFlexColumn}>
+                                    <View style={globalStyles.formFlexRow}>
                                         <View style={styles.postAuthorProfilePicContainer}>
                                             <Image source={authorImage} resizeMode={'cover'}
                                                     style={styles.postAuthorProfilePic}
@@ -184,26 +185,16 @@ class PostDetailScreen extends Component {
                                         </View>
                                     </View>
                                     <View style={styles.postContentContainer}>
-                                        {/*<Text style={styles.postContentTitle}>Description</Text>*/}
                                         <Text selectable={true} style={styles.postContent}>{post.body}</Text>
                                     </View>
-                                    <View style={styles.postAuthorMetaData}>
-                                        <Text
-                                            style={styles.postAuthorMeta}>{post.author && post.author.full_name}</Text>
-                                        <Text style={styles.postDateMeta}>{toReadable(post.created_at)}</Text>
-                                    </View>
                                 </View>
-                                <View style={styles.postContentContainer}>
-                                    {/*<Text style={styles.postContentTitle}>Description</Text>*/}
-                                    <Text style={styles.postContent}>{post.body}</Text>
-                                </View>
-                                <View>
+                              
+                                <View style={globalStyles.formFlexColumn}>
                                     <PostComments/>
                                 </View>
                             </View>
                        
                         }
-                    </View>
                 </KeyboardAvoidingView>
                 }
             </ScrollView>
