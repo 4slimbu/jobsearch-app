@@ -1,20 +1,21 @@
 {
   "expo": {
-    "name": "kchahiyo myapp",
-    "slug": "kchahiyo-myapp",
-    "description": "kchahiyo app ",
+    "name": "kchahiyo-app",
+    "slug": "kchahiyo-app",
+    "description": "Kchahiyo is an app to help global nepalese community find things they need",
     "privacy": "public",
-    "sdkVersion": "32.0.0",
+    "sdkVersion": "34.0.0",
     "platforms": [
       "ios",
       "android"
     ],
     "version": "0.3.0",
     "orientation": "portrait",
-    "primaryColor": "#cccccc",
-    "icon": "./assets/icons/icon.png",
+    "primaryColor": "#f04c40",
+    "icon": "./assets/images/logo-icon.png",
     "splash": {
-      "image": "./assets/icons/loading.png"
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,11 +24,11 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.responsivepixel.loksewa",
+      "bundleIdentifier": "com.responsivepixel.kchahiyo",
       "supportsTablet": true
     },
     "android": {
-      "package": "com.responsivepixel.loksewa",
+      "package": "com.responsivepixel.kchahiyo",
       "googleServicesFile": "./google-services.json"
     }
   }

@@ -1,16 +1,20 @@
 import React from 'react';
-import {registerRootComponent, Permissions, Notifications} from 'expo';
+import {Notifications, registerRootComponent} from 'expo';
+import * as Permissions from "expo-permissions";
 import {Provider} from 'react-redux';
-import configureStore from './src/store/configureStore';
+import store from './src/store/configureStore';
 import {AsyncStorage, StyleSheet} from "react-native";
-import {createAppContainer} from "react-navigation";
-import MainNavigator from "./src/navigators/MainNavigator";
 import NavigationService from "./src/services/NavigationService";
 import {uiUpdateViewHistory} from "./src/store/actions/uiActions";
+import Constants from 'expo-constants';
+import AppWrapper from "./src/AppWrapper";
 
-const store = configureStore();
+const registerForPushNotificationsAsync = async () => {
+    // don't proceed if simulator
+    if (! Constants.isDevice) {
+        return;
+    }
 
-const registerForPushNotificationsAsync = async() => {
     let deviceId = await AsyncStorage.getItem('loksewa:auth:deviceId');
 
     if (deviceId) {
@@ -42,15 +46,20 @@ const registerForPushNotificationsAsync = async() => {
     AsyncStorage.setItem("loksewa:auth:deviceId", deviceId);
 };
 
-const AppContainer = createAppContainer(MainNavigator);
-
 export default class App extends React.Component {
     state = {
         notification: {},
     };
 
+    constructor(props) {
+        super(props);
+
+        App.handleNavigationStateChange = App.handleNavigationStateChange.bind(this);
+    }
+
     componentDidMount() {
-        registerForPushNotificationsAsync();
+        registerForPushNotificationsAsync().then((res) => {
+        }).catch((err) => {});
 
         // Handle notifications that are received or selected while the app
         // is open. If the app was closed and then opened by tapping the
@@ -68,21 +77,18 @@ export default class App extends React.Component {
         }
     };
 
-    handleNavigationStateChange() {
+    static handleNavigationStateChange() {
         store.dispatch(uiUpdateViewHistory(NavigationService.getCurrentRoute()));
     }
 
     render() {
         return (
             <Provider store={store}>
-                <AppContainer ref={navigatorRef => {
-                    NavigationService.setTopLevelNavigator(navigatorRef);
-                }}
-                    onNavigationStateChange={() => this.handleNavigationStateChange()}
+                <AppWrapper ref={navigatorRef => {
+                        NavigationService.setTopLevelNavigator(navigatorRef);
+                    }}
+                    onNavigationStateChange={App.handleNavigationStateChange}
                 />
-                {/*<View style={[styles.container, styles.horizontal]}>*/}
-                {/*  <ActivityIndicator size="large" color="red" />*/}
-                {/*</View>*/}
             </Provider>
         )
     }

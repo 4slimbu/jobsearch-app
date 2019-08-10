@@ -9,7 +9,7 @@ import Colors from "../../constants/colors";
 import PostListMetaData from "../PostListMetaData";
 
 const PostList = (props) => {
-    const {posts, type} = props;
+    const {posts, type, onRefresh} = props;
     return map(posts.data, (post, key) => {
         return (
             <View style={{ width: '50%'}} key={key}>
@@ -17,6 +17,7 @@ const PostList = (props) => {
                 <PostItem
                     post={post}
                     type={type}
+                    onRefresh={onRefresh}
                 />
             </View>
         )

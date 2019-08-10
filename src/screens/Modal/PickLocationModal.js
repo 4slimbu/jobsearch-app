@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import globalStyles from "../../constants/globalStyle";
-import {Location, Permissions} from "expo";
+import * as Location from "expo-location";
+import * as Permissions from "expo-permissions";
 import {BackHandler, ScrollView, StyleSheet, View} from 'react-native';
 import {Icon, SearchBar,} from 'react-native-elements';
 
 import Colors from "../../constants/colors";
 import {connect} from "react-redux";
-import ContentLoading from "../../components/ContentLoading";
 import LocationList from "../../components/List/LocationList";
 import {resetLocation, setLocation} from "../../store/actions/formActions";
 import appData from "../../constants/app";
@@ -201,12 +201,6 @@ class PickLocationModal extends Component {
                 <ScrollView style={{marginTop: 20}}>
                     <LocationList locations={this.state.predictions} onSelect={this.onSelectPlace} onPickMyLocation={this.onPickMyLocation}/>
                 </ScrollView>
-
-                <View style={{height: 100}}>
-                    {
-                        isLoading && <ContentLoading/>
-                    }
-                </View>
             </ScrollView>
         );
     }

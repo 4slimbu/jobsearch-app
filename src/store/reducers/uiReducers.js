@@ -1,4 +1,5 @@
 import {
+    UI_ADD_FLASH_MESSAGE, UI_DELETE_FLASH_MESSAGE,
     UI_START_LOADING, UI_STOP_LOADING, UI_UPDATE_SCREEN_UPDATE_LIST,
     UI_UPDATE_VIEW_HISTORY
 } from "../actions/actionTypes";
@@ -18,11 +19,13 @@ const uiReducers = (state = initialState, action) => {
                 ...state,
                 isLoading: true
             };
+
         case UI_STOP_LOADING:
             return {
                 ...state,
                 isLoading: false
             };
+
         case UI_UPDATE_VIEW_HISTORY:
             let viewHistory = [...state.viewHistory];
             if (viewHistory.length > 15) {
@@ -39,6 +42,7 @@ const uiReducers = (state = initialState, action) => {
                 ...state,
                 viewHistory: viewHistory,
             };
+
         case UI_UPDATE_SCREEN_UPDATE_LIST:
             let refreshList = [...state.refreshList];
             refreshList = toggleItemInArray(refreshList, action.payload);
@@ -47,6 +51,26 @@ const uiReducers = (state = initialState, action) => {
                 ...state,
                 refreshList: refreshList
             };
+
+        case UI_ADD_FLASH_MESSAGE:
+            return [
+                {
+                    id: shortid.generate(),
+                    type: action.message.type,
+                    text: action.message.text
+                }
+            ];
+
+        case UI_DELETE_FLASH_MESSAGE:
+            const index = findIndex(state, {id: action.id});
+            if (index >= 0) {
+                return [
+                    ...state.slice(0, index),
+                    ...state.slice(index + 1)
+                ];
+            }
+            return state;
+
         default:
             return state;
     }

@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import {AsyncStorage} from "react-native";
+import {uiStartLoading, uiStopLoading} from "../../store/actions/uiActions";
 
 export function showExcerpt(string, length) {
     return string.length > length ?
@@ -141,3 +142,34 @@ export function humanReadableFilterInfo(meta, filter) {
 
     return displayInfoText;
 };
+
+export function fetchData(url, method = 'GET',  data = {}, dispatch,  token = false) {
+    let headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    };
+
+    if (token) {
+        headers.Authorization = "Bearer " + token;
+    }
+
+    dispatch(uiStartLoading());
+    return new Promise((resolve, reject) => {
+        return fetch(url, {
+            method: method,
+            body: JSON.stringify(data),
+            headers: headers
+        })
+            .then(res => {
+                return res.json();
+            })
+            .then(parsedRes => {
+                dispatch(uiStopLoading());
+                resolve(parsedRes);
+            })
+            .catch(function () {
+                dispatch(uiStopLoading());
+                reject();
+            });
+    });
+}

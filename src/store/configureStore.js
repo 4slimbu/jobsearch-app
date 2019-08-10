@@ -24,4 +24,5 @@ const configureStore = () => {
     return createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 };
 
-export default configureStore;
+const store = configureStore();
+export default store;

@@ -1,6 +1,6 @@
 import React from "react";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {FontAwesome} from '@expo/vector-icons';
 import PropTypes from "prop-types";
 import Colors from "../../constants/colors";
 import {Divider} from "react-native-elements";
@@ -15,10 +15,9 @@ const CommentItem = props => {
             <TouchableOpacity onPress={() => NavigationService.navigate('PostDetail', { postId: comment.post_id })} style={styles.activityListContainer}>
                 <View style={styles.activityListHeaderContainer}>
                     <View style={styles.activityIcon}>
-                        <Icon
+                        <FontAwesome
                             color={Colors.primary}
                             name="wechat"
-                            type="font-awesome"
                             size={22}
                         />
                     </View>

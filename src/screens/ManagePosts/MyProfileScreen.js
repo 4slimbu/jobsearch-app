@@ -4,8 +4,9 @@ import Colors from '../../constants/colors';
 import globalStyles from "../../constants/globalStyle";
 import {Avatar, Button, CheckBox, Divider} from "react-native-elements/src/index";
 import {connect} from "react-redux";
-import {ImagePicker, Permissions} from "expo";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
+import {FontAwesome} from '@expo/vector-icons';
 import {updateMyProfile, updatePassword} from "../../store/actions/authActions";
 import alertMessage from "../../components/Alert";
 import * as _ from "lodash";
@@ -279,10 +280,9 @@ class MyProfileScreen extends Component {
                             {
                                 newProfilePicture && newProfilePicture.uri ?
                                 <View>
-                                    <Icon
+                                    <FontAwesome
                                         color={Colors.primary}
                                         name="trash"
-                                        type="font-awesome"
                                         size={22}
                                         onPress={this.removeImageHandler}
                                     />
@@ -719,7 +719,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
     return {
         updateMyProfile: (formData) => dispatch(updateMyProfile(formData)),
-        updatePassword: (formData) => dispatch(updatePassword(formData)),
         updatePassword: (formData) => dispatch(updatePassword(formData)),
         setLocation: (location) => dispatch(setLocation(location)),
     };

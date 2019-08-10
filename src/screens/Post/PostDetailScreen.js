@@ -1,18 +1,16 @@
 import React, {Component} from 'react';
 import appData from "../../constants/app";
-import {ActivityIndicator, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Colors from '../../constants/colors';
-import {Icon, Image} from "react-native-elements";
-import * as _ from "lodash";
+import {Image} from "react-native-elements";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import {connect} from "react-redux";
-import {getPost} from "../../store/actions/postActions";
+import {flagPost, getPost} from "../../store/actions/postActions";
 import {prettyDistance, toReadable} from "../../utils/helper/helper";
-import ContentLoading from "../../components/ContentLoading";
 import PostComments from "./PostComments";
 import KCarousel from "../../components/Carousel/KCarousel";
-import NavigationService from "../../services/NavigationService";
 import {uiUpdateViewHistory} from "../../store/actions/uiActions";
+import {FontAwesome} from "@expo/vector-icons";
 
 class PostDetailScreen extends Component {
     constructor(props) {
@@ -20,12 +18,14 @@ class PostDetailScreen extends Component {
         this.state = {
             post: {},
             isSaved: false,
+            isFlagged: false,
             comment: "",
             isReady: false,
             isLoading: false,
         };
 
         this.savePostHandler = this.savePostHandler.bind(this);
+        this.flagPostHandler = this.flagPostHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -33,13 +33,15 @@ class PostDetailScreen extends Component {
 
         const {params} = this.props.navigation.state;
         const postId = params ? params.postId : null;
-        const {savedPosts} = this.props.preferences;
+        const {savedPosts, flaggedPosts} = this.props.preferences;
         const isSaved = savedPosts && savedPosts.indexOf(postId) > -1;
+        const isFlagged = flaggedPosts && flaggedPosts.indexOf(postId) > -1;
 
         this._isMounted && await this.props.getPost(postId) && this.setState({
             ...this.state,
             post: this.props.posts.post,
             isSaved: isSaved,
+            isFlagged: isFlagged,
             isReady: true
         });
     }
@@ -53,7 +55,7 @@ class PostDetailScreen extends Component {
             isSaved: !this.state.isSaved
         });
 
-        let savedPosts = [...this.props.preferences.savedPosts];
+        let savedPosts = this.props.preferences.savedPosts ? [...this.props.preferences.savedPosts] : [];
         let index = savedPosts.indexOf(postId);
         if (index > -1) {
             savedPosts.splice(index, 1);
@@ -67,16 +69,65 @@ class PostDetailScreen extends Component {
         this.props.onUpdatePreferences(preferences);
     }
 
+    flagPostHandler(postId) {
+        if (this.state.isFlagged) {
+            Alert.alert(
+                'You have already flagged this post.',
+                "",
+                [
+                    {
+                        text: 'Cancel',
+                        style: 'cancel',
+                    },
+                ],
+            );
+
+            return;
+        }
+
+        Alert.alert(
+            'Are you sure you want to report this post?',
+            "",
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                { text: 'OK', onPress: () => this.flagPost(postId) },
+            ],
+            { cancelable: false },
+        );
+    }
+
+    flagPost(postId) {
+        this.setState({
+            isFlagged: !this.state.isFlagged
+        });
+
+        let flaggedPosts = this.props.preferences.flaggedPosts ? [...this.props.preferences.flaggedPosts] : [];
+        let index = flaggedPosts.indexOf(postId);
+        if (index > -1) {
+            flaggedPosts.splice(index, 1);
+        } else {
+            flaggedPosts.push(postId);
+        }
+        let preferences = {
+            ...this.props.preferences,
+            flaggedPosts: flaggedPosts
+        };
+        this.props.onUpdatePreferences(preferences);
+
+        this.props.flagPost(postId);
+    }
+
     render() {
-        const {isReady, isSaved} = this.state;
+        const {isReady, isSaved, isFlagged} = this.state;
         const {post} = this.props.posts;
-        const primaryImage = _.find(post.postImages, {"is_primary": true});
-        const featuredImage = primaryImage ? {uri: primaryImage.url} : require("../../../assets/images/placeholder.png");
         const authorImage = post.author && post.author.profile_pic ? {uri: post.author.profile_pic} : require("../../../assets/images/user-hp.png");
 
         return (
             <ScrollView style={styles.container}>
-                {  post && isReady &&
+                {post && isReady &&
                 <KeyboardAvoidingView style={{flex: 1, marginBottom: 50}}
                                       behavior="padding"
                 >
@@ -88,10 +139,9 @@ class PostDetailScreen extends Component {
                             <Text selectable="true" style={styles.heading}>{post.title}</Text>
                             <Text style={styles.price}>{ prettyDistance(post.distance) }</Text>
                             <View style={styles.locationContainer}>
-                                <Icon
+                                <FontAwesome
                                     name="map-marker"
                                     size={22}
-                                    type="font-awesome"
                                     color={Colors.primary}
                                     containerStyle={styles.locationIcon}
                                 />
@@ -105,18 +155,28 @@ class PostDetailScreen extends Component {
                                     onPress={() => this.savePostHandler(post.id)}
                                 />
                             </View>
+                            <View>
+                                <FontAwesome
+                                    name="flag"
+                                    size={22}
+                                    color={isFlagged ? Colors.primary : Colors.greyOutline}
+                                    containerStyle={{marginRight: 14}}
+                                    onPress={() => this.flagPostHandler(post.id)}
+                                />
+                            </View>
                         </View>
 
                         {
                             ! isReady ?
-                                <ContentLoading/>
-                                :
+                            <ContentLoading/>
+                            :
+                            <View>
                                 <View style={[{paddingLeft: 20, paddingRight: 20, marginBottom: 20}]}>
                                     <View style={{flex: 1, flexDirection: 'row', alignItems: "center",}}>
                                         <View style={styles.postAuthorProfilePicContainer}>
                                             <Image source={authorImage} resizeMode={'cover'}
-                                                   style={styles.postAuthorProfilePic}
-                                                   PlaceholderContent={<ActivityIndicator/>}
+                                                    style={styles.postAuthorProfilePic}
+                                                    PlaceholderContent={<ActivityIndicator/>}
                                             />
                                         </View>
                                         <View style={styles.postAuthorMetaData}>
@@ -128,10 +188,21 @@ class PostDetailScreen extends Component {
                                         {/*<Text style={styles.postContentTitle}>Description</Text>*/}
                                         <Text selectable="true" style={styles.postContent}>{post.body}</Text>
                                     </View>
-                                    <View>
-                                        <PostComments/>
+                                    <View style={styles.postAuthorMetaData}>
+                                        <Text
+                                            style={styles.postAuthorMeta}>{post.author && post.author.full_name}</Text>
+                                        <Text style={styles.postDateMeta}>{toReadable(post.created_at)}</Text>
                                     </View>
                                 </View>
+                                <View style={styles.postContentContainer}>
+                                    {/*<Text style={styles.postContentTitle}>Description</Text>*/}
+                                    <Text style={styles.postContent}>{post.body}</Text>
+                                </View>
+                                <View>
+                                    <PostComments/>
+                                </View>
+                            </View>
+                       
                         }
                     </View>
                 </KeyboardAvoidingView>
@@ -179,18 +250,18 @@ const styles = StyleSheet.create({
     postAuthorProfilePicContainer: {
         marginRight: 10,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 0 },
+        shadowOffset: {width: 0, height: 0},
         shadowOpacity: 0.2,
         shadowRadius: 6,
         elevation: 2.0,
         width: 60,
         height: 60,
-        borderRadius: 60/2,
+        borderRadius: 60 / 2,
     },
     postAuthorProfilePic: {
         width: 60,
         height: 60,
-        borderRadius: 60/2,
+        borderRadius: 60 / 2,
     },
     postAuthorMetaData: {
         flex: 3,
@@ -205,7 +276,7 @@ const styles = StyleSheet.create({
         fontWeight: 'normal',
     },
     postContentContainer: {
-        marginTop:15,
+        marginTop: 15,
         padding: 20,
         backgroundColor: Colors.lightGray,
         borderRadius: 5,
@@ -251,9 +322,9 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
     },
     additionalImg: {
-        display:'flex',
-        flexDirection:'row',
-        paddingBottom:20,
+        display: 'flex',
+        flexDirection: 'row',
+        paddingBottom: 20,
     },
     postAdditionalImg: {
         backgroundColor: 'red',
@@ -276,6 +347,7 @@ const mapDispatchToProps = (dispatch) => {
         onUpdatePreferences: (preferences) => dispatch(authUpdatePreferences(preferences)),
         uiUpdateViewHistory: (navData) => dispatch(uiUpdateViewHistory(navData)),
         getPost: (postId) => dispatch(getPost(postId)),
+        flagPost: (postId) => dispatch(flagPost(postId)),
     };
 };
 

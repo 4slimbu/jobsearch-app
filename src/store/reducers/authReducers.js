@@ -15,7 +15,11 @@ const initialState = {
         last_name: null,
         gender: null,
         contact_number: null,
-        preferences: {},
+        preferences: {
+            subscribedCategories: [],
+            savedPosts: [],
+            flaggedPosts: []
+        },
         verified: false
     },
     isLoggedIn: false

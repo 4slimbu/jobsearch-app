@@ -1,4 +1,5 @@
-import { Permissions, Notifications } from 'expo';
+import { Notifications } from 'expo';
+import * as Permissions from "expo-permissions";
 
 const PUSH_ENDPOINT = 'https://your-server.com/users/push-token';
 

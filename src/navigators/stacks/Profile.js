@@ -5,7 +5,7 @@ import PostDetailScreen from "../../screens/Post/PostDetailScreen";
 import PageDetailScreen from "../../screens/Page/PageDetailScreen";
 import MyProfileScreen from "../../screens/ManagePosts/MyProfileScreen";
 
-const LogoUrl = require('../../../assets/icons/icon.png');
+const LogoUrl = require('../../../assets/images/logo-icon.png');
 
 const ProfileStacks = createStackNavigator({
     MyProfile: {

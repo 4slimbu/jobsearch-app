@@ -1,13 +1,15 @@
-import React, { Component } from "react";
-import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, {Component} from "react";
+import {ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import PropTypes from "prop-types";
 import Colors from "../../constants/colors";
-import { Icon, Image } from "react-native-elements";
-import {getFeaturedImageSrc, prettyDistance, toReadable} from "../../utils/helper/helper";
-import { connect } from "react-redux";
-import { authUpdatePreferences } from "../../store/actions/authActions";
-import { deletePost, deleteSavedPost } from "../../store/actions/postActions";
-import { withNavigation } from "react-navigation";
+import {Image} from "react-native-elements";
+import {getFeaturedImageSrc} from "../../utils/helper/helper";
+import {connect} from "react-redux";
+import {authUpdatePreferences} from "../../store/actions/authActions";
+import {deletePost, deleteSavedPost} from "../../store/actions/postActions";
+import {withNavigation} from "react-navigation";
+import {FontAwesome} from "@expo/vector-icons";
+
 
 class MyPostItem extends Component {
     constructor(props) {
@@ -99,18 +101,16 @@ class MyPostItem extends Component {
                         <View style={styles.postButtonWrap}>
                             {(type === 'my') &&
                                 <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4, }}>
-                                    <Icon
+                                    <FontAwesome
                                         name="edit"
                                         size={22}
-                                        type="font-awesome"
                                         color={Colors.primary}
                                         containerStyle={{marginRight: 14}}
                                         onPress={() => this.editPostHandler(post.id)}
                                     />
-                                    <Icon
+                                    <FontAwesome
                                         name="trash"
                                         size={22}
-                                        type="font-awesome"
                                         color={Colors.primary}
                                         containerStyle={{marginRight: 14}}
                                         onPress={() => this.deletePostHandler(post)}

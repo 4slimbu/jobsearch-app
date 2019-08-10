@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {ListView, ScrollView, StyleSheet, View} from 'react-native';
 
-import {ListItem, Text,} from 'react-native-elements/src/index';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {ListItem,} from 'react-native-elements/src/index';
 
 import Colors from '../../constants/colors';
+import {FontAwesome} from "@expo/vector-icons";
 
 const log = () => {
 };
@@ -14,25 +14,21 @@ const managePostList = [
         name: 'New Post',
         icon: 'plus-circle',
         target: 'AddPost',
-        type: 'font-awesome',
     },
     {
         name: 'My Posts',
         icon: 'file-text-o',
         target: 'MyPosts',
-        type: 'font-awesome',
     },
     {
         name: 'My Activities',
         icon: 'comments-o',
         target: 'MyComments',
-        type: 'font-awesome',
     },
     {
         name: 'My Saved Posts',
         icon: 'star-o',
         target: 'MySavedPosts',
-        type: 'font-awesome',
     },
 ];
 
@@ -70,17 +66,12 @@ class ManagePostsScreen extends Component {
                 <View style={styles.list}>
                     {managePostList.map((l, i) => (
                         <ListItem
-                            leftIcon={{
-                                name: l.icon,
-                                type: l.type,
-                                size: 25,
-                                color: Colors.darkGray,
-                            }}
+                            leftIcon={<FontAwesome name={l.icon} size={25} color={Colors.darkGray}/>}
                             key={i}
                             onPress={() => this.props.navigation.navigate(l.target)}
                             title={l.name}
                             subtitle={l.subtitle}
-                            titleStyle={{ color: Colors.darkGray,}}
+                            titleStyle={{color: Colors.darkGray,}}
                             chevron
                             bottomDivider
                         />

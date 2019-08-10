@@ -14,7 +14,7 @@ import {
 import {AppLoading, LinearGradient} from 'expo';
 import {Button, Image, Input} from 'react-native-elements';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {FontAwesome} from '@expo/vector-icons';
 import socialColor from "../../constants/socialColors";
 import Colors from "../../constants/colors";
 import {resetPassword, sendForgotPasswordEmail} from "../../store/actions/authActions";
@@ -183,7 +183,7 @@ class ForgotPasswordScreen extends Component {
                                 <View style={globalStyles.formRow}>
                                     <Input
                                         leftIcon={
-                                            <Icon
+                                            <FontAwesome
                                                 name="code"
                                                 color={Colors.primary}
                                                 size={25}
@@ -202,7 +202,7 @@ class ForgotPasswordScreen extends Component {
                                 <View style={globalStyles.formRow}>
                                     <Input
                                         leftIcon={
-                                            <Icon
+                                            <FontAwesome
                                                 name="lock"
                                                 color={Colors.primary}
                                                 size={25}
@@ -222,7 +222,7 @@ class ForgotPasswordScreen extends Component {
                                 <View style={globalStyles.formRow}>
                                     <Input
                                         leftIcon={
-                                            <Icon
+                                            <FontAwesome
                                                 name="lock"
                                                 color={Colors.primary}
                                                 size={25}
@@ -247,7 +247,7 @@ class ForgotPasswordScreen extends Component {
                         status === 'unsuccessful' &&
                         <View style={{flex: 1, height: 150, alignItems: 'center', justifyContent: 'center'}}>
                             <View style={{alignItems: 'center'}}>
-                                <Icon color={Colors.danger} name="close" size={62}/>
+                                <FontAwesome color={Colors.danger} name="close" size={62}/>
                                 <Text>Something went wrong. Please, try again!</Text>
                             </View>
                         </View>
@@ -256,7 +256,7 @@ class ForgotPasswordScreen extends Component {
                         status === 'successful' &&
                         <View style={{flex: 1, height: 150, alignItems: 'center', justifyContent: 'center'}}>
                             <View style={{alignItems: 'center'}}>
-                                <Icon color={Colors.success} name="check" size={62}/>
+                                <FontAwesome color={Colors.success} name="check" size={62}/>
                                 <Text>Password reset successfully!</Text>
                             </View>
                         </View>
@@ -268,7 +268,7 @@ class ForgotPasswordScreen extends Component {
                         <View style={globalStyles.formRow}>
                             <Input
                                 leftIcon={
-                                    <Icon
+                                    <FontAwesome
                                         name="envelope-o"
                                         color={Colors.primary}
                                         size={25}
@@ -303,8 +303,6 @@ class ForgotPasswordScreen extends Component {
                                     activeOpacity={0.8}
                                     title="Have Password Reset Code?"
                                     onPress={this.havePasswordResetCodeHandler}
-                                    loading={isLoading}
-                                    disabled={isLoading}
                                 />
                             }
                         </View>

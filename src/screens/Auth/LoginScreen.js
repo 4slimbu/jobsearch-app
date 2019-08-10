@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {AppLoading, LinearGradient, Constants} from 'expo';
 import {Button, Image, Input} from 'react-native-elements';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {FontAwesome} from '@expo/vector-icons';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import socialColor from "../../constants/socialColors";
 import {authAutoSignIn, facebookLogin, tryAuth} from '../../store/actions/authActions';
@@ -135,7 +135,7 @@ class LoginScreen extends Component {
                                 <View style={globalStyles.formRow}>
                                     <Input
                                         leftIcon={
-                                            <Icon
+                                            <FontAwesome
                                                 name="envelope-o"
                                                 color={Colors.primary}
                                                 size={25}

@@ -1,13 +1,15 @@
-import React, { Component } from "react";
-import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, {Component} from "react";
+import {ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import PropTypes from "prop-types";
 import Colors from "../../constants/colors";
-import {Image, Icon, Button} from "react-native-elements";
-import {getFeaturedImageSrc, prettyDistance, toReadable} from "../../utils/helper/helper";
-import { connect } from "react-redux";
-import { authUpdatePreferences } from "../../store/actions/authActions";
-import { deletePost, deleteSavedPost } from "../../store/actions/postActions";
-import { withNavigation } from "react-navigation";
+import {Image} from "react-native-elements";
+import {getFeaturedImageSrc, prettyDistance} from "../../utils/helper/helper";
+import {connect} from "react-redux";
+import {authUpdatePreferences} from "../../store/actions/authActions";
+import {deletePost, deleteSavedPost} from "../../store/actions/postActions";
+import {withNavigation} from "react-navigation";
+import {FontAwesome} from "@expo/vector-icons";
+
 
 class PostItem extends Component {
     constructor(props) {
@@ -49,7 +51,7 @@ class PostItem extends Component {
 
     savePostHandler(post) {
         let isDeleted = false;
-        let savedPosts = [...this.props.preferences.savedPosts];
+        let savedPosts = this.props.preferences.savedPosts ? [...this.props.preferences.savedPosts] : [];
         let index = savedPosts.indexOf(post.id);
         if (index > -1) {
             isDeleted = true;
@@ -69,7 +71,8 @@ class PostItem extends Component {
     }
 
     editPostHandler(postId) {
-        this.props.navigation.navigate('EditPost', { postId: postId });
+        const {onRefresh} = this.props;
+        this.props.navigation.navigate('EditPost', { postId: postId, onRefresh: onRefresh });
     }
 
     deletePost(id) {
@@ -84,20 +87,21 @@ class PostItem extends Component {
         return (
             <View style={styles.postMainWrapper}>
                 <View style={styles.postFeaturedImageWrapper}>
-                    <TouchableOpacity onPress={() => this.selectPostHandler(post)}>
+                    <TouchableOpacity onPress={() => this.selectPostHandler(post)} >
                         { featuredImage && 
                             <Image source={featuredImage} resizeMode={'cover'}
                                 style={styles.postFeaturedImage}
                                 PlaceholderContent={<ActivityIndicator />}
                             />
                         }
-                        { !featuredImage && 
-                            <Icon
-                                name="photo"
-                                type="font-awesome"
-                                color={Colors.primary}
-                                size={45}
-                            />
+                        { !featuredImage &&
+                            <View style={{alignItems: 'center'}}>
+                                <FontAwesome
+                                    name="photo"
+                                    color={Colors.primary}
+                                    size={45}
+                                />
+                            </View>
                         }
                     </TouchableOpacity>
                 </View>
@@ -111,7 +115,6 @@ class PostItem extends Component {
                                 <Icon
                                     name="map-marker"
                                     size={18}
-                                    type="font-awesome"
                                     color={Colors.primary}
                                     containerStyle={styles.postLocationIcon}
                                 />
@@ -129,24 +132,32 @@ class PostItem extends Component {
 
                         {(type === 'my') &&
                             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4, }}>
-                                <Icon
+                                <FontAwesome
                                     name="edit"
                                     size={22}
-                                    type="font-awesome"
                                     color={Colors.primary}
                                     containerStyle={{marginRight: 14}}
                                     onPress={() => this.editPostHandler(post.id)}
                                 />
-                                <Icon
+                                <FontAwesome
                                     name="trash"
                                     size={22}
-                                    type="font-awesome"
                                     color={Colors.primary}
                                     containerStyle={{marginRight: 14}}
                                     onPress={() => this.deletePostHandler(post)}
                                 />
                             </View>
                         }
+
+                        <View>
+                            <FontAwesome
+                                name="star"
+                                size={22}
+                                color={isSaved ? Colors.primary : Colors.greyOutline}
+                                containerStyle={{marginRight: 14}}
+                                onPress={() => this.savePostHandler(post)}
+                            />
+                        </View>
                     </View>
                 </View>
             </View>
