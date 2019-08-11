@@ -1,61 +1,43 @@
 import React from "react";
-import {StyleSheet, View} from "react-native";
-import PropTypes from "prop-types";
-import {map} from "lodash";
-
-import PostItem from "../ListItem/PostItem";
-import {Divider} from "react-native-elements";
-import Colors from "../../constants/colors";
+import {FlatList, StyleSheet, View} from "react-native";
 import PostListMetaData from "../PostListMetaData";
+import PostItem from "../ListItem/PostItem";
 
-const PostList = (props) => {
-    const {posts, type, onRefresh} = props;
-    return map(posts.data, (post, key) => {
-        return (
-            <View style={{ width: '50%'}} key={key}>
-                {key !== 0 && <Divider style={styles.divider}/>}
-                <PostItem
-                    post={post}
-                    type={type}
-                    onRefresh={onRefresh}
-                />
-            </View>
-        )
-    });
-};
-
-const postList = props => {
-    const {posts, backScreen, isFilterActive, onRefresh, filter} = props;
+const PostList = props => {
+    const {type, posts, backScreen, isFilterActive, filter, onRefresh, onScroll} = props;
     return (
-        <View>
-            <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} filter={filter} onRefresh={onRefresh}/>
-            <View style={styles.postListWrapper}>
-                <PostList {...props}/>
-            </View>
-            {
-                posts.meta && posts.meta.total > 10 &&
-                <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} filter={filter} onRefresh={onRefresh}/>
-            }
+        <View style={styles.postListContainer} >
+            <FlatList
+                data={posts.data}
+                keyExtractor={(item, key) => key}
+                ListHeaderComponent={
+                    <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} filter={filter} onRefresh={onRefresh}/>
+                }
+                renderItem={({item, key}) =>
+                    <PostItem
+                        post={item}
+                        type={type}
+                        onRefresh={onRefresh}
+                    />
+                }
+                ListFooterComponent={
+                    posts.meta && posts.meta.total > 10 &&
+                    <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} filter={filter} onRefresh={onRefresh}/>
+                }
+                numColumns={2}
+                onEndReached={onScroll}
+            />
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    divider: {
-        backgroundColor: 'transparent',
-        // marginTop: 20,
-        // marginBottom: 20
-    },
-
-    postListWrapper: {
+    postListContainer: {
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
+        marginBottom: 150
     },
 });
 
-PostList.propTypes = {
-    posts: PropTypes.object.isRequired,
-};
-
-export default postList;
+export default PostList;

@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         category: state.forms.category,
-        categories: state.categories,
+        categories: state.categories.categories,
         viewHistory: state.ui.viewHistory,
     }
 };

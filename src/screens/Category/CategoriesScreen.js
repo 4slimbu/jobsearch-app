@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
 import appData from "../../constants/app";
-import globalStyles from "../../constants/globalStyle";
-import {TouchableOpacity} from "react-native";
-import {ActivityIndicator, ScrollView, StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from "react-native";
 import {Feather} from '@expo/vector-icons';
 import {connect} from "react-redux";
 import {loadCategories} from "../../store/actions/categoryActions";
-import CategoryList from "../../components/List/CategoryList";
 import Colors from "../../constants/colors";
 import {Image} from "react-native-elements";
 import {DrawerActions} from "react-navigation";
+import * as globalStyles from "../../constants/globalStyle";
+import CategoryList from "../../components/List/CategoryList";
 
 class CategoriesScreen extends Component {
     static navigationOptions = ({navigation}) => {
@@ -37,10 +36,6 @@ class CategoriesScreen extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            categories: [{}],
-            isLoading: false,
-        };
 
         this.onSelectCategory = this.onSelectCategory.bind(this);
     }
@@ -48,10 +43,7 @@ class CategoriesScreen extends Component {
     async componentDidMount() {
         this._isMounted = true;
 
-        this.setState({isLoading: true});
-        this._isMounted && await this.props.onLoadCategories() &&
-        this.setState({ categories: this.props.categories });
-        this.setState({isLoading: false});
+        this._isMounted && await this.props.onLoadCategories();
     }
 
     componentWillUnmount() {
@@ -63,51 +55,30 @@ class CategoriesScreen extends Component {
     }
 
     render() {
-        const {isLoading} = this.state.isLoading;
-        const categoryListProps = {
-            categories: this.props.categories,
+        const {categories} = this.props;
+        const categoryItemProps = {
+            categories: categories,
             onSelectCategory: this.onSelectCategory
         };
 
+        console.log(categoryItemProps);
         return (
-            <ScrollView style={styles.container}>
-                <View style={styles.contentView}>
-                    {
-                        isLoading ?
-                            <ActivityIndicator size="large" color={Colors.primary} style={{marginTop: 100}}/>
-                            :
-                            <CategoryList {...categoryListProps}/>
-                    }
-                </View>
-            </ScrollView>
+            <View style={styles.contentView}>
+                <CategoryList {...categoryItemProps}/>
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'white',
-    },
-    headerContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#acacac',
-        marginBottom: 20,
-        padding:40,
-    },
     contentView: {
         flex: 1,
-    },
-    heading: {
-        color: 'white',
-        fontSize: 22,
-        fontWeight: 'bold',
     },
 });
 
 const mapStateToProps = state => {
     return {
-        categories: state.categories,
+        categories: state.categories.categories,
         filter: state.posts.filter
     }
 };

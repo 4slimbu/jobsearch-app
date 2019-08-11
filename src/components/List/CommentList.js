@@ -1,32 +1,23 @@
 import React from "react";
-import {StyleSheet, View, Text} from "react-native";
-import PropTypes from "prop-types";
-import {map} from "lodash";
+import {FlatList, StyleSheet, View} from "react-native";
 
 import CommentItem from "../ListItem/CommentItem";
+import {generateUniqueId} from "../../utils/helper/helper";
 
-const CommentList = (props) => {
+const CommentList = props => {
     const {comments} = props;
-
-    return map(comments, (comment, key) => {
-        return (
-            <CommentItem
-                key={key}
-                isFirst={key === 0}
-                comment={comment}
-            />
-        )
-    });
-};
-
-const commentList = props => {
-    const {comments} = props;
-    const commentListProps = {
-        comments: comments,
-    };
     return (
         <View style={styles.commentContainer}>
-            <CommentList {...commentListProps}/>
+            <FlatList
+                data={comments}
+                keyExtractor={(item, key) => generateUniqueId(item.id)}
+                renderItem={({item, key}) =>
+                    <CommentItem
+                        isFirst={key === 0}
+                        comment={item}
+                    />
+                }
+            />
         </View>
     );
 };
@@ -38,8 +29,4 @@ const styles = StyleSheet.create({
     },
 });
 
-CommentList.propTypes = {
-    comments: PropTypes.array.isRequired,
-};
-
-export default commentList;
+export default CommentList;

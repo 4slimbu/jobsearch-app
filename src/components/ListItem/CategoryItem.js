@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {StyleSheet, Text, TouchableOpacity} from "react-native";
 import Colors from "../../constants/colors";
 import {FontAwesome} from '@expo/vector-icons';
 
@@ -16,17 +16,12 @@ const categoryItem = props => {
 
 const styles = StyleSheet.create({
     categoryItem: {
-        marginRight: 5,
-        marginBottom: 20,
-        width: '44%',
-        paddingTop: 20,
-        paddingBottom: 20,
-        display:'flex',
-        flexDirection: 'column',
-        justifyContent:'center',
-        alignItems:'center',
+        padding: 20,
         backgroundColor:Colors.lightGray,
         borderRadius: 8,
+        flex: 1/2,
+        margin: 10,
+        alignItems: 'center',
     },
     catIcon: {
         color:Colors.primary,

@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {SearchBar,} from 'react-native-elements';
 
 import Colors from "../../constants/colors";
 import {connect} from "react-redux";
 import {getPosts, resetPostFilter, resetPosts, updatePostFilter} from "../../store/actions/postActions";
-import PostList from "../../components/List/PostList";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import {uiUpdateViewHistory} from "../../store/actions/uiActions";
 import * as _ from "lodash";
+import PostList from "../../components/List/PostList";
 
 class PostListScreen extends Component {
     constructor(props) {
@@ -102,23 +102,9 @@ class PostListScreen extends Component {
         this.refresh();
     }
 
-    async scrollHandler(e){
-        // if (this.state.searchText.length < 3) {
-        //     return;
-        // }
-
-        let windowHeight = Dimensions.get('window').height,
-            height = e.nativeEvent.contentSize.height,
-            offset = e.nativeEvent.contentOffset.y;
-        if( windowHeight + offset >= height ){
-            if (this.props.posts.posts.meta.to !== this.props.posts.posts.meta.total) {
-                this.setState({isLoading: true});
-                await this.props.getPosts(this.props.posts.filter, this.props.posts.posts.links.next).then(res => {
-                    this.setState({isLoading: false});
-                }).catch(err => {
-                    this.setState({isLoading: false});
-                });
-            }
+    async scrollHandler(){
+        if (this.props.posts.posts.meta.to !== this.props.posts.posts.meta.total) {
+            await this.props.getPosts(this.props.posts.filter, this.props.posts.posts.links.next);
         }
     }
 
@@ -136,13 +122,13 @@ class PostListScreen extends Component {
                 radius: 100,
                 orderBy: "nearest",
             }),
+            onRefresh: this.refresh,
             filter: filter,
-            onRefresh: this.refresh
+            onScroll: this.scrollHandler
         };
 
-
         return (
-            <ScrollView style={styles.container} keyboardShouldPersistTaps="handled" onScrollEndDrag={this.scrollHandler}>
+            <View style={styles.container} keyboardShouldPersistTaps="handled" >
                 <SearchBar
                     lightTheme
                     containerStyle={{backgroundColor: Colors.white, borderWidth: 0}}
@@ -153,13 +139,8 @@ class PostListScreen extends Component {
                     onChangeText={searchText => this.onChange(searchText)}
                 />
 
-                {
-                    isReady &&
-                    <View>
-                        <PostList {...postListProps}/>
-                    </View>
-                }
-            </ScrollView>
+                <PostList {...postListProps}/>
+            </View>
         );
     }
 }
@@ -217,7 +198,8 @@ const styles = StyleSheet.create({
     },
     searchBar: {
         backgroundColor: Colors.grey5
-    }
+    },
+
 });
 
 const mapStateToProps = state => {

@@ -7,7 +7,7 @@ import * as _ from "lodash";
 import {Icon} from "react-native-elements";
 import {DrawerActions} from "react-navigation";
 import {Feather} from '@expo/vector-icons';
-import AppLoading from "../../components/AppLoading";
+import {uiStartLoading, uiStopLoading} from "../../store/actions/uiActions";
 
 class PageDetailScreen extends Component {
     static navigationOptions = ({navigation}) => {
@@ -71,7 +71,8 @@ class PageDetailScreen extends Component {
                     source={{ uri: page && page.url }}
                     style={{ marginTop: 20 }}
                     startInLoadingState={true}
-                    renderLoading={() => <AppLoading/>}
+                    onLoadStart={(e) => this.props.uiStartLoading()}
+                    onLoadEnd={(e) => this.props.uiStopLoading()}
                 />
             </Fragment>
         );
@@ -90,6 +91,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getPage: (pageSlug) => dispatch(getPage(pageSlug)),
+        uiStartLoading: () => dispatch(uiStartLoading()),
+        uiStopLoading: () => dispatch(uiStopLoading())
     };
 };
 

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import globalStyles from "../../constants/globalStyle";
 import {ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import PropTypes from "prop-types";
 import Colors from '../../constants/colors';
 import {Button, Image} from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
@@ -414,13 +413,9 @@ const styles = StyleSheet.create({
 
 });
 
-EditPostScreen.propTypes = {
-    categories: PropTypes.object.isRequired,
-};
-
 const mapStateToProps = state => {
     return {
-        categories: state.categories,
+        categories: state.categories.categories,
         post: state.posts.post,
         forms: state.forms
     }

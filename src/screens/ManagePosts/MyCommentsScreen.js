@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import Colors from '../../constants/colors';
 import globalStyles from "../../constants/globalStyle";
 import CommentList from "../../components/List/CommentList";
 import {connect} from "react-redux";

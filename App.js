@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Notifications, registerRootComponent} from 'expo';
 import * as Permissions from "expo-permissions";
 import {Provider} from 'react-redux';
 import store from './src/store/configureStore';
-import {AsyncStorage, StyleSheet} from "react-native";
+import {AsyncStorage} from "react-native";
 import NavigationService from "./src/services/NavigationService";
 import {uiUpdateViewHistory} from "./src/store/actions/uiActions";
 import Constants from 'expo-constants';
@@ -48,9 +48,9 @@ const registerForPushNotificationsAsync = async () => {
     AsyncStorage.setItem("loksewa:auth:deviceId", deviceId);
 };
 
-const AppContainerWithNavigator = createAppContainer(MainNavigator);
+const AppContainer = createAppContainer(MainNavigator);
 
-export default class App extends React.Component {
+export default class App extends Component {
     state = {
         notification: {},
     };
@@ -58,7 +58,7 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
 
-        App.handleNavigationStateChange = App.handleNavigationStateChange.bind(this);
+        this.handleNavigationStateChange = this.handleNavigationStateChange.bind(this);
     }
 
     componentDidMount() {
@@ -81,38 +81,22 @@ export default class App extends React.Component {
         }
     };
 
-    static handleNavigationStateChange() {
+    handleNavigationStateChange() {
         store.dispatch(uiUpdateViewHistory(NavigationService.getCurrentRoute()));
     }
 
     render() {
         return (
             <Provider store={store}>
-                <AppContainerWithNavigator ref={navigatorRef => {
+                <AppContainer ref={navigatorRef => {
                         NavigationService.setTopLevelNavigator(navigatorRef);
                     }}
-                    onNavigationStateChange={App.handleNavigationStateChange}
+                    onNavigationStateChange={this.handleNavigationStateChange}
                 />
                 <AppLoading/>
             </Provider>
         )
     }
 }
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        position: 'absolute',
-        top: '50%',
-        left: '50%'
-    },
-    horizontal: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        padding: 10
-    }
-});
 
 registerRootComponent(App);

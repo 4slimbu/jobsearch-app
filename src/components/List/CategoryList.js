@@ -1,50 +1,33 @@
 import React from "react";
-import {StyleSheet, View} from "react-native";
-import PropTypes from "prop-types";
-import {map} from "lodash";
-
+import {FlatList, StyleSheet} from "react-native";
+import {generateUniqueId} from "../../utils/helper/helper";
 import CategoryItem from "../ListItem/CategoryItem";
 
-const CategoryList = (props) => {
+const CategoryList = props => {
     const {categories, onSelectCategory} = props;
-    return map(categories, (category, key) => {
-        return (
-            <CategoryItem
-                key={key}
-                category={category}
-                onSelectCategory={() => onSelectCategory(category.id)}
-            />
-        )
-    });
-};
-
-const categoryList = props => {
-    const {categories, onSelectCategory} = props;
-    const categoryListProps = {
-        categories: categories,
-        onSelectCategory: onSelectCategory
-    };
     return (
-        <View style={styles.categoryContainer}>
-            <CategoryList {...categoryListProps}/>
-        </View>
+        <FlatList
+            style={styles.categoryContainer}
+            data={categories}
+            keyExtractor={(item, key) => generateUniqueId(item.id)}
+            renderItem={({item, key}) =>
+                <CategoryItem
+                    category={item}
+                    onSelectCategory={() => onSelectCategory(item.id)}
+                />
+            }
+            numColumns={2}
+        />
     );
 };
 
 const styles = StyleSheet.create({
     categoryContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        flexWrap: 'wrap',
-        width: '100%',
-        marginTop: 20,
-        padding: 20,
-    },
+        flex: 1,
+        display: 'flex',
+        padding: 10,
+        marginTop: 5,
+    }
 });
 
-CategoryList.propTypes = {
-    categories: PropTypes.object.isRequired,
-    onSelectCategory: PropTypes.func.isRequired
-};
-
-export default categoryList;
+export default CategoryList;

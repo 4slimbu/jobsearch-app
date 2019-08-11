@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         postsFilter: state.posts.filter,
-        categories: state.categories,
+        categories: state.categories.categories,
         viewHistory: state.ui.viewHistory,
     }
 };

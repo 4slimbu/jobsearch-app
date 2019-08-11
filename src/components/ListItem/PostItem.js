@@ -238,6 +238,7 @@ const styles = StyleSheet.create({
     },
     postMainWrapper: {
         display: 'flex',
+        flex: 1/2,
         flexDirection: 'column',
         backgroundColor: '#ffffff',
         padding: 0,
@@ -277,7 +278,6 @@ const mapDispatchToProps = dispatch => {
     return {
         updatePreferences: (preferences) => dispatch(authUpdatePreferences(preferences)),
         deletePost: (id) => dispatch(deletePost(id)),
-        deleteSavedPost: (id) => dispatch(deleteSavedPost(id))
     }
 };
 
