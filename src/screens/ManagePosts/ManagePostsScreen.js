@@ -35,29 +35,11 @@ const managePostList = [
 class ManagePostsScreen extends Component {
     constructor() {
         super();
-        const ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 !== r2,
-        });
-
         this.updateIndex = this.updateIndex.bind(this);
-        this.renderRow = this.renderRow.bind(this);
     }
 
     updateIndex(selectedIndex) {
         this.setState({selectedIndex});
-    }
-
-    renderRow(rowData, sectionID) {
-        return (
-            <ListItem
-                key={sectionID}
-                onPress={log}
-                title={rowData.title}
-                leftIcon={{name: rowData.icon}}
-                chevron
-                bottomDivider
-            />
-        );
     }
 
     render() {

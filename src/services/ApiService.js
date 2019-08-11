@@ -67,8 +67,6 @@ const Auth = {
         callApi('POST', API_BASE_URL + "/login", data),
     register: (data) =>
         callApi('POST', API_BASE_URL + "/register", data),
-    verifyEmail: (data) =>
-        callApi('PUT', API_BASE_URL + "/register-as-guest/" + data.verificationCode),
     forgotPassword: (data) =>
         callApi('POST', API_BASE_URL + "/forgot-password", data),
     resetPassword: (data) =>
