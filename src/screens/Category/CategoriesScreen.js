@@ -1,39 +1,11 @@
 import React, {Component} from 'react';
-import appData from "../../constants/app";
-import {StyleSheet, TouchableOpacity, View} from "react-native";
-import {Feather} from '@expo/vector-icons';
+import {StyleSheet, View} from "react-native";
 import {connect} from "react-redux";
+
 import {loadCategories} from "../../store/actions/categoryActions";
-import Colors from "../../constants/colors";
-import {Image} from "react-native-elements";
-import {DrawerActions} from "react-navigation";
-import * as globalStyles from "../../constants/globalStyle";
 import CategoryList from "../../components/List/CategoryList";
 
 class CategoriesScreen extends Component {
-    static navigationOptions = ({navigation}) => {
-        return {
-            title: 'Browse Categories',
-            headerLeft: (
-                <TouchableOpacity onPress={() => navigation.navigate('Categories')}>
-                    <Image 
-                        style={globalStyles.innerLogo}
-                        source={appData.app.LOGO_INNER_URL}
-                    />
-                </TouchableOpacity>
-            ),
-            headerRight: (
-                <Feather
-                    name="bar-chart-2"
-                    style={{marginRight: 10, transform: [{ rotate: "-90deg" }]}}
-                    size={32}
-                    color={Colors.darkGray}
-                    onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-                />
-            ),
-        }
-    };
-
     constructor(props) {
         super(props);
 
@@ -61,7 +33,6 @@ class CategoriesScreen extends Component {
             onSelectCategory: this.onSelectCategory
         };
 
-        console.log(categoryItemProps);
         return (
             <View style={styles.contentView}>
                 <CategoryList {...categoryItemProps}/>

@@ -16,5 +16,9 @@ export default {
         // PLACE_HOLDER_IMAGE_URL: require('../../assets/images/placeholder.png'),
         // PLACE_HOLDER_AVATAR_URL: require('../../assets/images/user-hp.png'),
         // BG_IMAGE: require('../../assets/images/wallpaper_4.jpg'),
+    },
+    routes: {
+        CATEGORIES: 'Categories',
+        HOME: 'Categories'
     }
 };

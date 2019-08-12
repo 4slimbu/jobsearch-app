@@ -23,7 +23,7 @@ const managePostList = [
     {
         name: 'My Activities',
         icon: 'comments-o',
-        target: 'MyComments',
+        target: 'MyActivities',
     },
     {
         name: 'My Saved Posts',

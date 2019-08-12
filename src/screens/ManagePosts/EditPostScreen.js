@@ -247,9 +247,6 @@ class EditPostScreen extends Component {
         return (
             <ScrollView style={globalStyles.scrollViewContainer}>
                 <View style={globalStyles.scrollViewContentView}>
-                    <View style={globalStyles.headerContainer}>
-                        <Text style={globalStyles.heading}>Edit Post</Text>
-                    </View>
                     <View style={{marginLeft: 20, marginRight: 20}}>
                         <View>
                             <Text style={globalStyles.formTitle}>Post Title</Text>

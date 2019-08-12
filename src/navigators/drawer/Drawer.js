@@ -1,4 +1,4 @@
-import {Image, Text, View, TouchableOpacity} from "react-native";
+import {Image, Text, TouchableOpacity, View} from "react-native";
 import appData from "../../constants/app";
 import {createDrawerNavigator} from "react-navigation";
 import React from "react";
@@ -10,7 +10,7 @@ import Colors from "../../constants/colors";
 import Profile from "../stacks/Profile";
 import Page from "../stacks/Page";
 
-const managePostList = [
+const menuList = [
     {
         name: 'My Profile',
         icon: 'verified-user',
@@ -59,9 +59,8 @@ const CustomDrawerContentComponent = props => (
                 justifyContent: 'flex-start',
                 alignItems: 'center'
             }}
-            onPress={() => props.navigation.navigate('CategoriesScreen')}
         >
-            <TouchableOpacity onPress={() => props.navigation.navigate('Categories')}>
+            <TouchableOpacity onPress={() => props.navigation.navigate(appData.routes.HOME)}>
                 <Image
                     source={appData.app.LOGO_INNER_URL}
                     style={{width: appData.app.SCREEN_WIDTH * 0.20, height: 50}}
@@ -71,7 +70,7 @@ const CustomDrawerContentComponent = props => (
             <Text style={{fontSize: 18, fontWeight: 'bold', color: Colors.darkGray}}>MENU</Text>
         </View>
         <View>
-            {managePostList.map((l, i) => (
+            {menuList.map((l, i) => (
                 <ListItem
                     leftIcon={{
                         name: l.icon,
@@ -109,6 +108,7 @@ const Drawer = createDrawerNavigator(
     {
         initialRouteName: 'Tabs',
         drawerPosition: 'right',
+        swipeEnabled: true,
         contentOptions: {
             activeTintColor: Colors.primary,
             activeBackgroundColor: 'transparent',

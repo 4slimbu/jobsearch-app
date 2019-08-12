@@ -27,10 +27,6 @@ class MyCommentsScreen extends Component {
         return (
             <ScrollView style={globalStyles.scrollViewContainer}>
                 <View style={globalStyles.scrollViewContentView}>
-                    <View style={globalStyles.headerContainer}>
-                        <Text style={globalStyles.heading}>My Activities</Text>
-                    </View>
-
                     <CommentList {...commentListProps} />
                 </View>
             </ScrollView>

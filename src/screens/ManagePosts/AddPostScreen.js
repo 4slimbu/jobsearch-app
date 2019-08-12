@@ -204,9 +204,6 @@ class AddPostScreen extends Component {
         return (
             <ScrollView style={globalStyles.scrollViewContainer}>
                 <View style={globalStyles.scrollViewContentView}>
-                    <View style={globalStyles.headerContainer}>
-                        <Text style={globalStyles.heading}>Add Post</Text>
-                    </View>
                     <View style={{marginLeft: 20, marginRight: 20}}>
                         <View style={styles.formRow}>
                             <Text style={globalStyles.formTitle}>Post Title</Text>

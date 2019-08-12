@@ -1,51 +1,24 @@
 import React from 'react';
-import appData from "../../constants/app";
-import globalStyles from "../../constants/globalStyle";
-import {TouchableOpacity} from "react-native";
-import {createStackNavigator, DrawerActions} from 'react-navigation';
-import {Image} from 'react-native-elements';
-import {Feather} from '@expo/vector-icons';
-import Colors from '../../constants/colors';
+import {createStackNavigator} from 'react-navigation';
 
 import ManagePostsScreen from '../../screens/ManagePosts/ManagePostsScreen';
 import AddPostScreen from "../../screens/ManagePosts/AddPostScreen";
 import MyCommentsScreen from "../../screens/ManagePosts/MyCommentsScreen";
 import EditPostScreen from "../../screens/ManagePosts/EditPostScreen";
-import PostDetailScreen from "../../screens/Post/PostDetailScreen";
 import PostListScreen from "../../screens/Post/PostListScreen";
+import withCustomNav from "../../components/HOC/withCustomNav";
 
 const ManagePostsTab = createStackNavigator({
     ManagePosts: {
-        screen: ManagePostsScreen,
+        screen: withCustomNav(ManagePostsScreen),
         path: '/',
-        navigationOptions: ({navigation}) => ({
-            title: 'Manage Posts',
-            headerLeft: (
-                <TouchableOpacity onPress={() => navigation.navigate('Categories')}>
-                    <Image 
-                        style={globalStyles.innerLogo}
-                        source={appData.app.LOGO_INNER_URL}
-                    />
-                </TouchableOpacity>
-            ),
-            headerRight: (
-                <Feather
-                    name="bar-chart-2"
-                    style={{marginRight: 10, transform: [{ rotate: "-90deg" }]}}
-                    size={32}
-                    color={Colors.darkGray}
-                    onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-                />
-            ),
-        }),
+        params: { title: 'Manage Posts', backBehavior: 'HOME'}
     },
-    AddPost: {screen: AddPostScreen, navigationOptions: ({navigation}) => ({ title: 'Add Post'})},
-    MyPosts: {screen: PostListScreen, params: {type: 'my'}, navigationOptions: ({navigation}) => ({ title: 'My Posts'})},
-    MyComments: {screen: MyCommentsScreen, navigationOptions: ({navigation}) => ({ title: 'My Activities'})},
-    MySavedPosts: {screen: PostListScreen, params: {type: 'saved'}, navigationOptions: ({navigation}) => ({ title: 'My Saved Posts'})},
-    EditPost: {screen: EditPostScreen, navigationOptions: ({navigation}) => ({ title: 'Edit Post'})},
-    ManagePostList: {screen: PostListScreen},
-    PostDetail: {screen: PostDetailScreen}
+    AddPost: {screen: withCustomNav(AddPostScreen), params: { title: 'Add Post'}},
+    MyPosts: {screen: withCustomNav(PostListScreen), params: {type: 'my', title: 'My Posts'}},
+    MyActivities: {screen: withCustomNav(MyCommentsScreen), params: { title: 'My Activities'}},
+    MySavedPosts: {screen: withCustomNav(PostListScreen), params: {type: 'saved', title: 'My Saved Posts'}},
+    EditPost: {screen: withCustomNav(EditPostScreen), params: { title: 'Edit Post'}},
 });
 
 export default ManagePostsTab;

@@ -5,7 +5,6 @@ import {Provider} from 'react-redux';
 import store from './src/store/configureStore';
 import {AsyncStorage} from "react-native";
 import NavigationService from "./src/services/NavigationService";
-import {uiUpdateViewHistory} from "./src/store/actions/uiActions";
 import Constants from 'expo-constants';
 import {createAppContainer} from "react-navigation";
 import MainNavigator from "./src/navigators/MainNavigator";
@@ -57,8 +56,6 @@ export default class App extends Component {
 
     constructor(props) {
         super(props);
-
-        this.handleNavigationStateChange = this.handleNavigationStateChange.bind(this);
     }
 
     componentDidMount() {
@@ -81,17 +78,12 @@ export default class App extends Component {
         }
     };
 
-    handleNavigationStateChange() {
-        store.dispatch(uiUpdateViewHistory(NavigationService.getCurrentRoute()));
-    }
-
     render() {
         return (
             <Provider store={store}>
                 <AppContainer ref={navigatorRef => {
                         NavigationService.setTopLevelNavigator(navigatorRef);
                     }}
-                    onNavigationStateChange={this.handleNavigationStateChange}
                 />
                 <AppLoading/>
             </Provider>

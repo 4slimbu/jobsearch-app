@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import globalStyles from "../../constants/globalStyle";
 import appData from "../../constants/app";
-import {ActivityIndicator, Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+    ActivityIndicator, Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity,
+    View
+} from 'react-native';
 import Colors from '../../constants/colors';
 import {Image} from "react-native-elements";
 import {authUpdatePreferences} from "../../store/actions/authActions";
@@ -11,7 +14,7 @@ import {prettyDistance, toReadable} from "../../utils/helper/helper";
 import PostComments from "./PostComments";
 import KCarousel from "../../components/Carousel/KCarousel";
 import {uiUpdateViewHistory} from "../../store/actions/uiActions";
-import {FontAwesome} from "@expo/vector-icons";
+import {FontAwesome, MaterialIcons} from "@expo/vector-icons";
 
 class PostDetailScreen extends Component {
     constructor(props) {
@@ -148,20 +151,22 @@ class PostDetailScreen extends Component {
                                     />
                                 </View>
                                 <Text selectable={true} style={styles.location}>{ post.address}</Text>
-                                <View style={styles.postActions}></View>
-                                    <FontAwesome
-                                        name="star"
-                                        size={22}
-                                        color={isSaved ? Colors.yellow : Colors.greyOutline}
-                                        onPress={() => this.savePostHandler(post.id)}
-                                    />
-                                    <FontAwesome
-                                        name="flag"
-                                        size={22}
-                                        color={isFlagged ? Colors.primary : Colors.greyOutline}
-                                        containerStyle={{marginLeft: 14}}
-                                        onPress={() => this.flagPostHandler(post.id)}
-                                    />
+                                <View style={styles.postActions}>
+                                    <TouchableOpacity onPress={() => this.savePostHandler(post.id)}>
+                                        <MaterialIcons
+                                            name="watch-later"
+                                            size={22}
+                                            color={isSaved ? Colors.yellow : Colors.greyOutline}
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.flagPostHandler(post.id)}>
+                                        <MaterialIcons
+                                            name="report"
+                                            size={22}
+                                            color={isFlagged ? Colors.primary : Colors.greyOutline}
+                                            containerStyle={{marginLeft: 14}}
+                                        />
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
@@ -195,6 +200,7 @@ class PostDetailScreen extends Component {
                             </View>
                        
                         }
+                    </View>
                 </KeyboardAvoidingView>
                 }
             </ScrollView>
@@ -310,6 +316,8 @@ const styles = StyleSheet.create({
     },
     postActions: {
         marginLeft: 'auto',
+        alignItems: 'flex-end',
+        flexDirection: 'row'
     },
     additionalImg: {
         display: 'flex',

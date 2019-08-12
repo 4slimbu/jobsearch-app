@@ -8,7 +8,7 @@ import {connect} from "react-redux";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import {deletePost} from "../../store/actions/postActions";
 import {withNavigation} from "react-navigation";
-import {FontAwesome} from "@expo/vector-icons";
+import {FontAwesome, MaterialIcons} from "@expo/vector-icons";
 
 
 class PostItem extends Component {
@@ -63,11 +63,7 @@ class PostItem extends Component {
             ...this.props.preferences,
             savedPosts: savedPosts
         };
-        this.props.updatePreferences(preferences).then(res => {
-            if (isDeleted) {
-                this.props.deleteSavedPost(post.id);
-            }
-        });
+        this.props.updatePreferences(preferences);
     }
 
     editPostHandler(postId) {
@@ -123,12 +119,13 @@ class PostItem extends Component {
                                 </View>
                                 <Text style={styles.postLocation}>{ prettyDistance(post.distance) }</Text>
                                 <View style={styles.postActions}>
-                                    <FontAwesome
-                                        name="star"
-                                        size={18}
-                                        color={isSaved ? Colors.yellow : Colors.greyOutline}
-                                        onPress={() => this.savePostHandler(post)}
-                                    />
+                                    <TouchableOpacity onPress={() => this.savePostHandler(post)}>
+                                        <MaterialIcons
+                                            name="watch-later"
+                                            size={18}
+                                            color={isSaved ? Colors.yellow : Colors.greyOutline}
+                                        />
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         }
