@@ -42,20 +42,26 @@ export function callApi(method = 'GET', url, data = {}, headers = null) {
         }
     }
 
-    store.dispatch(uiStartLoading());
     return new Promise((resolve, reject) => {
-        return fetch(url, fetchArgs)
-            .then(res => {
-                store.dispatch(uiStopLoading());
-                return res.json();
-            })
-            .then(parsedRes => {
-                resolve(parsedRes);
-            })
-            .catch(function (error) {
-                store.dispatch(uiStopLoading());
-                reject();
-            });
+        store.dispatch(uiStartLoading());
+        try {
+            return fetch(url, fetchArgs)
+                .then(res => {
+                    store.dispatch(uiStopLoading());
+                    return res.json();
+                })
+                .then(parsedRes => {
+                    store.dispatch(uiStopLoading());
+                    resolve(parsedRes);
+                })
+                .catch(function (error) {
+                    store.dispatch(uiStopLoading());
+                    reject();
+                });
+        } catch (e) {
+            store.dispatch(uiStopLoading());
+            reject();
+        }
     });
 }
 
@@ -104,8 +110,8 @@ const Categories = {
 const Comments = {
     get: (postId) =>
         callApi('GET', API_BASE_URL + "/comments/" + postId),
-    getMine: () =>
-        callApi('GET', API_BASE_URL + "/mycomments"),
+    getMine: (data) =>
+        callApi('GET', !data.url ? API_BASE_URL + '/mycomments?' + data.queryString : data.url + data.queryString),
     save: (data) =>
         callApi('POST', API_BASE_URL + "/comments", data),
 };

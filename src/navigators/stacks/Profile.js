@@ -6,7 +6,7 @@ import withCustomNav from "../../components/HOC/withCustomNav";
 const ProfileStacks = createStackNavigator({
     MyProfile: {
         screen: withCustomNav(MyProfileScreen),
-        path: '/',
+        path: '/my-profile',
         params: {
             title: 'My Profile'
         }

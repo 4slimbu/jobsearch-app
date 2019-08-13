@@ -3,7 +3,7 @@ import {ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View} from
 import PropTypes from "prop-types";
 import Colors from "../../constants/colors";
 import {Image} from "react-native-elements";
-import {getFeaturedImageSrc, prettyDistance} from "../../utils/helper/helper";
+import {getFeaturedImageSrc, prettyDistance, trimListTitle, trimNavTitle} from "../../utils/helper/helper";
 import {connect} from "react-redux";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import {deletePost} from "../../store/actions/postActions";
@@ -46,7 +46,7 @@ class PostItem extends Component {
     }
 
     selectPostHandler(post) {
-        this.props.navigation.navigate('PostDetail', { postId: post.id });
+        this.props.navigation.navigate('PostDetail', { postId: post.id, title: trimNavTitle(post.title) });
     }
 
     savePostHandler(post) {
@@ -105,7 +105,7 @@ class PostItem extends Component {
                 <View style={styles.postContentWrapper}>
                     <View style={styles.postContent}>
                         <TouchableOpacity onPress={() => this.selectPostHandler(post)}>
-                            <Text style={styles.postTitle}>{post.title}</Text>
+                            <Text style={styles.postTitle}>{trimListTitle(post.title)}</Text>
                         </TouchableOpacity>
                     </View>
                         {(type !== 'my') &&

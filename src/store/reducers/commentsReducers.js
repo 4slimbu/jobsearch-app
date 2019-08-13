@@ -1,5 +1,5 @@
 import {
-    COMMENTS_BY_ME_SET
+    COMMENTS_BY_ME_SET, COMMENTS_BY_ME_UPDATE
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -15,7 +15,20 @@ const commentReducers = (state = initialState, action) => {
         case COMMENTS_BY_ME_SET:
             return {
                 ...state,
-                myComments: action.payload
+                myComments: {
+                    data: action.payload.data,
+                    links: action.payload.links,
+                    meta: action.payload.meta
+                }
+            };
+        case COMMENTS_BY_ME_UPDATE:
+            return {
+                ...state,
+                myComments: {
+                    data: state.myComments.data.concat(action.payload.data),
+                    links: action.payload.links,
+                    meta: action.payload.meta
+                }
             };
         default:
             return state;

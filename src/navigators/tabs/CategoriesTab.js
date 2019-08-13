@@ -8,19 +8,15 @@ import withCustomNav from "../../components/HOC/withCustomNav";
 const CategoriesTab = createStackNavigator({
     Categories: {
         screen: withCustomNav(CategoriesScreen),
-        path: '/',
+        path: '/categories',
         params: { title: 'Browse Categories', backBehavior: 'HOME'}
     },
     CategoryPostList: {
         screen: withCustomNav(PostListScreen),
         path: '/post-list',
-        params: { title: '', type: 'category'}
+        params: { type: 'category'}
     },
-    PostDetail: {
-        screen: withCustomNav(PostDetailScreen),
-        path: '/post-detail',
-        params: { title: 'Post Detail'}
-    }
+    PostDetail: {screen: withCustomNav(PostDetailScreen)},
 });
 
 export default CategoriesTab;

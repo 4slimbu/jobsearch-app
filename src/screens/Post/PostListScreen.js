@@ -22,7 +22,6 @@ class PostListScreen extends Component {
         };
 
         this.onChange = this.onChange.bind(this);
-        this.onSelectPost = this.onSelectPost.bind(this);
         this.onSavePost = this.onSavePost.bind(this);
         this.scrollHandler = this.scrollHandler.bind(this);
         this.refresh = this.refresh.bind(this);
@@ -49,6 +48,14 @@ class PostListScreen extends Component {
             await this.props.getPosts(this.props.posts.filter) && this.setState({isReady: true});
         }
 
+    }
+
+    shouldComponentUpdate() {
+        return true;
+    }
+
+    componentWillUnmount() {
+        this.props.resetPosts();
     }
 
     refresh() {
@@ -80,10 +87,6 @@ class PostListScreen extends Component {
         }, 300);
 
         this.setState({setTimeoutId: setTimeoutId});
-    }
-
-    onSelectPost(postId) {
-        this.props.navigation.navigate('PostDetail', {postId: postId});
     }
 
     onSavePost(postId) {

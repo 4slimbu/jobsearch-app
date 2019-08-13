@@ -8,6 +8,14 @@ export function showExcerpt(string, length) {
         string;
 }
 
+export function trimNavTitle(title) {
+    return showExcerpt(title, 20);
+}
+
+export function trimListTitle(title) {
+    return showExcerpt(title, 37);
+}
+
 export function toReadable(mysql_date) {
     let t;
 

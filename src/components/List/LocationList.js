@@ -1,6 +1,5 @@
-import React from "react";
-import {StyleSheet, View, Text, TouchableOpacity} from "react-native";
-import PropTypes from "prop-types";
+import React, {PureComponent} from "react";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {map} from "lodash";
 
 import LocationItem from "../ListItem/LocationItem";
@@ -21,25 +20,27 @@ const LocationListView = (props) => {
     });
 };
 
-const LocationList = props => {
-    const {locations, onSelect, onPickMyLocation} = props;
-    const locationListProps = {
-        locations: locations,
-        onSelect: onSelect,
-    };
-    return (
-        <View style={styles.locationContainer}>
-            <TouchableOpacity onPress={() => onPickMyLocation()} style={{width: '100%'}}>
-                <View style={{width: '100%'}}>
-                    <View style={{paddingLeft: 20, paddingRight: 20, marginBottom: 5, width: '100%'}}>
-                        <Text>Pick My Current Location</Text>
+class LocationList extends PureComponent {
+    render() {
+        const {locations, onSelect, onPickMyLocation} = this.props;
+        const locationListProps = {
+            locations: locations,
+            onSelect: onSelect,
+        };
+        return (
+            <View style={styles.locationContainer}>
+                <TouchableOpacity onPress={() => onPickMyLocation()} style={{width: '100%'}}>
+                    <View style={{width: '100%'}}>
+                        <View style={{paddingLeft: 20, paddingRight: 20, marginBottom: 5, width: '100%'}}>
+                            <Text>Pick My Current Location</Text>
+                        </View>
                     </View>
-                </View>
-            </TouchableOpacity>
-            <LocationListView {...locationListProps}/>
-        </View>
-    );
-};
+                </TouchableOpacity>
+                <LocationListView {...locationListProps}/>
+            </View>
+        );
+    }
+}
 
 const styles = StyleSheet.create({
     locationContainer: {
@@ -50,9 +51,5 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
 });
-
-LocationList.propTypes = {
-    locations: PropTypes.array.isRequired,
-};
 
 export default LocationList;

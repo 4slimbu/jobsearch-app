@@ -1,24 +1,27 @@
-import React from "react";
+import React, {PureComponent} from "react";
 import {FlatList, StyleSheet} from "react-native";
 import {generateUniqueId} from "../../utils/helper/helper";
 import CategoryItem from "../ListItem/CategoryItem";
 
-const CategoryList = props => {
-    const {categories, onSelectCategory} = props;
-    return (
-        <FlatList
-            style={styles.categoryContainer}
-            data={categories}
-            keyExtractor={(item, key) => generateUniqueId(item.id)}
-            renderItem={({item, key}) =>
-                <CategoryItem
-                    category={item}
-                    onSelectCategory={() => onSelectCategory(item.id)}
-                />
-            }
-            numColumns={2}
-        />
-    );
+class CategoryList extends PureComponent {
+    render() {
+        const {categories, onSelectCategory} = this.props;
+        return (
+            <FlatList
+                style={styles.categoryContainer}
+                data={categories}
+                keyExtractor={(item, key) => generateUniqueId(item.id)}
+                renderItem={({item, key}) =>
+                    <CategoryItem
+                        category={item}
+                        onSelectCategory={() => onSelectCategory(item)}
+                    />
+                }
+                numColumns={2}
+            />
+        );
+    }
+
 };
 
 const styles = StyleSheet.create({

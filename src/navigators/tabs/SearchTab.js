@@ -7,7 +7,7 @@ import withCustomNav from "../../components/HOC/withCustomNav";
 const SearchTab = createStackNavigator({
     Search: {
         screen: withCustomNav(PostListScreen),
-        path: '/',
+        path: '/search',
         params: { type: 'search', title: 'Search Posts', backBehavior: 'HOME' }
     },
     PostDetail: {screen: withCustomNav(PostDetailScreen)},

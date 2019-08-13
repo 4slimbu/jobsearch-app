@@ -1,19 +1,18 @@
 import {CATEGORIES_SET} from "./actionTypes";
 import ApiService from "../../services/ApiService";
 
-export const loadCategories = () => {
+export const loadCategories = (returnPromise = false) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
             return ApiService.Categories.all()
                 .then(parsedRes => {
-                    if (!parsedRes.data) {
-                        reject();
+                    if (parsedRes.data) {
+                        dispatch(setCategories(parsedRes.data));
                     }
-                    dispatch(setCategories(parsedRes.data));
-                    resolve(parsedRes.data);
+                    returnPromise && resolve(parsedRes.data);
                 })
                 .catch(function() {
-                    reject();
+                    returnPromise && reject();
                 });
         });
 

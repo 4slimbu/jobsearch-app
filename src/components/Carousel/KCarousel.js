@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import Colors from '../../constants/colors';
-import Carousel, {Pagination}  from 'react-native-snap-carousel';
-import {Platform, StyleSheet, View} from "react-native";
+import {ActivityIndicator, Animated, Platform, StyleSheet, Text, View} from "react-native";
 import {Image} from "react-native-elements";
 import appData from "../../constants/app";
+import SideSwipe from "react-native-sideswipe";
+import * as _ from "lodash";
+import Colors from "react-native-elements/src/config/colors";
 
 class KCarousel extends Component {
     constructor() {
@@ -11,7 +12,8 @@ class KCarousel extends Component {
 
         this.state = {
             entries: [],
-            activeSlide: 0
+            activeSlide: 0,
+            currentIndex: 0,
         }
     }
 
@@ -21,7 +23,7 @@ class KCarousel extends Component {
         })
     }
 
-    renderItem ({item, index}, parallaxProps) {
+    renderItem ({ itemIndex, currentIndex, item, animatedValue }) {
         const image = item.url ? {uri: item.url} : require('../../../assets/images/placeholder.png');
         return (
             <View style={styles.item}>
@@ -30,48 +32,38 @@ class KCarousel extends Component {
                     resizeMode={'cover'}
                     containerStyle={styles.imageContainer}
                     style={styles.image}
+                    PlaceholderContent={<ActivityIndicator />}
                 />
             </View>
         );
     }
 
     get pagination() {
-        const {entries, activeSlide} = this.state;
+        const {entries, currentIndex} = this.state;
         return (
-            <Pagination
-                dotsLength={entries.length}
-                activeDotIndex={activeSlide}
-                containerStyle={{paddingTop: 5, paddingBottom: 5, marginTop: -25}}
-                dotStyle={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: 5,
-                    marginHorizontal: 0,
-                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                }}
-                inactiveDotStyle={{
-                    // Define styles for inactive dots here
-                }}
-                inactiveDotOpacity={0.4}
-                inactiveDotScale={0.6}
-            />
+            <View style={styles.paginationWrapper}>
+                {
+                    _.map(entries, function (item, key) {
+                        return <Animated.View key={key} style={currentIndex === key ? styles.activeDotStyle : styles.dotStyle} />
+                    })
+                }
+            </View>
         );
     }
 
     render() {
         return (
             <View>
-                <Carousel
-                    ref={(c) => { this._carousel = c; }}
-                    sliderWidth={appData.app.SCREEN_WIDTH}
-                    sliderHeight={appData.app.SCREEN_WIDTH * 3 / 5 }
+                <SideSwipe
+                    index={this.state.currentIndex}
                     itemWidth={appData.app.SCREEN_WIDTH}
+                    style={{ width: appData.app.SCREEN_WIDTH }}
                     data={this.state.entries}
+                    contentOffset={0}
+                    onIndexChange={index =>
+                        this.setState(() => ({ currentIndex: index }))
+                    }
                     renderItem={this.renderItem}
-                    hasParallaxImages={true}
-                    loop={true}
-                    autoplay={false}
-                    onSnapToItem={(index) => this.setState({ activeSlide: index }) }
                 />
                 { this.pagination }
             </View>
@@ -96,6 +88,36 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
         resizeMode: 'cover',
     },
+    paginationWrapper: {
+        position: 'absolute',
+        left: 0,
+        bottom: 0,
+        width: '100%',
+        height: 30,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row'
+    },
+    dotStyle: {
+        width: 10,
+        height: 10,
+        margin: 5,
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: '#f7f7f7',
+        overflow: 'hidden'
+    },
+    activeDotStyle: {
+        width: 10,
+        height: 10,
+        margin: 5,
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: '#f7f7f7',
+        backgroundColor: 'white',
+        overflow: 'hidden'
+    }
 });
 
 export default KCarousel;

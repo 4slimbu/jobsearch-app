@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 
 import {loadCategories} from "../../store/actions/categoryActions";
 import CategoryList from "../../components/List/CategoryList";
+import {trimNavTitle} from "../../utils/helper/helper";
 
 class CategoriesScreen extends Component {
     constructor(props) {
@@ -22,8 +23,8 @@ class CategoriesScreen extends Component {
         this._isMounted = false;
     }
 
-    onSelectCategory(categoryId) {
-        this.props.navigation.navigate('CategoryPostList', {...this.props.filter, category: [categoryId], type: 'category'});
+    onSelectCategory(category) {
+        this.props.navigation.navigate('CategoryPostList', {...this.props.filter, title: trimNavTitle(category.name), category: [category.id], type: 'category'});
     }
 
     render() {

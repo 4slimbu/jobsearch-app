@@ -48,19 +48,19 @@ export const getPosts = (queryObject, url=null) => {
         return new Promise((resolve, reject) => {
             ApiService.Posts.all({url: url, queryString: queryString})
                 .then(parsedRes => {
-                    if (!parsedRes.data) {
-                        reject();
-                    }
-
-                    if (isFreshSearch) {
-                        dispatch( setPosts(parsedRes) );
+                    if (parsedRes.data) {
+                        if (isFreshSearch) {
+                            dispatch( setPosts(parsedRes) );
+                        } else {
+                            dispatch( updatePosts(parsedRes) );
+                        }
+                        // resolve(parsedRes);
                     } else {
-                        dispatch( updatePosts(parsedRes) );
+                        // reject();
                     }
-                    resolve(parsedRes);
                 })
                 .catch(err => {
-                    reject();
+                    // reject();
                 });
         });
 

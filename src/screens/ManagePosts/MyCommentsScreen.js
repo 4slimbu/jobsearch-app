@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import globalStyles from "../../constants/globalStyle";
 import CommentList from "../../components/List/CommentList";
 import {connect} from "react-redux";
@@ -8,6 +8,7 @@ import {getMyComments} from "../../store/actions/commentActions";
 class MyCommentsScreen extends Component {
     constructor(props) {
         super(props);
+        this.scrollHandler = this.scrollHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -19,23 +20,32 @@ class MyCommentsScreen extends Component {
         this._isMounted = false;
     }
 
+    async scrollHandler(){
+        if (this.props.myComments.meta.to !== this.props.myComments.meta.total) {
+            await this.props.onGetMyComments({}, this.props.myComments.links.next);
+        }
+    }
+
     render() {
         const {myComments} = this.props;
         const commentListProps = {
-            comments: myComments.data
+            comments: myComments.data,
+            onScroll: this.scrollHandler
         };
         return (
-            <ScrollView style={globalStyles.scrollViewContainer}>
-                <View style={globalStyles.scrollViewContentView}>
-                    <CommentList {...commentListProps} />
-                </View>
-            </ScrollView>
+            <View style={styles.commentContainer}>
+                <CommentList {...commentListProps} />
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-
+    commentContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    }
 });
 
 const mapStateToProps = state => {
@@ -46,7 +56,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onGetMyComments: () => dispatch(getMyComments())
+        onGetMyComments: (queryObject, url) => dispatch(getMyComments(queryObject, url)),
     };
 };
 

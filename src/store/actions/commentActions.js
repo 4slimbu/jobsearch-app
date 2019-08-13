@@ -1,5 +1,6 @@
-import {COMMENTS_BY_ME_SET, POST_COMMENT_SET} from "./actionTypes";
+import {COMMENTS_BY_ME_SET, COMMENTS_BY_ME_UPDATE, POST_COMMENT_SET} from "./actionTypes";
 import ApiService from "../../services/ApiService";
+import {toQueryString} from "../../utils/helper/helper";
 
 export const saveComment = (commentData) => {
     return (dispatch, getState) => {
@@ -47,19 +48,34 @@ export const setPostComments = (postComments) => {
     }
 };
 
-export const getMyComments = () => {
+export const getMyComments = (queryObject, url=null) => {
+    let isFreshSearch = true;
+
+    let queryString = toQueryString(queryObject);
     return (dispatch, getState) => {
-        ApiService.Comments.getMine()
-            .then(parsedRes => {
-                if (!parsedRes.data) {
-                } else {
-                    dispatch(
-                        setMyComments(parsedRes)
-                    );
-                }
-            })
-            .catch(function() {
-            });
+        if (url) {
+            isFreshSearch = false;
+        }
+
+        return new Promise((resolve, reject) => {
+            ApiService.Comments.getMine({url: url, queryString: queryString})
+                .then(parsedRes => {
+                    if (parsedRes.data) {
+                        if (isFreshSearch) {
+                            dispatch( setMyComments(parsedRes) );
+                        } else {
+                            dispatch( updateMyComments(parsedRes) );
+                        }
+                        // resolve(parsedRes);
+                    } else {
+                        // reject();
+                    }
+                })
+                .catch(err => {
+                    // reject();
+                });
+        });
+
     };
 };
 
@@ -67,5 +83,12 @@ export const setMyComments = (myComments) => {
     return {
         type: COMMENTS_BY_ME_SET,
         payload: myComments
+    }
+};
+
+export const updateMyComments = (payload) => {
+    return {
+        type: COMMENTS_BY_ME_UPDATE,
+        payload: payload
     }
 };
