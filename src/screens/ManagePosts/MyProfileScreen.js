@@ -11,7 +11,7 @@ import {updateMyProfile, updatePassword} from "../../store/actions/authActions";
 import alertMessage from "../../components/Alert";
 import * as _ from "lodash";
 import {setLocation} from "../../store/actions/formActions";
-import PickLocation from "../../components/Picker/LocationPicker";
+import LocationPicker from "../../components/Picker/LocationPicker";
 
 class MyProfileScreen extends Component {
     constructor(props) {
@@ -39,6 +39,11 @@ class MyProfileScreen extends Component {
             isSavingProfilePicture: false,
             isSavingProfile: false,
             isSavingPassword: false,
+            location: {
+                address: "",
+                latitude: "",
+                longitude: ""
+            },
             errors: {}
         };
 
@@ -74,13 +79,17 @@ class MyProfileScreen extends Component {
             email: user.email,
             profilePicture: user.profile_pic,
             newProfilePicture: null,
+            location: {
+                address: user.address,
+                latitude: user.latitude,
+                longitude: user.longitude
+            },
+            newLocation: {
+                address: "",
+                latitude: "",
+                longitude: ""
+            }
         });
-
-        this.props.setLocation({
-            address: user.address,
-            latitude: user.latitude,
-            longitude: user.longitude
-        })
     }
 
     removeImageHandler() {
@@ -135,19 +144,20 @@ class MyProfileScreen extends Component {
     }
 
     editProfileHandler() {
-        const { firstName, lastName, gender, contactNumber} = this.state;
+        const { firstName, lastName, gender, contactNumber, location} = this.state;
         this.setState({
             isSaveProfile: true,
             newFirstName: firstName,
             newLastName: lastName,
             newGender: gender,
-            newContactNumber: contactNumber
+            newContactNumber: contactNumber,
+            newLocation: location
         });
     }
 
     isProfileFormValid() {
-        const {newFirstName, newLastName, newContactNumber} = this.state;
-        const {address} = this.props.forms.location;
+        const {newFirstName, newLastName, newContactNumber, newLocation} = this.state;
+        const {address} = newLocation;
 
         let errors = {};
 
@@ -161,8 +171,8 @@ class MyProfileScreen extends Component {
     }
 
     async saveProfileHandler() {
-        const {newFirstName, newLastName, newGender, newContactNumber} = this.state;
-        const {address, latitude, longitude} = this.props.forms.location;
+        const {newFirstName, newLastName, newGender, newContactNumber, newLocation} = this.state;
+        const {address, latitude, longitude} = newLocation;
 
         if (!this.isProfileFormValid()) {
             alertMessage({title: "Error", body: "Validation failed"});
@@ -244,6 +254,7 @@ class MyProfileScreen extends Component {
                 newLastName: '',
                 newGender: '',
                 newContactNumber: '',
+                newLocation: { address: '', latitude: '', longitude: ''}
             })
         }
 
@@ -257,17 +268,15 @@ class MyProfileScreen extends Component {
         }
     }
 
-
-
     render() {
         const {
             firstName, lastName, email, gender, contactNumber,
             profilePicture, newProfilePicture, isSaveProfilePicture, isSaveProfile, isSavePassword,
             currentPassword, newPassword, confirmNewPassword,
-            newFirstName, newLastName, newGender, newContactNumber,
+            newFirstName, newLastName, newGender, newContactNumber, newLocation, location,
             isSavingProfilePicture, isSavingProfile, isSavingPassword, errors
         } = this.state;
-        const {address} = this.props.forms.location;
+        const {address} = location;
 
         const profilePictureSource = profilePicture ? {uri: profilePicture} : require('../../../assets/images/user-hp.png');
 
@@ -567,13 +576,11 @@ class MyProfileScreen extends Component {
                                         <Text style={globalStyles.formTitle}>Address</Text>
                                     </View>
                                     <View style={styles.profileInput}>
-                                        <PickLocation
-                                            value={this.props.forms.location.address}
-                                            navigation={this.props.navigation}
-                                            errorMessage={errors.address ? errors.address : null}
-                                            backScreen="MyProfile"
+                                        <LocationPicker
+                                            location={location.address}
+                                            onChange={location => this.setState({location: location, newLocation: location})}
                                         />
-                                        <Text style={{color: Colors.danger, marginTop: 5}}>{errors.newContactNumber ? errors.newContactNumber: ''}</Text>
+                                        <Text style={{color: Colors.danger, marginTop: 5}}>{errors.address ? errors.address: ''}</Text>
                                     </View>
                                 </View>
                                 :

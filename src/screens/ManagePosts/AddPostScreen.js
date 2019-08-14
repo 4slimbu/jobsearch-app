@@ -11,9 +11,9 @@ import {loadCategories} from "../../store/actions/categoryActions";
 import {connect} from "react-redux";
 import {addPost} from "../../store/actions/postActions";
 import alertMessage from "../../components/Alert";
-import PickLocation from "../../components/Picker/LocationPicker";
 import {resetCategory, resetLocation} from "../../store/actions/formActions";
 import CategoryPicker from "../../components/Picker/CategoryPicker";
+import LocationPicker from "../../components/Picker/LocationPicker";
 
 const PostImages = (props) => {
     const {type, images, removeImageHandler} = props;
@@ -39,11 +39,17 @@ class AddPostScreen extends Component {
             additionalImages: [],
             categories: [],
             date: null,
+            location: {
+                address: "",
+                latitude: "",
+                longitude: ""
+            },
             errors: {},
             isLoading: false
         };
 
         this.removeImageHandler = this.removeImageHandler.bind(this);
+        this.changeHandler = this.changeHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
 
     }
@@ -64,8 +70,6 @@ class AddPostScreen extends Component {
         }
 
         this.props.resetCategory();
-        this.props.resetLocation();
-
     }
 
     componentWillUnmount() {
@@ -131,8 +135,8 @@ class AddPostScreen extends Component {
     };
 
     isFormValid() {
-        const {postTitle, postContent} = this.state;
-        const {address} = this.props.forms.location;
+        const {postTitle, postContent, location} = this.state;
+        const {address} = location;
         const {category} = this.props.forms;
         let errors = {};
 
@@ -154,8 +158,8 @@ class AddPostScreen extends Component {
     }
 
     submitHandler() {
-        const {postTitle, postContent, featuredImage, additionalImages, date} = this.state;
-        const {address, latitude, longitude} = this.props.forms.location;
+        const {postTitle, postContent, featuredImage, additionalImages, date, location} = this.state;
+        const {address, latitude, longitude} = location;
         const {category} = this.props.forms;
 
         if (!this.isFormValid()) {
@@ -198,8 +202,12 @@ class AddPostScreen extends Component {
         });
     }
 
+    changeHandler(data) {
+        this.setState(data);
+    }
+
     render() {
-        const {featuredImage, additionalImages, errors, isLoading} = this.state;
+        const {featuredImage, additionalImages, errors, isLoading, location} = this.state;
 
         return (
             <ScrollView style={globalStyles.scrollViewContainer}>
@@ -209,7 +217,7 @@ class AddPostScreen extends Component {
                             <Text style={globalStyles.formTitle}>Post Title</Text>
                             <TextInput
                                 style={globalStyles.textInput}
-                                onChangeText={postTitle => this.setState({postTitle})}
+                                onChangeText={postTitle => this.changeHandler({postTitle})}
                             />
                             {errors.postTitle &&
                             <Text style={globalStyles.error}>{errors.postTitle}</Text>
@@ -222,7 +230,7 @@ class AddPostScreen extends Component {
                                     style={globalStyles.textAreaLight}
                                     multiline={true}
                                     numberOfLines={15}
-                                    onChangeText={postContent => this.setState({postContent})}
+                                    onChangeText={postContent => this.changeHandler({postContent})}
                                 />
                                 {errors.postContent &&
                                 <Text style={globalStyles.error}>{errors.postContent}</Text>
@@ -295,10 +303,9 @@ class AddPostScreen extends Component {
                         </View>
                         <View style={globalStyles.formRow}>
                             <Text style={globalStyles.formTitle}>Post Location</Text>
-                            <PickLocation
-                                value={this.props.forms.location.address}
-                                navigation={this.props.navigation}
-                                backScreen="AddPost"
+                            <LocationPicker
+                                location={location.address}
+                                onChange={location => this.changeHandler({location})}
                             />
                             <Text style={{
                                 color: Colors.danger,

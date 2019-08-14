@@ -15,6 +15,7 @@ const withCustomNav = (PassedComponent) => {
     class WithCustomNav extends Component {
         static navigationOptions = ({navigation}) => {
             let navigationOptions = {};
+            let showHeaderRight = true;
             let title = navigation.getParam('title');
             let backBehavior = navigation.getParam('backBehavior');
 
@@ -60,15 +61,17 @@ const withCustomNav = (PassedComponent) => {
             }
 
             // Set Header Right
-            navigationOptions.headerRight = (
-                <Feather
-                    name="bar-chart-2"
-                    style={{marginRight: 10, transform: [{rotate: "-90deg"}]}}
-                    size={32}
-                    color={Colors.darkGray}
-                    onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-                />
-            );
+            if (navigation.state.params.isAuthenticated) {
+                navigationOptions.headerRight = (
+                    <Feather
+                        name="bar-chart-2"
+                        style={{marginRight: 10, transform: [{rotate: "-90deg"}]}}
+                        size={32}
+                        color={Colors.darkGray}
+                        onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+                    />
+                );
+            }
 
             return navigationOptions;
         };
@@ -78,6 +81,9 @@ const withCustomNav = (PassedComponent) => {
         }
 
         componentDidMount() {
+            // Set auth state
+            this.props.navigation.setParams({isAuthenticated: this.props.isAuthenticated});
+            console.log({isAuthenticated: this.props.isAuthenticated});
             BackHandler.addEventListener('hardwareBackPress', this._onBackIconPress);
         }
 
@@ -113,7 +119,9 @@ const withCustomNav = (PassedComponent) => {
     }
 
     const mapStateToProps = state => {
-        return {}
+        return {
+            isAuthenticated: !! state.auth.user && state.auth.user.id
+        }
     };
 
     const mapDispatchToProps = {

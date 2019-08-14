@@ -1,21 +1,17 @@
 import React, {Component} from 'react';
 import appData from "../../constants/app";
-import * as Platform from 'react-native';
-import {KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, UIManager, View} from 'react-native';
-import Constants from 'expo-constants';
+import {KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, UIManager, View} from 'react-native';
 import {connect} from 'react-redux';
 import {Button, CheckBox, Image, Input} from 'react-native-elements';
 
 import {FontAwesome} from '@expo/vector-icons';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
-import socialColor from "../../constants/socialColors";
 import {tryAuth} from '../../store/actions/authActions';
 import Colors from "../../constants/colors";
 import {getDeviceId, validateEmail} from "../../utils/helper/helper";
 import * as _ from "lodash";
 import globalStyles from "../../constants/globalStyle";
-import PickLocation from "../../components/Picker/LocationPicker";
-import {resetRegisterForm, updateRegisterForm} from "../../store/actions/formActions";
+import LocationPicker from "../../components/Picker/LocationPicker";
 
 // Enable LayoutAnimation on Android
 UIManager.setLayoutAnimationEnabledExperimental &&
@@ -29,6 +25,19 @@ class RegisterScreen extends Component {
 
         this.state = {
             isLoading: false,
+            email: "",
+            password: "",
+            confirmPassword: "",
+            firstName: "",
+            lastName: "",
+            gender: "male",
+            contactNumber: "",
+            location: {
+                address: "",
+                latitude: "",
+                longitude: ""
+            },
+            errors: {}
         };
 
         this.registerHandler = this.registerHandler.bind(this);
@@ -45,8 +54,8 @@ class RegisterScreen extends Component {
     }
 
     isRegisterFormValid() {
-        const {email, firstName, lastName, password, confirmPassword, contactNumber} = this.props.forms.register;
-        const {address} = this.props.forms.location;
+        const {email, firstName, lastName, password, confirmPassword, contactNumber, location} = this.state;
+        const {address} = location;
         let errors = {};
 
         if (!validateEmail(email)) {
@@ -77,7 +86,7 @@ class RegisterScreen extends Component {
             errors.address = "Location is required";
         }
 
-        this.props.updateRegisterForm({errors: errors});
+        this.setState({errors: errors});
         return _.isEmpty(errors);
     }
 
@@ -89,8 +98,8 @@ class RegisterScreen extends Component {
 
         // Start processing form
         this.setState({isLoading: true});
-        const {email, password, firstName, lastName, gender, contactNumber} = this.props.forms.register;
-        const {address, latitude, longitude} = this.props.forms.location;
+        const {email, password, firstName, lastName, gender, contactNumber, location} = this.state;
+        const {address, latitude, longitude} = location;
         const deviceId = await getDeviceId();
         await this.props.onTryAuth({
             email: email,
@@ -117,7 +126,7 @@ class RegisterScreen extends Component {
     }
 
     onChangeHandler(data) {
-        this.props.updateRegisterForm(data);
+        this.setState(data);
     }
 
     render() {
@@ -130,8 +139,9 @@ class RegisterScreen extends Component {
             lastName,
             gender,
             contactNumber,
-            errors
-        } = this.props.forms.register;
+            location,
+            errors,
+        } = this.state;
         return (
             <ScrollView style={globalStyles.scrollViewContainer}>
                 <View style={globalStyles.scrollViewContentView}>
@@ -270,12 +280,14 @@ class RegisterScreen extends Component {
                         </View>
                         
                         <View style={globalStyles.formFlexColumn}>
-                            <PickLocation
-                                value={this.props.forms.location.address}
-                                navigation={this.props.navigation}
-                                errorMessage={errors.address ? errors.address : null}
-                                backScreen="RegisterScreen"
+                            <LocationPicker
+                                location={location.address}
+                                onChange={location => this.onChangeHandler({location})}
                             />
+                            {
+                                errors.address &&
+                                <Text style={globalStyles.error}>{errors.address}</Text>
+                            }
                         </View>
 
                         <View style={globalStyles.formFlexRow}>
@@ -357,15 +369,12 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         auth: state.auth,
-        forms: state.forms
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         onTryAuth: async (authData, authMode) => await dispatch(tryAuth(authData, authMode)),
-        updateRegisterForm: (data) => dispatch(updateRegisterForm(data)),
-        resetRegisterForm: () => dispatch(resetRegisterForm())
     };
 };
 
