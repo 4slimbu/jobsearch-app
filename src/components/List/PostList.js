@@ -1,9 +1,9 @@
-import React, {PureComponent} from "react";
+import React, {Component} from "react";
 import {FlatList, StyleSheet, View} from "react-native";
 import PostListMetaData from "../PostListMetaData";
 import PostItem from "../ListItem/PostItem";
 
-class PostList extends PureComponent {
+class PostList extends Component {
     render() {
         const {type, posts, filter, onFilterUpdate, onRefresh, onScroll} = this.props;
 
@@ -34,8 +34,9 @@ class PostList extends PureComponent {
                         <PostListMetaData {...postListMetaDataProps}/>
                     }
                     numColumns={2}
-                    onEndReachedThreshold={10}
-                    onEndReached={onScroll}
+                    bounces={false}
+                    onEndReachedThreshold={0.01}
+                    onEndReached={() => onScroll()}
                 />
             </View>
         );

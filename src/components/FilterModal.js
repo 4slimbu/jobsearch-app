@@ -25,12 +25,7 @@ class FilterModal extends Component {
         if (type === 'radius') { filterData.radius = _.ceil(value * 100) }
         if (type === 'orderBy') { filterData.orderBy = value }
 
-        clearTimeout(this.state.setTimeoutId);
-        let setTimeoutId = setTimeout(function () {
-            this.props.onChangeFilter(filterData);
-        }.bind(this), 100);
-
-        this.setState({setTimeoutId: setTimeoutId});
+        this.props.onChangeFilter(filterData);
     }
 
     render() {

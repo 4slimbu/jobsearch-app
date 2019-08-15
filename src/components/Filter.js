@@ -3,6 +3,7 @@ import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FontAwesome} from '@expo/vector-icons';
 import FilterModal from "./FilterModal";
 import Colors from "../constants/colors";
+import * as _ from "lodash";
 
 class Filter extends Component {
     constructor(props) {
@@ -34,14 +35,38 @@ class Filter extends Component {
         this.reset = this.reset.bind(this);
     }
 
+    static getDerivedStateFromProps(props, state) {
+        if (!_.isEqual(props.filter, state.filter)) {
+            return {
+                filter: props.filter
+            };
+        }
+        // Return null to indicate no change to state.
+        return null;
+    }
+
     componentDidMount() {
         this._isMounted = true;
+        console.log('Filter mounted');
         this.setState({
             filter: this.props.filter,
         })
     }
 
+    componentDidUpdate(prevProps) {
+        if (!_.isEqual(prevProps.filter, this.props.filter)) {
+            return {
+                filter: props.filter
+            };
+        }
+    }
+
+    componentWillMount() {
+        console.log('Filter cwm');
+    }
+
     componentWillUnmount() {
+        console.log('Filter cwum');
         this.reset();
         this._isMounted = false;
     }

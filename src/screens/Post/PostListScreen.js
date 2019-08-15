@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {SearchBar,} from 'react-native-elements';
 
@@ -9,7 +9,7 @@ import {authUpdatePreferences} from "../../store/actions/authActions";
 import {uiUpdateViewHistory} from "../../store/actions/uiActions";
 import PostList from "../../components/List/PostList";
 
-class PostListScreen extends PureComponent {
+class PostListScreen extends Component {
     constructor(props) {
         super(props);
 
@@ -110,17 +110,18 @@ class PostListScreen extends PureComponent {
     }
 
     async scrollHandler(){
-        console.log('scroll handler here');
         if (this.props.posts.posts.meta.to !== this.props.posts.posts.meta.total) {
-            console.log('post using scroll handler');
-            await this.props.getPosts(this.props.posts.filter, this.props.posts.posts.links.next);
+            await this.props.getPosts(this.state.filter, this.props.posts.posts.links.next);
         }
     }
 
     filterUpdateHandler(filterData) {
-        console.log('filter updated');
-        this.setState({filter: filterData});
-        this.props.getPosts(filterData);
+        let filter = {
+            ...this.state.filter,
+            ...filterData
+        };
+        this.setState({filter: filter});
+        this.props.getPosts(filter);
     }
 
     render() {
@@ -214,7 +215,7 @@ const mapStateToProps = state => {
     return {
         preferences: state.auth.user.preferences,
         posts: state.posts,
-        viewHistory: state.ui.viewHistory
+        ui: state.ui
     }
 };
 
