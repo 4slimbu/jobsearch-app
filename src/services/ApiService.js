@@ -43,22 +43,26 @@ export function callApi(method = 'GET', url, data = {}, headers = null) {
     }
 
     return new Promise((resolve, reject) => {
-        store.dispatch(uiStartLoading());
         try {
+            console.log(url);
+            store.dispatch(uiStartLoading());
             return fetch(url, fetchArgs)
                 .then(res => {
                     store.dispatch(uiStopLoading());
                     return res.json();
                 })
                 .then(parsedRes => {
+                    console.log("Parsed Res");
                     store.dispatch(uiStopLoading());
                     resolve(parsedRes);
                 })
                 .catch(function (error) {
+                    console.log("Err", error);
                     store.dispatch(uiStopLoading());
                     reject();
                 });
         } catch (e) {
+            console.log("E", e);
             store.dispatch(uiStopLoading());
             reject();
         }

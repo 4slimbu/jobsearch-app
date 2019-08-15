@@ -5,27 +5,36 @@ import PostItem from "../ListItem/PostItem";
 
 class PostList extends PureComponent {
     render() {
-        const {type, posts, backScreen, isFilterActive, filter, onRefresh, onScroll} = this.props;
+        const {type, posts, filter, onFilterUpdate, onRefresh, onScroll} = this.props;
+
+        const postListMetaDataProps = {
+            meta: posts.meta,
+            filter: filter,
+            onFilterUpdate: onFilterUpdate
+        };
+
+        const postItemProps = {
+            type: type,
+            onRefresh: onRefresh
+        };
+
         return (
             <View style={styles.postListContainer} >
                 <FlatList
                     data={posts.data}
                     keyExtractor={(item, key) => key}
                     ListHeaderComponent={
-                        <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} filter={filter} onRefresh={onRefresh}/>
+                        <PostListMetaData {...postListMetaDataProps}/>
                     }
                     renderItem={({item, key}) =>
-                        <PostItem
-                            post={item}
-                            type={type}
-                            onRefresh={onRefresh}
-                        />
+                        <PostItem post={item} {...postItemProps}/>
                     }
                     ListFooterComponent={
                         posts.meta && posts.meta.total > 10 &&
-                        <PostListMetaData meta={posts.meta} backScreen={backScreen} isFilterActive={isFilterActive} filter={filter} onRefresh={onRefresh}/>
+                        <PostListMetaData {...postListMetaDataProps}/>
                     }
                     numColumns={2}
+                    onEndReachedThreshold={10}
                     onEndReached={onScroll}
                 />
             </View>

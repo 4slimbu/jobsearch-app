@@ -15,7 +15,6 @@ const withCustomNav = (PassedComponent) => {
     class WithCustomNav extends Component {
         static navigationOptions = ({navigation}) => {
             let navigationOptions = {};
-            let showHeaderRight = true;
             let title = navigation.getParam('title');
             let backBehavior = navigation.getParam('backBehavior');
 
@@ -61,7 +60,7 @@ const withCustomNav = (PassedComponent) => {
             }
 
             // Set Header Right
-            if (navigation.state.params.isAuthenticated) {
+            if (navigation.state.params && navigation.state.params.isAuthenticated) {
                 navigationOptions.headerRight = (
                     <Feather
                         name="bar-chart-2"
@@ -83,7 +82,6 @@ const withCustomNav = (PassedComponent) => {
         componentDidMount() {
             // Set auth state
             this.props.navigation.setParams({isAuthenticated: this.props.isAuthenticated});
-            console.log({isAuthenticated: this.props.isAuthenticated});
             BackHandler.addEventListener('hardwareBackPress', this._onBackIconPress);
         }
 
@@ -120,7 +118,7 @@ const withCustomNav = (PassedComponent) => {
 
     const mapStateToProps = state => {
         return {
-            isAuthenticated: !! state.auth.user && state.auth.user.id
+            isAuthenticated: !! state.auth && state.auth.user && state.auth.user.id
         }
     };
 

@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {ActivityIndicator, Animated, Platform, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Animated, Platform, StyleSheet, View} from "react-native";
 import {Image} from "react-native-elements";
 import appData from "../../constants/app";
 import SideSwipe from "react-native-sideswipe";
 import * as _ from "lodash";
-import Colors from "react-native-elements/src/config/colors";
 
 class KCarousel extends Component {
     constructor() {

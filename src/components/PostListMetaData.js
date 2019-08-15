@@ -1,12 +1,17 @@
 import React, {Fragment} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {FontAwesome} from '@expo/vector-icons';
+import {StyleSheet, Text, View} from 'react-native';
 import Colors from "../constants/colors";
-import NavigationService from "../services/NavigationService";
 import {humanReadableFilterInfo} from "../utils/helper/helper";
+import Filter from "./Filter";
 
 const PostListMetaData = props => {
-    const {meta, backScreen, isFilterActive, filter, onRefresh} = props;
+    const {meta, filter, onFilterUpdate} = props;
+
+    const filterProps = {
+        filter: filter,
+        onFilterUpdate: onFilterUpdate
+    };
+
     return (
         <Fragment>
             {
@@ -16,15 +21,8 @@ const PostListMetaData = props => {
                             <Text>{ meta && filter && humanReadableFilterInfo(meta, filter) }</Text>
                         </View>
                         <View style={{flex: 1}}>
-                            <TouchableOpacity onPress={() => NavigationService.navigate('FilterModal', {backScreen: backScreen, onRefresh: onRefresh})}>
-                                <FontAwesome style={[styles.filter, isFilterActive && styles.active]} name="sliders"/>
-                            </TouchableOpacity>
+                            <Filter {...filterProps}/>
                         </View>
-                        {/* <View style={{flex: 1}}>
-                <TouchableOpacity onPress={onRefresh}>
-                    <FontAwesome style={styles.refresh} name="refresh"/>
-                </TouchableOpacity>
-            </View> */}
                     </View>
             }
         </Fragment>

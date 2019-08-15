@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {SearchBar,} from 'react-native-elements';
 
@@ -7,10 +7,9 @@ import {connect} from "react-redux";
 import {getPosts, resetPostFilter, resetPosts, updatePostFilter} from "../../store/actions/postActions";
 import {authUpdatePreferences} from "../../store/actions/authActions";
 import {uiUpdateViewHistory} from "../../store/actions/uiActions";
-import * as _ from "lodash";
 import PostList from "../../components/List/PostList";
 
-class PostListScreen extends Component {
+class PostListScreen extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -18,43 +17,48 @@ class PostListScreen extends Component {
             isReady: false,
             isLoading: false,
             searchText: "",
-            setTimeoutId: 0
+            setTimeoutId: 0,
+            filter: {
+                isOn: false,
+                type: "",
+                search: "",
+                category: [],
+                radius: 100,
+                orderBy: "nearest",
+            },
         };
 
         this.onChange = this.onChange.bind(this);
         this.onSavePost = this.onSavePost.bind(this);
         this.scrollHandler = this.scrollHandler.bind(this);
+        this.filterUpdateHandler = this.filterUpdateHandler.bind(this);
         this.refresh = this.refresh.bind(this);
     }
 
     async componentDidMount() {
         this.props.resetPosts();
+        let filter = {...this.state.filter};
 
         const { params } = this.props.navigation.state;
-        let baseFilter = {
-            type: "",
-            search: "",
-            category: [],
-        };
-        if (params.type === 'my' || params.type === 'saved'){ baseFilter.radius = "" }
-        if (params.type === 'my' || params.type === 'saved'){ baseFilter.orderBy = "latest" }
+        if (params.type) { filter.type = params.type}
+        if (params.type === 'my' || params.type === 'saved'){ filter.radius = ""; filter.orderBy = "latest"; }
+        if (params.type === 'category' && params.category){ filter.category = params.category }
 
-        await this.props.updatePostFilter({...baseFilter, ...params});
-
+        this.setState({filter: filter});
+        console.log(filter);
         // Don't automatically pull posts for search
-        if (this.props.posts.filter.type === 'search') {
+        if (filter.type === 'search') {
+            console.log('inside search');
             this.setState({isReady: true});
         } else {
-            await this.props.getPosts(this.props.posts.filter) && this.setState({isReady: true});
+            await this.props.getPosts(filter) && this.setState({isReady: true});
         }
 
-    }
-
-    shouldComponentUpdate() {
-        return true;
+        console.log('Post list screen cdm');
     }
 
     componentWillUnmount() {
+        console.log('Post list screen unmounted');
         this.props.resetPosts();
     }
 
@@ -106,27 +110,28 @@ class PostListScreen extends Component {
     }
 
     async scrollHandler(){
+        console.log('scroll handler here');
         if (this.props.posts.posts.meta.to !== this.props.posts.posts.meta.total) {
+            console.log('post using scroll handler');
             await this.props.getPosts(this.props.posts.filter, this.props.posts.posts.links.next);
         }
     }
 
+    filterUpdateHandler(filterData) {
+        console.log('filter updated');
+        this.setState({filter: filterData});
+        this.props.getPosts(filterData);
+    }
+
     render() {
-        const {searchText, isReady, isLoading} = this.state;
-        const {posts, filter} = this.props.posts;
+        const {searchText, isLoading, filter} = this.state;
+        const {posts} = this.props.posts;
         const postListProps = {
-            type: filter.type,
             posts: posts,
-            backScreen: this.props.viewHistory[this.props.viewHistory.length - 1],
-            isFilterActive: ! _.isEqual(filter, {
-                type: "",
-                search: "",
-                category: [],
-                radius: 100,
-                orderBy: "nearest",
-            }),
-            onRefresh: this.refresh,
+            type: filter.type,
             filter: filter,
+            onRefresh: this.refresh,
+            onFilterUpdate: this.filterUpdateHandler,
             onScroll: this.scrollHandler
         };
 

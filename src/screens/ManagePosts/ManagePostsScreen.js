@@ -6,9 +6,6 @@ import {ListItem,} from 'react-native-elements/src/index';
 import Colors from '../../constants/colors';
 import {FontAwesome} from "@expo/vector-icons";
 
-const log = () => {
-};
-
 const managePostList = [
     {
         name: 'New Post',

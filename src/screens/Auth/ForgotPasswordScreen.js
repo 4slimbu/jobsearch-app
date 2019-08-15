@@ -2,16 +2,15 @@ import React, {Component} from 'react';
 import appData from "../../constants/app";
 import {
     ActivityIndicator,
-    Dimensions,
     KeyboardAvoidingView,
     ScrollView,
     StyleSheet,
-    ImageBackground,
     Text,
+    TouchableOpacity,
     UIManager,
-    View, TouchableOpacity,
+    View,
 } from 'react-native';
-import {AppLoading, LinearGradient} from 'expo';
+import {LinearGradient} from 'expo';
 import {Button, Image, Input} from 'react-native-elements';
 
 import {FontAwesome} from '@expo/vector-icons';

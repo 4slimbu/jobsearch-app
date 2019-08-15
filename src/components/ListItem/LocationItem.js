@@ -3,7 +3,6 @@ import {StyleSheet, Text, View} from "react-native";
 import PropTypes from "prop-types";
 import Colors from "../../constants/colors";
 import {Divider} from "react-native-elements";
-import {toReadable} from "../../utils/helper/helper";
 
 const LocationItem = props => {
     const {location, isFirst} = props;
