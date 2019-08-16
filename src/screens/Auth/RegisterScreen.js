@@ -118,10 +118,11 @@ class RegisterScreen extends Component {
             } else if (this.props.auth.isLoggedIn && this.props.auth.user.verified) {
                 this.props.navigation.navigate('App');
             }
+            this.setState({isLoading: false});
         }).catch(err => {
+            this.setState({isLoading: false});
         });
 
-        this._isMounted && this.props.resetRegisterForm();
         this._isMounted && this.setState({isLoading: true});
     }
 

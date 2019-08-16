@@ -8,6 +8,7 @@ import {SearchBar,} from 'react-native-elements';
 import Colors from "../../constants/colors";
 import LocationList from "../../components/List/LocationList";
 import appData from "../../constants/app";
+import ApiService from "../../services/ApiService";
 
 class LocationPickerModal extends Component {
 
@@ -46,15 +47,7 @@ class LocationPickerModal extends Component {
         // Call action only after few milli seconds
         this.setState({isLoading: true});
         let setTimeoutId = setTimeout(() => {
-            const url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?&input=" + searchText + "&types=(cities)&key=" + appData.app.GOOGLE_API_KEY;
-            fetch(url, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                }
-            })
-                .then(res => res.json())
+            ApiService.GoogleApis.searchLocation(searchText)
                 .then(parsedRes => {
                     if (!parsedRes.predictions) {
                         return;
@@ -76,15 +69,7 @@ class LocationPickerModal extends Component {
     }
 
     onSelectPlace(location) {
-        const url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + location.description + "&key=" + appData.app.GOOGLE_API_KEY;
-        fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            }
-        })
-            .then(res => res.json())
+        ApiService.GoogleApis.geocodeAddress(location.description)
             .then(parsedRes => {
                 if (!parsedRes.results) {
                     return;
@@ -120,8 +105,7 @@ class LocationPickerModal extends Component {
         let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
 
         // Get address
-        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + location.coords.latitude + ',' + location.coords.longitude + '&key=' + appData.app.GOOGLE_API_KEY)
-            .then(res => res.json())
+        ApiService.GoogleApis.reverseGeocodeAddress(location.coords.latitude, location.coords.longitude)
             .then(parsedRes => {
                 if (!parsedRes.results) {
                     return;
@@ -157,7 +141,7 @@ class LocationPickerModal extends Component {
                     containerStyle={{backgroundColor: Colors.lightGray, borderWidth: 0}}
                     inputContainerStyle={{backgroundColor: Colors.mediumGray, borderWidth: 0, marginTop: 5}}
                     inputStyle={{marginTop: 6}}
-                    placeholder="Search Location"
+                    placeholder="Search city, suburb or town"
                     showLoading={isLoading}
                     value={isChanged ? searchText : address}
                     multiline={true}
@@ -170,63 +154,5 @@ class LocationPickerModal extends Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'white',
-        // marginTop: Constants.statusBarHeight
-    },
-    headerContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 40,
-        backgroundColor: '#acacac',
-    },
-    heading: {
-        color: 'white',
-        marginTop: 10,
-        fontSize: 22,
-        fontWeight: 'bold',
-    },
-    contentView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    triangleLeft: {
-        position: 'absolute',
-        left: -20,
-        bottom: 0,
-        width: 0,
-        height: 0,
-        borderRightWidth: 20,
-        borderRightColor: 'white',
-        borderBottomWidth: 25,
-        borderBottomColor: 'transparent',
-        borderTopWidth: 25,
-        borderTopColor: 'transparent',
-    },
-    triangleRight: {
-        position: 'absolute',
-        right: -20,
-        top: 0,
-        width: 0,
-        height: 0,
-        borderLeftWidth: 20,
-        borderLeftColor: 'white',
-        borderBottomWidth: 25,
-        borderBottomColor: 'transparent',
-        borderTopWidth: 25,
-        borderTopColor: 'transparent',
-    },
-    inputContainerStyle: {
-        marginTop: 16,
-        width: '90%',
-    },
-    searchBar: {
-        backgroundColor: Colors.grey5
-    }
-});
-
 
 export default LocationPickerModal;

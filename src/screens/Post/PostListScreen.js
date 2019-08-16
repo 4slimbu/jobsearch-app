@@ -64,7 +64,7 @@ class PostListScreen extends Component {
 
     refresh() {
         this.setState({isReady: false});
-        this.props.getPosts(this.props.posts.filter) && this.setState({isReady: true});
+        this.props.getPosts(this.state.filter) && this.setState({isReady: true});
     }
 
     onChange(searchText) {

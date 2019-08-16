@@ -53,7 +53,6 @@ export function callApi(method = 'GET', url, data = {}, headers = null) {
                 })
                 .then(parsedRes => {
                     console.log("Parsed Res");
-                    store.dispatch(uiStopLoading());
                     resolve(parsedRes);
                 })
                 .catch(function (error) {
@@ -148,6 +147,18 @@ const Posts = {
         callApi('GET', API_BASE_URL + '/posts/flag/' + postId)
 };
 
+/**
+ * Handles all pages related requests
+ */
+const GoogleApis = {
+    searchLocation: (searchText) =>
+        callApi('GET', "https://maps.googleapis.com/maps/api/place/autocomplete/json?&input=" + searchText + "&types=(cities)&key=" + appData.app.GOOGLE_API_KEY),
+    geocodeAddress: (address) =>
+        callApi('GET', "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=" + appData.app.GOOGLE_API_KEY),
+    reverseGeocodeAddress: (latitude, longitude) =>
+        callApi('GET', 'https://maps.googleapis.com/maps/api/geocode/json?address=' + latitude + ',' + longitude + '&key=' + appData.app.GOOGLE_API_KEY),
+};
+
 export default {
     Auth,
     Me,
@@ -155,4 +166,5 @@ export default {
     Comments,
     Pages,
     Posts,
+    GoogleApis
 };

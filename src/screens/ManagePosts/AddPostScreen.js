@@ -12,21 +12,9 @@ import {connect} from "react-redux";
 import {addPost} from "../../store/actions/postActions";
 import alertMessage from "../../components/Alert";
 import {resetCategory, resetLocation} from "../../store/actions/formActions";
-import CategoryPicker from "../../components/Picker/CategoryPicker";
 import LocationPicker from "../../components/Picker/LocationPicker";
-
-const PostImages = (props) => {
-    const {type, images, removeImageHandler} = props;
-    return _.map(images, (image, key) => {
-        return (
-            <View key={key}>
-                <FontAwesome color={Colors.darkGray} name="close" size={30}
-                             onPress={() => removeImageHandler(type, key)}/>
-                <Image source={{uri: image.uri}} style={{width: 100, height: 100, marginTop: 10, marginBottom: 10}}/>
-            </View>
-        )
-    });
-};
+import CategoryPicker from "../../components/CategoryPicker";
+import PostImages from "../../components/PostImages";
 
 class AddPostScreen extends Component {
     constructor(props) {
@@ -38,6 +26,7 @@ class AddPostScreen extends Component {
             featuredImage: null,
             additionalImages: [],
             categories: [],
+            selectedCategory: {},
             date: null,
             location: {
                 address: "",
@@ -135,9 +124,8 @@ class AddPostScreen extends Component {
     };
 
     isFormValid() {
-        const {postTitle, postContent, location} = this.state;
+        const {postTitle, postContent, location, selectedCategory} = this.state;
         const {address} = location;
-        const {category} = this.props.forms;
         let errors = {};
 
         if (!postTitle) {
@@ -146,7 +134,7 @@ class AddPostScreen extends Component {
         if (!postContent) {
             errors.postContent = 'Post Content is required!';
         }
-        if (_.isEmpty(category)) {
+        if (_.isEmpty(selectedCategory)) {
             errors.category = 'Category is required!';
         }
         if (_.isEmpty(address)) {
@@ -158,9 +146,8 @@ class AddPostScreen extends Component {
     }
 
     submitHandler() {
-        const {postTitle, postContent, featuredImage, additionalImages, date, location} = this.state;
+        const {postTitle, postContent, featuredImage, additionalImages, date, location, selectedCategory} = this.state;
         const {address, latitude, longitude} = location;
-        const {category} = this.props.forms;
 
         if (!this.isFormValid()) {
             alertMessage({title: "Error", body: "Validation failed"});
@@ -175,7 +162,7 @@ class AddPostScreen extends Component {
         formData.append('address', address);
         formData.append('latitude', latitude);
         formData.append('longitude', longitude);
-        formData.append('category_id', category.id);
+        formData.append('category_id', selectedCategory.id);
         formData.append('expire_at', date);
         formData.append('selected_image', 0);
 
@@ -207,7 +194,14 @@ class AddPostScreen extends Component {
     }
 
     render() {
-        const {featuredImage, additionalImages, errors, isLoading, location} = this.state;
+        const {featuredImage, additionalImages, errors, isLoading, location, selectedCategory} = this.state;
+        const {categories} = this.props;
+
+        const categoryPickerProps = {
+            categories: categories,
+            selectedCategory: selectedCategory,
+            onChange: this.changeHandler
+        };
 
         return (
             <ScrollView style={globalStyles.scrollViewContainer}>
@@ -291,11 +285,8 @@ class AddPostScreen extends Component {
                         <View>
                             <Text style={globalStyles.formTitle}>Category</Text>
 
-                            <CategoryPicker
-                                category={this.props.forms.category}
-                                navigation={this.props.navigation}
-                                backScreen="AddPost"
-                            />
+                            <CategoryPicker {...categoryPickerProps}/>
+
                             <Text style={{
                                 color: Colors.danger,
                                 marginTop: 5

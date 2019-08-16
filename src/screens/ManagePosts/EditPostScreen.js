@@ -13,29 +13,10 @@ import {getPost, updatePost} from "../../store/actions/postActions";
 import {findAdditionalImages, findFeaturedImage} from "../../utils/helper/helper";
 import alertMessage from "../../components/Alert";
 import {resetCategory, resetLocation, setCategory, setLocation} from "../../store/actions/formActions";
-import CategoryPicker from "../../components/Picker/CategoryPicker";
 import LocationPicker from "../../components/Picker/LocationPicker";
-
-const PostImages = (props) => {
-    const {type, images, removeImageHandler} = props;
-    return _.map(images, (image, key) => {
-        return (
-            <View style={{}} key={key}>
-                <FontAwesome
-                    color={Colors.primary}
-                    style={styles.postThumbnailRemover}
-                    name="trash"
-                    size={22}
-                    onPress={() => removeImageHandler(type, key, image)}
-                />
-                <Image
-                    source={{uri: image.uri}}
-                    style={styles.postThumbnail}
-                />
-            </View>
-        )
-    });
-};
+import CategoryPicker from "../../components/CategoryPicker";
+import NavigationService from "../../services/NavigationService";
+import PostImages from "../../components/PostImages";
 
 class EditPostScreen extends Component {
     constructor(props) {
@@ -48,12 +29,12 @@ class EditPostScreen extends Component {
             featuredImage: null,
             additionalImages: [],
             categories: [],
+            selectedCategory: {},
             location: {
                 address: "",
                 latitude: "",
                 longitude: ""
             },
-            date: null,
             imagesToRemove: [],
             errors: {},
             isLoading: false
@@ -94,7 +75,7 @@ class EditPostScreen extends Component {
                 postContent: post.body,
                 featuredImage: findFeaturedImage(post.postImages),
                 additionalImages: findAdditionalImages(post.postImages),
-                date: post.expire_at,
+                selectedCategory: post.category,
                 location: {
                     address: post.address,
                     latitude: post.latitude,
@@ -102,7 +83,6 @@ class EditPostScreen extends Component {
                 }
             });
 
-            this.props.setCategory(post.category);
         }).catch(err => {
         });
 
@@ -180,14 +160,13 @@ class EditPostScreen extends Component {
     };
 
     isFormValid() {
-        const {postTitle, postContent, location} = this.state;
+        const {postTitle, postContent, location, selectedCategory} = this.state;
         const {address} = location;
-        const {category} = this.props.forms;
         let errors = {};
 
         if (!postTitle) { errors.postTitle = 'Post Title is required!'; }
         if (!postContent) { errors.postContent = 'Post Content is required!'; }
-        if (_.isEmpty(category)) { errors.category = 'Category is required!'; }
+        if (_.isEmpty(selectedCategory)) { errors.category = 'Category is required!'; }
         if (_.isEmpty(address)) { errors.address = "Location is required"; }
 
         this.setState({errors});
@@ -195,9 +174,8 @@ class EditPostScreen extends Component {
     }
 
     submitHandler() {
-        const {postId, postTitle, postContent, featuredImage,additionalImages, selectedCategoryId, imagesToRemove, date, location} = this.state;
+        const {postId, postTitle, postContent, featuredImage,additionalImages, selectedCategory, imagesToRemove, location} = this.state;
         const {address, latitude, longitude} = location;
-        const {category} = this.props.forms;
 
         if (!this.isFormValid()) {
             alertMessage({title: "Error", body: "Validation failed"});
@@ -212,7 +190,7 @@ class EditPostScreen extends Component {
         formData.append('address', address);
         formData.append('latitude', latitude);
         formData.append('longitude', longitude);
-        formData.append('category_id', category.id);
+        formData.append('category_id', selectedCategory.id);
         formData.append('selected_image', 0);
 
         if (imagesToRemove) {
@@ -238,7 +216,7 @@ class EditPostScreen extends Component {
         this.props.updatePost(postId, formData).then(res => {
             alertMessage({title: "Success", body: "Post updated successfully"});
             this.props.navigation.state.params.onRefresh();
-            this.props.navigation.goBack();
+            NavigationService.navigateBack();
         }).catch(err => {
             alertMessage({title: "Error", body: "Unable to update post"});
         });
@@ -251,7 +229,13 @@ class EditPostScreen extends Component {
     }
 
     render() {
-        const {postTitle, postContent, featuredImage, additionalImages, location, errors, isLoading} = this.state;
+        const {postTitle, postContent, featuredImage, additionalImages, location, errors, isLoading, selectedCategory} = this.state;
+        const {categories} = this.props;
+        const categoryPickerProps = {
+            categories: categories,
+            selectedCategory: selectedCategory,
+            onChange: this.changeHandler
+        };
 
         return (
             <ScrollView style={globalStyles.scrollViewContainer}>
@@ -341,11 +325,7 @@ class EditPostScreen extends Component {
                         <View>
                             <Text style={globalStyles.formTitle}>Category</Text>
 
-                            <CategoryPicker
-                                category={this.props.forms.category}
-                                navigation={this.props.navigation}
-                                backScreen="EditPost"
-                            />
+                            <CategoryPicker {...categoryPickerProps}/>
                             <Text style={{color: Colors.danger, marginTop: 5}}>{errors.category ? errors.category: ''}</Text>
                         </View>
                         <View>

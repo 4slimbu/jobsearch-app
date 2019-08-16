@@ -4,6 +4,7 @@ import {FontAwesome} from '@expo/vector-icons';
 import FilterModal from "./FilterModal";
 import Colors from "../constants/colors";
 import * as _ from "lodash";
+import * as Constants from "expo-constants";
 
 class Filter extends Component {
     constructor(props) {
@@ -35,30 +36,12 @@ class Filter extends Component {
         this.reset = this.reset.bind(this);
     }
 
-    static getDerivedStateFromProps(props, state) {
-        if (!_.isEqual(props.filter, state.filter)) {
-            return {
-                filter: props.filter
-            };
-        }
-        // Return null to indicate no change to state.
-        return null;
-    }
-
     componentDidMount() {
         this._isMounted = true;
         console.log('Filter mounted');
         this.setState({
             filter: this.props.filter,
         })
-    }
-
-    componentDidUpdate(prevProps) {
-        if (!_.isEqual(prevProps.filter, this.props.filter)) {
-            return {
-                filter: props.filter
-            };
-        }
     }
 
     componentWillMount() {
@@ -104,7 +87,7 @@ class Filter extends Component {
                     transparent={false}
                     visible={this.state.isVisible}
                     >
-                    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                    <View style={styles.modalContentWrapper}>
                         <View>
                             <FilterModal filter={this.state.filter} onChangeFilter={this.filterChangeHandler}/>
                             <View style={{height: 54, flexDirection: 'row', alignItems: 'center'}}>
@@ -129,7 +112,13 @@ class Filter extends Component {
 }
 
 const styles = StyleSheet.create({
-   
+    modalContentWrapper: {
+        flex: 1,
+        marginTop: Constants.statusBarHeight,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
     filterPicker: {
         flex: 1,
         borderColor: Colors.greyOutline,
