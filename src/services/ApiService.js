@@ -2,6 +2,7 @@ import appData from "../constants/app";
 import {uiStartLoading, uiStopLoading} from "../store/actions/uiActions";
 import store from "../store/configureStore";
 import * as _ from "lodash";
+import * as axios from "axios";
 
 const API_BASE_URL = appData.app.API_BASE_URL;
 
@@ -10,58 +11,54 @@ const API_BASE_URL = appData.app.API_BASE_URL;
  *
  */
 export function callApi(method = 'GET', url, data = {}, headers = null) {
-    let fetchArgs = {
+    let axiosArgs = {
         method: method,
+        url: url,
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
-        }
+        },
+        crossDomain: true,
     };
 
     // Set authorization header if present
     if (store.getState().auth.token) {
-        fetchArgs.headers["Authorization"] = "Bearer " + store.getState().auth.token;
+        axiosArgs.headers["Authorization"] = "Bearer " + store.getState().auth.token;
     }
 
     // Send body only if it is present. Also, don't sent body on get as it throws an error
     if (!_.isEmpty(data) && method !== 'GET') {
         // Auto detect form data
         if (data instanceof FormData) {
-            fetchArgs.headers["Content-Type"] = "multipart/form-data";
-            fetchArgs["body"] = data;
-        } else {
-            fetchArgs["body"] = JSON.stringify(data);
+            axiosArgs.headers["Content-Type"] = "multipart/form-data";
         }
+        axiosArgs.data = data;
     }
 
     // If headers is present, merge with default headers
     if (!_.isEmpty(headers)) {
-        fetchArgs.headers = {
-            ...fetchArgs.headers,
+        axiosArgs.headers = {
+            ...axiosArgs.headers,
             ...headers
         }
     }
 
     return new Promise((resolve, reject) => {
         try {
-            console.log(url);
             store.dispatch(uiStartLoading());
-            return fetch(url, fetchArgs)
-                .then(res => {
+            return axios.request(axiosArgs).then(response => {
+                    if (response.data) {
+                        resolve(response.data);
+                    } else {
+                        reject();
+                    }
                     store.dispatch(uiStopLoading());
-                    return res.json();
-                })
-                .then(parsedRes => {
-                    console.log("Parsed Res");
-                    resolve(parsedRes);
                 })
                 .catch(function (error) {
-                    console.log("Err", error);
                     store.dispatch(uiStopLoading());
                     reject();
                 });
         } catch (e) {
-            console.log("E", e);
             store.dispatch(uiStopLoading());
             reject();
         }

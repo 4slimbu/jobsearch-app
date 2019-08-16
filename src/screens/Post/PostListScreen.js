@@ -45,20 +45,15 @@ class PostListScreen extends Component {
         if (params.type === 'category' && params.category){ filter.category = params.category }
 
         this.setState({filter: filter});
-        console.log(filter);
         // Don't automatically pull posts for search
         if (filter.type === 'search') {
-            console.log('inside search');
             this.setState({isReady: true});
         } else {
             await this.props.getPosts(filter) && this.setState({isReady: true});
         }
-
-        console.log('Post list screen cdm');
     }
 
     componentWillUnmount() {
-        console.log('Post list screen unmounted');
         this.props.resetPosts();
     }
 

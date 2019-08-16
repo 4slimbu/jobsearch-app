@@ -38,18 +38,12 @@ class Filter extends Component {
 
     componentDidMount() {
         this._isMounted = true;
-        console.log('Filter mounted');
         this.setState({
             filter: this.props.filter,
         })
     }
 
-    componentWillMount() {
-        console.log('Filter cwm');
-    }
-
     componentWillUnmount() {
-        console.log('Filter cwum');
         this.reset();
         this._isMounted = false;
     }
