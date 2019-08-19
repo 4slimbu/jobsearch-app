@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import {Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {connect} from "react-redux";
 import * as _ from "lodash";
-import Colors from "../constants/colors";
+import Colors from "../../../constants/colors";
 import * as Constants from "expo-constants";
+import * as globalStyles from "../../../constants/globalStyle";
 
 /**
  * This will display a modal to pick category.
@@ -96,7 +97,7 @@ class CategoryPickerModal extends Component {
                 transparent={false}
                 visible={isVisible}
             >
-                <View style={styles.modalContentWrapper}>
+                <View style={globalStyles.modalContentWrapper}>
                     <ScrollView style={styles.container}>
                         <View style={styles.section}>
                             <Text style={styles.heading}>Categories</Text>
@@ -159,12 +160,6 @@ const styles = StyleSheet.create({
     categoryActive: {
         color: Colors.primary,
         borderColor: Colors.primary,
-    },
-    modalContentWrapper: {
-        flex: 1,
-        marginTop: Constants.statusBarHeight,
-        alignItems: 'center',
-        justifyContent: 'center'
     },
 
     button: {

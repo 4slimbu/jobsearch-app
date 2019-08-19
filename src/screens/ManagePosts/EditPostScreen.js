@@ -13,8 +13,8 @@ import {getPost, updatePost} from "../../store/actions/postActions";
 import {findAdditionalImages, findFeaturedImage} from "../../utils/helper/helper";
 import alertMessage from "../../components/Alert";
 import {resetCategory, resetLocation, setCategory, setLocation} from "../../store/actions/formActions";
-import LocationPicker from "../../components/Picker/LocationPicker";
-import CategoryPicker from "../../components/CategoryPicker";
+import LocationPicker from "../../components/Picker/Location/LocationPicker";
+import CategoryPicker from "../../components/Picker/Category/CategoryPicker";
 import NavigationService from "../../services/NavigationService";
 import PostImages from "../../components/PostImages";
 

@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FontAwesome} from '@expo/vector-icons';
-import Colors from "../../constants/colors";
+import Colors from "../../../constants/colors";
 import LocationPickerModal from "./LocationPickerModal";
 import * as Constants from "expo-constants";
+import * as globalStyles from "../../../constants/globalStyle";
 
 class LocationPicker extends Component {
     constructor(props) {
@@ -82,7 +83,7 @@ class LocationPicker extends Component {
                     transparent={false}
                     visible={this.state.isVisible}
                     >
-                    <View style={styles.modalContentWrapper}>
+                    <View style={globalStyles.modalContentWrapper}>
                         <LocationPickerModal location={this.state.location} onPickLocation={this.pickLocationHandler}/>
                         <View style={{height: 54, flexDirection: 'row', alignItems: 'center'}}>
                             <TouchableOpacity style={styles.button} onPress={this.cancelHandler}>
@@ -142,13 +143,6 @@ const styles = StyleSheet.create({
     dullText: {
         color: Colors.mediumGray
     },
-
-    modalContentWrapper: {
-        flex: 1,
-        marginTop: Constants.statusBarHeight,
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
 });
 
 export default LocationPicker;

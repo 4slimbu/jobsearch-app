@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import globalStyles from "../../constants/globalStyle";
+import globalStyles from "../../../constants/globalStyle";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import {ScrollView, StyleSheet} from 'react-native';
 import {SearchBar,} from 'react-native-elements';
 
-import Colors from "../../constants/colors";
-import LocationList from "../../components/List/LocationList";
-import appData from "../../constants/app";
-import ApiService from "../../services/ApiService";
+import Colors from "../../../constants/colors";
+import LocationList from "../../List/LocationList";
+import appData from "../../../constants/app";
+import ApiService from "../../../services/ApiService";
 
 class LocationPickerModal extends Component {
 

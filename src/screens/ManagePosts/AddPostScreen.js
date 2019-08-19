@@ -12,8 +12,8 @@ import {connect} from "react-redux";
 import {addPost} from "../../store/actions/postActions";
 import alertMessage from "../../components/Alert";
 import {resetCategory, resetLocation} from "../../store/actions/formActions";
-import LocationPicker from "../../components/Picker/LocationPicker";
-import CategoryPicker from "../../components/CategoryPicker";
+import LocationPicker from "../../components/Picker/Location/LocationPicker";
+import CategoryPicker from "../../components/Picker/Category/CategoryPicker";
 import PostImages from "../../components/PostImages";
 
 class AddPostScreen extends Component {

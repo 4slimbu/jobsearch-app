@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import CategoryPickerModal from "./CategoryPickerModal";
-import Colors from "../constants/colors";
+import Colors from "../../../constants/colors";
 import PropTypes from "prop-types";
 
 class CategoryPicker extends Component {

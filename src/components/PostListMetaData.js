@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Colors from "../constants/colors";
 import {humanReadableFilterInfo} from "../utils/helper/helper";
-import Filter from "./Filter";
+import Filter from "./Picker/Filter/Filter";
 
 const PostListMetaData = props => {
     const {meta, filter, onFilterUpdate} = props;

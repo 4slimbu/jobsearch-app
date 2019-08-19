@@ -11,7 +11,7 @@ import {updateMyProfile, updatePassword} from "../../store/actions/authActions";
 import alertMessage from "../../components/Alert";
 import * as _ from "lodash";
 import {setLocation} from "../../store/actions/formActions";
-import LocationPicker from "../../components/Picker/LocationPicker";
+import LocationPicker from "../../components/Picker/Location/LocationPicker";
 
 class MyProfileScreen extends Component {
     constructor(props) {

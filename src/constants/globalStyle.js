@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
 import Colors from "./colors";
+import {getStatusBarHeight} from "react-native-status-bar-height";
 
 module.exports = StyleSheet.create({
     innerLogo: {
@@ -30,7 +31,7 @@ module.exports = StyleSheet.create({
 
     inputStyle: {
         paddingLeft: 10,
-        color:Colors.darkGray,
+        color: Colors.darkGray,
     },
 
     inputViewContainer: {
@@ -38,10 +39,10 @@ module.exports = StyleSheet.create({
     },
 
     btnPrimaryContainer: {
-        marginTop: 32, 
+        marginTop: 32,
         flex: 1,
     },
-    
+
     btnPrimary: {
         backgroundColor: Colors.primary,
         borderRadius: 5,
@@ -94,7 +95,7 @@ module.exports = StyleSheet.create({
         marginLeft: 0,
     },
     btnLinkRight: {
-        marginLeft:0,
+        marginLeft: 0,
     },
     btnLinkTitle: {
         color: Colors.darkGray,
@@ -102,8 +103,8 @@ module.exports = StyleSheet.create({
     },
 
     inputIcon: {
-        backgroundColor:'transparent',
-        fontSize:18,
+        backgroundColor: 'transparent',
+        fontSize: 18,
     },
 
     textNote: {
@@ -121,7 +122,7 @@ module.exports = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'normal',
     },
-    
+
     formRow: {
         width: '100%',
         marginBottom: 5,
@@ -160,7 +161,7 @@ module.exports = StyleSheet.create({
     textArea: {
         borderWidth: 1,
         borderColor: Colors.greyOutline,
-        minHeight:104,
+        minHeight: 104,
         borderRadius: 5,
         backgroundColor: Colors.lightGray,
         padding: 5,
@@ -171,7 +172,7 @@ module.exports = StyleSheet.create({
     textAreaLight: {
         borderWidth: 1,
         borderColor: Colors.greyOutline,
-        minHeight:104,
+        minHeight: 104,
         borderRadius: 5,
         backgroundColor: 'white',
         padding: 5,
@@ -205,5 +206,12 @@ module.exports = StyleSheet.create({
         color: Colors.danger,
         marginTop: 5,
         fontSize: 12,
+    },
+
+    modalContentWrapper: {
+        flex: 1,
+        marginTop: getStatusBarHeight(),
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 });

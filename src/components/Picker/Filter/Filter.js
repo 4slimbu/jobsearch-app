@@ -2,9 +2,10 @@ import React, {Component, Fragment} from 'react';
 import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FontAwesome} from '@expo/vector-icons';
 import FilterModal from "./FilterModal";
-import Colors from "../constants/colors";
+import Colors from "../../../constants/colors";
 import * as _ from "lodash";
 import * as Constants from "expo-constants";
+import * as globalStyles from "../../../constants/globalStyle";
 
 class Filter extends Component {
     constructor(props) {
@@ -81,7 +82,7 @@ class Filter extends Component {
                     transparent={false}
                     visible={this.state.isVisible}
                     >
-                    <View style={styles.modalContentWrapper}>
+                    <View style={globalStyles.modalContentWrapper}>
                         <View>
                             <FilterModal filter={this.state.filter} onChangeFilter={this.filterChangeHandler}/>
                             <View style={{height: 54, flexDirection: 'row', alignItems: 'center'}}>
@@ -106,13 +107,6 @@ class Filter extends Component {
 }
 
 const styles = StyleSheet.create({
-    modalContentWrapper: {
-        flex: 1,
-        marginTop: Constants.statusBarHeight,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-
     filterPicker: {
         flex: 1,
         borderColor: Colors.greyOutline,

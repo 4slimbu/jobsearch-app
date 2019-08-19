@@ -11,7 +11,7 @@ import Colors from "../../constants/colors";
 import {getDeviceId, validateEmail} from "../../utils/helper/helper";
 import * as _ from "lodash";
 import globalStyles from "../../constants/globalStyle";
-import LocationPicker from "../../components/Picker/LocationPicker";
+import LocationPicker from "../../components/Picker/Location/LocationPicker";
 
 // Enable LayoutAnimation on Android
 UIManager.setLayoutAnimationEnabledExperimental &&
