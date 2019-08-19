@@ -1,20 +1,15 @@
 import React, {Component} from 'react';
-import {ActivityIndicator, Modal} from 'react-native';
-import Colors from "../constants/colors";
+import {View} from 'react-native';
 import {connect} from "react-redux";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 class AppLoading extends Component {
     render() {
         const {isLoading} = this.props.ui;
         return (
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={isLoading}
-            >
-                <ActivityIndicator size="large" color={Colors.primary} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}/>
-            </Modal>
-
+            <View>
+                <Spinner visible={isLoading}/>
+            </View>
         )
     }
 };
