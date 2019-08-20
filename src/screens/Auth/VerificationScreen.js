@@ -31,7 +31,6 @@ class VerificationScreen extends Component {
         super(props);
 
         this.state = {
-            isLoading: false,
             verificationCode: '',
             // fresh | processing | successful | unsuccessful
             verificationStatus: 'fresh'
@@ -80,7 +79,6 @@ class VerificationScreen extends Component {
 
     render() {
         const {
-            isLoading,
             verificationCode,
             verificationStatus
         } = this.state;
@@ -161,8 +159,6 @@ class VerificationScreen extends Component {
                             title={verificationStatus === 'unsuccessful' ? 'Try Again' : (verificationStatus === 'successful' ? 'Continue': 'Verify Email')}
                             onPress={verificationStatus === 'unsuccessful' ? this.tryAgainHandler : (verificationStatus === 'successful' ? this.continueHandler: this.verifyEmailHandler)}
                             titleStyle={styles.loginTextButton}
-                            loading={isLoading}
-                            disabled={isLoading}
                         />
                         {
                             (verificationStatus === 'successful' || verificationStatus === 'fresh') &&

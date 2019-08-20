@@ -32,7 +32,6 @@ class LoginScreen extends Component {
             email: '',
             password: '',
             isReady: false,
-            isLoading: false,
             isLoggedIn: false,
             errors: {}
         };
@@ -86,8 +85,6 @@ class LoginScreen extends Component {
             return;
         }
 
-        this.setState({isLoading: true});
-
         await this.props.onTryAuth({email: email, password: password}).then(() => {
             if (this.props.auth.isLoggedIn && !this.props.auth.user.verified) {
                 this.props.navigation.navigate('VerificationScreen');
@@ -98,7 +95,6 @@ class LoginScreen extends Component {
         });
 
         this._isMounted && this.setState({isReady: true});
-        this._isMounted && this.setState({isLoading: false});
     }
 
     facebookLoginHandler() {
@@ -112,7 +108,6 @@ class LoginScreen extends Component {
     render() {
         const {
             isReady,
-            isLoading,
             email,
             password,
             errors
@@ -183,8 +178,6 @@ class LoginScreen extends Component {
                                         activeOpacity={0.8}
                                         title="Login"
                                         onPress={this.normalLoginHandler}                                
-                                        loading={isLoading}
-                                        disabled={isLoading}
                                     />
                                 </View>
                                 <View style={[globalStyles.formFlexRow, { justifyContent: "space-between", marginBottom: 50,}]}>

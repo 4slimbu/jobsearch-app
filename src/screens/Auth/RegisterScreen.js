@@ -24,7 +24,6 @@ class RegisterScreen extends Component {
         this._isMounted = false;
 
         this.state = {
-            isLoading: false,
             email: "",
             password: "",
             confirmPassword: "",
@@ -97,7 +96,6 @@ class RegisterScreen extends Component {
         }
 
         // Start processing form
-        this.setState({isLoading: true});
         const {email, password, firstName, lastName, gender, contactNumber, location} = this.state;
         const {address, latitude, longitude} = location;
         const deviceId = await getDeviceId();
@@ -118,12 +116,8 @@ class RegisterScreen extends Component {
             } else if (this.props.auth.isLoggedIn && this.props.auth.user.verified) {
                 this.props.navigation.navigate('App');
             }
-            this.setState({isLoading: false});
         }).catch(err => {
-            this.setState({isLoading: false});
         });
-
-        this._isMounted && this.setState({isLoading: true});
     }
 
     onChangeHandler(data) {
@@ -132,7 +126,6 @@ class RegisterScreen extends Component {
 
     render() {
         const {
-            isLoading,
             email,
             password,
             confirmPassword,
@@ -322,8 +315,6 @@ class RegisterScreen extends Component {
                                 activeOpacity={0.8}
                                 title="Register"
                                 onPress={this.registerHandler}
-                                loading={isLoading}
-                                disabled={isLoading}
                             />
                         </View>
                         <View style={[globalStyles.formFlexRow, { justifyContent: "space-between", marginBottom: 10,}]}>

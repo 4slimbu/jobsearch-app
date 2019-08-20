@@ -32,7 +32,6 @@ class ForgotPasswordScreen extends Component {
 
         // status: fresh|receivedCode|unsuccessful|successful
         this.state = {
-            isLoading: false,
             email: '',
             password: '',
             confirmPassword: '',
@@ -59,14 +58,11 @@ class ForgotPasswordScreen extends Component {
         }
 
         // Send Forgot Password Email
-        this.setState({isLoading: true});
-
         await this.props.sendForgotPasswordEmail(this.state.email).then(res => {
         }).catch(err => {
         });
 
         this.setState({status: 'codeReceived'});
-        this.setState({isLoading: false});
     }
 
     isResetFormValid() {
@@ -96,8 +92,6 @@ class ForgotPasswordScreen extends Component {
             return;
         }
 
-        this.setState({isLoading: true});
-
         const data = {
             email: email,
             password: password,
@@ -109,7 +103,6 @@ class ForgotPasswordScreen extends Component {
             this.setState({status: 'unsuccessful'});
         });
 
-        this.setState({isLoading: false});
     }
 
     tryAgainHandler() {
@@ -126,7 +119,6 @@ class ForgotPasswordScreen extends Component {
 
     render() {
         const {
-            isLoading,
             email,
             password,
             confirmPassword,
@@ -290,8 +282,6 @@ class ForgotPasswordScreen extends Component {
                                 activeOpacity={0.8}
                                 title={submitButtonTitle}
                                 onPress={submitButtonPressHandler}
-                                loading={isLoading}
-                                disabled={isLoading}
                             />
 
                             {

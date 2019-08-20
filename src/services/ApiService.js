@@ -3,6 +3,7 @@ import {uiStartLoading, uiStopLoading} from "../store/actions/uiActions";
 import store from "../store/configureStore";
 import * as _ from "lodash";
 import * as axios from "axios";
+import flashMessage from "../components/FlashMessage";
 
 const API_BASE_URL = appData.app.API_BASE_URL;
 
@@ -50,17 +51,26 @@ export function callApi(method = 'GET', url, data = {}, headers = null) {
                     if (response.data) {
                         resolve(response.data);
                     } else {
-                        reject();
+                        reject(response);
                     }
                     store.dispatch(uiStopLoading());
                 })
                 .catch(function (error) {
                     store.dispatch(uiStopLoading());
-                    reject();
+
+                    // display alert
+                    let errorMessage = error.response && error.response.data && error.response.data.message ? error.response.data.message : "Unknown Error!";
+                    flashMessage({title: "Error", body: errorMessage});
+
+                    reject(error);
                 });
         } catch (e) {
             store.dispatch(uiStopLoading());
-            reject();
+
+            // display alert
+            flashMessage({title: "Error", body: "Network failed!"});
+
+            reject(e);
         }
     });
 }

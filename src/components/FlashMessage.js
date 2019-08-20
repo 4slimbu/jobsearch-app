@@ -1,7 +1,7 @@
 import React from 'react';
 import { Platform, Alert, AlertIOS } from 'react-native';
 
-const FlashMessage = props => {
+const flashMessage = props => {
     const {title, body} = props;
     return (
         Platform.OS === 'ios' ?
@@ -24,4 +24,4 @@ const FlashMessage = props => {
     )
 };
 
-export default FlashMessage;
+export default flashMessage;

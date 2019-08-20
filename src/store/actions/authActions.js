@@ -71,20 +71,16 @@ export const tryAuth = (authData, authMode = 'login') => {
     return dispatch => {
         return new Promise((resolve, reject) => {
             return tryAuth(body)
-                .then(parsedRes => {
-                    if (!parsedRes.access_token) {
-                        if (parsedRes.error === 'UserExistsException' && parsedRes.message) {
-                            alertMessage({title: "Error", body: parsedRes.message});
-                        } else {
-                            alertMessage({title: "Error", body: "Authentication failed, please try again!"});
-                        }
-                    } else {
-                        dispatch(storeAuthInfo(parsedRes));
+                .then(response => {
+                    if (! response.access_token) {
+                        reject(response);
                     }
-                    resolve(parsedRes);
+
+                    dispatch(storeAuthInfo(response));
+                    resolve(response);
                 })
                 .catch(err => {
-                    reject();
+                    reject(err);
                 });
         });
     };
@@ -241,7 +237,13 @@ export const verifyEmail = (verificationCode) => {
 export const sendForgotPasswordEmail = (email) => {
     return dispatch => {
         return new Promise((resolve, reject) => {
-            return ApiService.Auth.forgotPassword({email: email});
+            return ApiService.Auth.forgotPassword({email: email})
+                .then(parsedRes => {
+                    resolve(parsedRes);
+                })
+                .catch(function () {
+                    reject();
+                });
         });
     };
 };
@@ -255,7 +257,13 @@ export const resetPassword = (data) => {
 
     return dispatch => {
         return new Promise((resolve, reject) => {
-            return ApiService.Auth.resetPassword(body);
+            return ApiService.Auth.resetPassword(body)
+                .then(parsedRes => {
+                    resolve(parsedRes);
+                })
+                .catch(function () {
+                    reject();
+                });
         });
     };
 };
@@ -263,7 +271,13 @@ export const resetPassword = (data) => {
 export const reSendVerificationCode = () => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
-            return ApiService.Auth.reSendVerificationCode({});
+            return ApiService.Auth.reSendVerificationCode({})
+                .then(parsedRes => {
+                    resolve(parsedRes);
+                })
+                .catch(function () {
+                    reject();
+                });
         });
     };
 };
@@ -294,7 +308,13 @@ export const updateMyProfile = (formData) => {
 export const updatePassword = (formData) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
-            return ApiService.Me.resetPassword(formData);
+            return ApiService.Me.resetPassword(formData)
+                .then(parsedRes => {
+                    resolve(parsedRes);
+                })
+                .catch(function () {
+                    reject();
+                });
         });
     };
 };
