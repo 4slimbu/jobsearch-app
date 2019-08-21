@@ -24,12 +24,11 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.responsivepixel.loksewa",
+      "bundleIdentifier": "com.responsivepixel.kchahiyo",
       "supportsTablet": true
     },
     "android": {
-      "package": "com.responsivepixel.loksewa",
-      "googleServicesFile": "./google-services.json"
+      "package": "com.responsivepixel.kchahiyo"
     }
   }
 }
