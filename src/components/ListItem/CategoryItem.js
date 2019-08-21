@@ -10,6 +10,7 @@ const categoryItem = props => {
                         onPress={onSelectCategory}>
             <FontAwesome style={styles.catIcon} name={category.icon}/>
             <Text style={styles.categoryText}>{category.name}</Text>
+            <Text style={styles.postCountText}>{category.posts_count}</Text>
         </TouchableOpacity>
     )
 };
@@ -32,6 +33,19 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: 'bold',
         marginTop: 5,
+    },
+    postCountText: {
+        color: Colors.darkGray,
+        fontSize: 13,
+        fontWeight: 'bold',
+        marginTop: 5,
+        borderRadius: 15,
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+        borderColor: Colors.mediumGray,
+        borderWidth: 1
     },
 });
 

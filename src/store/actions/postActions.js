@@ -47,12 +47,12 @@ export const getPosts = (queryObject, url=null) => {
 
         return new Promise((resolve, reject) => {
             ApiService.Posts.all({url: url, queryString: queryString})
-                .then(parsedRes => {
-                    if (parsedRes.data) {
+                .then(response => {
+                    if (response.data) {
                         if (isFreshSearch) {
-                            dispatch( setPosts(parsedRes) );
+                            dispatch( setPosts(response) );
                         } else {
-                            dispatch( updatePosts(parsedRes) );
+                            dispatch( updatePosts(response) );
                         }
                         // resolve(parsedRes);
                     } else {

@@ -70,7 +70,7 @@ class Filter extends Component {
     }
 
     render() {
-        const {filter} = this.state;
+        const filter = this.state.filter && this.state.filter.isOn ? this.state.filter : this.props.filter;
         return (
             <Fragment>
                 <TouchableOpacity onPress={() => this.setState({isVisible: true})}>
@@ -84,7 +84,7 @@ class Filter extends Component {
                     >
                     <View style={globalStyles.modalContentWrapper}>
                         <View>
-                            <FilterModal filter={this.state.filter} onChangeFilter={this.filterChangeHandler}/>
+                            <FilterModal filter={filter} onChangeFilter={this.filterChangeHandler}/>
                             <View style={{height: 54, flexDirection: 'row', alignItems: 'center'}}>
                                 <TouchableOpacity style={styles.button} onPress={this.cancelHandler}>
                                     <Text>Cancel</Text>

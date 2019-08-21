@@ -6,8 +6,8 @@ import {getStatusBarHeight} from "react-native-status-bar-height";
 module.exports = StyleSheet.create({
     innerLogo: {
         marginLeft: 10,
-        width: 40,
-        height: 40,
+        width: 32,
+        height: 32,
     },
 
     keyboardAvoidingView: {
