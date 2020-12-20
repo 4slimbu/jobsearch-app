@@ -6,3 +6,4 @@ npm-debug.*
 /beta
 .idea/*
 .vscode/*
+tags
