@@ -16,7 +16,7 @@ const registerForPushNotificationsAsync = async () => {
         return;
     }
 
-    let deviceId = await AsyncStorage.getItem('loksewa:auth:deviceId');
+    let deviceId = await AsyncStorage.getItem('jobsearch:auth:deviceId');
 
     if (deviceId) {
         return;
@@ -44,7 +44,7 @@ const registerForPushNotificationsAsync = async () => {
     // Get the token that uniquely identifies this device
     deviceId = await Notifications.getExpoPushTokenAsync();
 
-    AsyncStorage.setItem("loksewa:auth:deviceId", deviceId);
+    AsyncStorage.setItem("jobsearch:auth:deviceId", deviceId);
 };
 
 const AppContainer = createAppContainer(MainNavigator);

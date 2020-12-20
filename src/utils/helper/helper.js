@@ -77,7 +77,7 @@ export function findAdditionalImages(postImages) {
 export async function getDeviceId() {
     let deviceId = '';
     try {
-        deviceId =  await AsyncStorage.getItem('loksewa:auth:deviceId');
+        deviceId =  await AsyncStorage.getItem('jobsearch:auth:deviceId');
     } catch (error) {
     }
     return deviceId;

@@ -96,9 +96,9 @@ export const storeAuthInfo = (res) => {
         const expiryDate = now.getTime() + expiresIn * 1000;
 
         // Store user info in Async Storage
-        AsyncStorage.setItem("loksewa:auth:user", JSON.stringify(user));
-        AsyncStorage.setItem("loksewa:auth:token", token);
-        AsyncStorage.setItem("loksewa:auth:expiryDate", expiryDate.toString());
+        AsyncStorage.setItem("jobsearch:auth:user", JSON.stringify(user));
+        AsyncStorage.setItem("jobsearch:auth:token", token);
+        AsyncStorage.setItem("jobsearch:auth:expiryDate", expiryDate.toString());
 
         // Dispatch actions to store Auth info in the redux store
         dispatch(authSetToken(token, expiryDate));
@@ -114,7 +114,7 @@ export const authGetToken = (dispatch, getState) => {
             const expiryDate = getState().auth.expiryDate;
             if (!token || new Date(expiryDate) <= new Date()) {
                 let fetchedToken, fetchedExpiryDate, fetchedUser;
-                AsyncStorage.getItem("loksewa:auth:token")
+                AsyncStorage.getItem("jobsearch:auth:token")
                     .catch(err => reject())
                     .then(tokenFromStorage => {
                         fetchedToken = tokenFromStorage;
@@ -122,14 +122,14 @@ export const authGetToken = (dispatch, getState) => {
                             reject();
                             return;
                         }
-                        return AsyncStorage.getItem("loksewa:auth:expiryDate");
+                        return AsyncStorage.getItem("jobsearch:auth:expiryDate");
                     })
                     .then(expiryDate => {
                         const parsedExpiryDate = new Date(parseInt(expiryDate));
                         const now = new Date();
                         if (parsedExpiryDate > now) {
                             fetchedExpiryDate = expiryDate;
-                            return AsyncStorage.getItem("loksewa:auth:user");
+                            return AsyncStorage.getItem("jobsearch:auth:user");
                         } else {
                             reject();
                         }
@@ -166,10 +166,10 @@ export const authAutoSignIn = () => {
 
 export const authClearStorage = () => {
     return dispatch => {
-        AsyncStorage.removeItem("loksewa:auth:token");
-        AsyncStorage.removeItem("loksewa:auth:expiryDate");
-        AsyncStorage.removeItem("loksewa:auth:user");
-        AsyncStorage.removeItem("loksewa:auth:fbToken");
+        AsyncStorage.removeItem("jobsearch:auth:token");
+        AsyncStorage.removeItem("jobsearch:auth:expiryDate");
+        AsyncStorage.removeItem("jobsearch:auth:user");
+        AsyncStorage.removeItem("jobsearch:auth:fbToken");
     };
 };
 
@@ -187,8 +187,8 @@ export const authLogout = () => {
 };
 
 export const facebookLogin = () => async dispatch => {
-    let fbToken = await AsyncStorage.getItem('loksewa:auth:fbToken');
-    let deviceId = await AsyncStorage.getItem('loksewa:auth:deviceId');
+    let fbToken = await AsyncStorage.getItem('jobsearch:auth:fbToken');
+    let deviceId = await AsyncStorage.getItem('jobsearch:auth:deviceId');
     if (!fbToken) {
         fbToken = await doFacebookLogin(dispatch);
     }
@@ -290,7 +290,7 @@ export const updateMyProfile = (formData) => {
                     if (!parsedRes.data) {
                     } else {
                         // Store user info in Async Storage
-                        AsyncStorage.setItem("loksewa:auth:user", JSON.stringify(parsedRes.data));
+                        AsyncStorage.setItem("jobsearch:auth:user", JSON.stringify(parsedRes.data));
 
                         dispatch(
                             authSetUser(parsedRes.data)
@@ -329,7 +329,7 @@ const doFacebookLogin = async () => {
         alertMessage({title: "Cancelled", body: 'Facebook Login Failed!'});
     }
 
-    await AsyncStorage.setItem('loksewa:auth:fbToken', token);
+    await AsyncStorage.setItem('jobsearch:auth:fbToken', token);
 
     return token;
 };

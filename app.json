@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "kchahiyo-app",
-    "slug": "kchahiyo-app",
-    "description": "Kchahiyo is an app to help global nepalese community find things they need",
+    "name": "jobsearch-app",
+    "slug": "jobsearch-app",
+    "description": "Jobsearch is an app to help global nepalese community find things they need",
     "privacy": "public",
     "sdkVersion": "34.0.0",
     "platforms": [
@@ -24,11 +24,11 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.responsivepixel.kchahiyo",
+      "bundleIdentifier": "com.responsivepixel.jobsearch",
       "supportsTablet": true
     },
     "android": {
-      "package": "com.responsivepixel.kchahiyo"
+      "package": "com.responsivepixel.jobsearch"
     }
   }
 }
